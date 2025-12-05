@@ -45,6 +45,11 @@ The content MUST be accessible to a global audience and prepared for future enha
 -   **Urdu Translation Friendliness**: Write in clear, direct English, avoiding slang, complex idioms, and convoluted sentence structures to facilitate accurate translation.
 -   **Global Terminology**: A central glossary will be maintained. All terms MUST be used consistently across all chapters.
 
+### VII. Discoverability and Navigation
+To ensure ease of access and a seamless user experience, all chapters MUST be easily discoverable.
+-   **Navigation Bar**: Every new chapter must be added to the main navigation sidebar.
+-   **Home Page**: The home page must be updated to include a link to every new chapter, providing a central point of entry for all content.
+
 ## Writing and Content Standards
 
 ### Tone, Language, and Reading Level
