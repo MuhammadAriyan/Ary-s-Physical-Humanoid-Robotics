@@ -1,20 +1,291 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Modern UI CSS with custom branding and glassmorphism effects
+ * Removes default Docusaurus branding and implements 2025 design trends
  */
 
-/* You can override the default Infima variables here. */
+/* Custom Robotics Theme Colors */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary: #667eea;
+  --ifm-color-primary-dark: #5a6fd8;
+  --ifm-color-primary-darker: #4c63b2;
+  --ifm-color-primary-darkest: #3d4f91;
+  --ifm-color-primary-light: #738ef5;
+  --ifm-color-primary-lighter: #819eff;
+  --ifm-color-primary-lightest: #a0b3ff;
+  --ifm-color-secondary: #764ba2;
+  --ifm-color-success: #00d4aa;
+  --ifm-color-info: #3b82f6;
+  --ifm-color-warning: #f59e0b;
+  --ifm-color-danger: #ef4444;
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(102, 126, 234, 0.1);
+  
+  /* Custom CSS Variables for Modern UI */
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.125);
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark Mode Theme */
+[data-theme='dark'] {
+  --ifm-color-primary: #738ef5;
+  --ifm-color-primary-dark: #667eea;
+  --ifm-color-primary-darker: #5a6fd8;
+  --ifm-color-primary-darkest: #4c63b2;
+  --ifm-color-primary-light: #819eff;
+  --ifm-color-primary-lighter: #8faeff;
+  --ifm-color-primary-lightest: #a0b3ff;
+  --docusaurus-highlighted-code-line-bg: rgba(115, 142, 245, 0.15);
+  
+  /* Dark mode glassmorphism */
+  --glass-bg: rgba(0, 0, 0, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Remove Default Docusaurus Branding */
+.navbar__brand {
+  background: none !important;
+}
+
+.navbar__brand .navbar__logo {
+  content: url('/img/logo.svg') !important;
+  height: 32px !important;
+  width: auto !important;
+}
+
+.navbar__brand::before {
+  content: '' !important;
+}
+
+/* Hide default footer branding */
+.footer__logo {
+  display: none !important;
+}
+
+/* Custom Typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+/* Modern Button Styles */
+.button {
+  border-radius: var(--border-radius-sm) !important;
+  font-weight: 600 !important;
+  transition: all var(--transition-normal) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.button--primary {
+  background: var(--primary-gradient) !important;
+  border: none !important;
+}
+
+.button--secondary {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+}
+
+/* Glassmorphism Card Effects */
+.glass-effect {
+  backdrop-filter: blur(12px) saturate(180%);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius-md);
+  transition: all var(--transition-normal);
+}
+
+.glass-effect:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='dark'] .glass-effect:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Modern Navigation */
+.navbar {
+  backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.125) !important;
+}
+
+[data-theme='dark'] .navbar {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.navbar__link {
+  font-weight: 500 !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.navbar__link:hover {
+  color: var(--ifm-color-primary) !important;
+  transform: translateY(-1px);
+}
+
+/* Sidebar Modernization */
+.menu__link {
+  border-radius: var(--border-radius-sm) !important;
+  transition: all var(--transition-fast) !important;
+  margin: 2px 0 !important;
+}
+
+.menu__link:hover {
+  background: var(--glass-bg) !important;
+  transform: translateX(4px);
+}
+
+.menu__link--active {
+  background: var(--primary-gradient) !important;
+  color: white !important;
+}
+
+/* Content Cards */
+.card {
+  border-radius: var(--border-radius-lg) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  background: var(--glass-bg) !important;
+  transition: all var(--transition-normal) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Search Bar Improvements */
+.DocSearch-Button {
+  border-radius: var(--border-radius-md) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  transition: all var(--transition-normal) !important;
+}
+
+.DocSearch-Button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Footer Customization */
+.footer {
+  background: var(--primary-gradient) !important;
+  border-top: none !important;
+}
+
+.footer__links {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.footer__link-item {
+  color: rgba(255, 255, 255, 0.8) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.footer__link-item:hover {
+  color: white !important;
+  transform: translateY(-1px);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--glass-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ifm-color-primary);
+  border-radius: var(--border-radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ifm-color-primary-dark);
+}
+
+/* Selection Styling */
+::selection {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+::-moz-selection {
+  background: var(--ifm-color-primary);
+  color: white;
+}
+
+/* Focus States for Accessibility */
+.button:focus,
+.navbar__link:focus,
+.menu__link:focus,
+.card:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Loading States */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Print Styles */
+@media print {
+  .glass-effect {
+    background: white !important;
+    backdrop-filter: none !important;
+    border: 1px solid #ccc !important;
+  }
+  
+  .navbar,
+  .footer {
+    display: none !important;
+  }
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */

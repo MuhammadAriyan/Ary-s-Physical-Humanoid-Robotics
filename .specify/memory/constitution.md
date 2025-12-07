@@ -1,102 +1,77 @@
 <!--
-- Version: 1.1.0
-- Ratified: 2025-12-05
-- Last Amended: 2025-12-07
-- Description: Version 1.1.0 introduces a new principle VIII, mandating that all chapters be detailed and simplified, with a strong emphasis on using diagrams for clearer explanations. This enhances the book's educational effectiveness.
-- Changes:
-  - Added "Principle VIII: Simplified Depth and Visual Storytelling".
-  - Incremented version from 1.0.0 to 1.1.0.
+Sync Impact Report:
+Version change: 1.2.0 → 1.3.0 (MINOR - added modern UI design principle and enhanced welcome page requirements)
+Modified principles: VII (enhanced welcome page integration), VIII (renamed to IX, expanded visual identity)
+Added sections: Core Principles (9 principles - added VIII. Modern UI Design and Aesthetics)
+Removed sections: None
+Templates requiring updates: ✅ plan-template.md (Constitution Check), ✅ spec-template.md (scope alignment), ✅ tasks-template.md (task categorization)
+Follow-up TODOs: None
 -->
 
-# Physical & Humanoid Robotics Authoring Constitution
+# Physical and Humanoid Robotics Book Constitution
 
 ## Core Principles
 
-### I. Academic Rigor & Technical Clarity
-All content MUST be factually accurate, technically sound, and well-researched. Explanations must be clear, unambiguous, and targeted at a professional engineering audience. Complex topics shall be broken down into understandable components without sacrificing depth.
+### I. Academic Rigor
+Every chapter MUST provide university-level content with proper mathematical foundations, theoretical depth, and engineering trade-offs. Content MUST progress from prerequisites to advanced topics suitable for undergraduate seniors to graduate students. All concepts MUST include citations to current research (2019-2025) and real-world examples.
 
-### II. Structured, College-Notes-Inspired Format
-Every chapter MUST follow a consistent, hierarchical structure to optimize learning and readability. The mandatory flow is:
-1.  **Learning Objectives**: A bulleted list of key takeaways.
-2.  **Core Concepts**: In-depth explanation of the topic.
-3.  **Practical Examples**: Code snippets, diagrams, or case studies illustrating the concepts.
-4.  **Exercises**: Problems or questions to reinforce learning.
-5.  **Chapter Summary**: Concise review of the main points.
-6.  **Glossary Terms**: Definitions of new terminology introduced in the chapter.
+### II. Physical Embodiment Focus
+Content MUST emphasize physical robotics (hardware, embodiment, real-world interaction) over virtual simulation. Every topic MUST connect to physical implementation challenges, including hardware constraints, energy efficiency, and real-world deployment considerations. Humanoid-specific challenges (bipedal locomotion, anthropomorphic manipulation, human-like cognition) MUST be prioritized.
 
-### III. Practical, Example-Driven Explanations
-Theoretical concepts MUST be grounded in practical application. Every major concept or mathematical formula must be accompanied by a runnable code example, a clear diagram, or a real-world case study to ensure concepts are tangible and implementable.
+### III. Visual and Practical Learning
+Every subsection MUST include 2-5 figures (CAD models, kinematic trees, force-torque plots) generated using appropriate tools (MATLAB/Simulink, PyBullet). Real-world case studies (Boston Dynamics Atlas, Tesla Optimus, Figure 02) and simulation examples MUST be integrated. Code snippets (Python/ROS) and exercises MUST be provided for practical application.
 
-### IV. Visual Excellence & Premium Design
-The book MUST adhere to the highest visual standards to provide a premium reading experience. This includes:
--   **Diagrams**: Must be clean, professional, and consistent in style (e.g., using a tool like Mermaid.js or a consistent design language).
--   **Images**: Must be high-resolution and directly relevant to the content.
--   **Layout**: Adherence to Docusaurus best practices for a clean, navigable, and aesthetically pleasing interface.
+### IV. 2025 State-of-the-Art Integration
+Content MUST incorporate latest advancements including generative AI for planning, physical AI for safe human-robot collaboration, and industrial humanoids (Unitree G1, Figure 02). Examples MUST reference current deployments and recent research from Springer's Humanoid Robotics: A Reference and top university courses (CMU 16-715, Stanford CS 326).
 
-### V. RAG-Optimized & Chunkable Content
-All content MUST be structured for efficient machine retrieval and processing by Retrieval-Augmented Generation (RAG) systems. This requires:
--   **Short Paragraphs**: Each paragraph should focus on a single, coherent idea.
--   **Clear Sections**: Use of headings and subheadings to create a logical, chunkable hierarchy.
--   **Atomic Concepts**: Important definitions and concepts must not be buried in long explanations.
+### V. Comprehensive Coverage
+The book MUST provide "bigger" coverage through expansive subsections with theoretical foundations, mathematical derivations, and interdisciplinary connections (biomechanics, AI, ethics). Structure MUST follow 10 parts with 40+ chapters, each ~30-50 pages, totaling 800-1000 pages. Appendices MUST include math proofs and datasets.
 
-### VI. Global Accessibility & Consistency
-The content MUST be accessible to a global audience and prepared for future enhancements.
--   **Personalization Tags**: Use comment tags (`<!-- BEGINNER_EXPLAIN -->`, `<!-- ADVANCED_EXPLAIN -->`, `<!-- PRACTICAL_EXAMPLE -->`) to mark sections for future automated rewriting for different expertise levels.
--   **Urdu Translation Friendliness**: Write in clear, direct English, avoiding slang, complex idioms, and convoluted sentence structures to facilitate accurate translation.
--   **Global Terminology**: A central glossary will be maintained. All terms MUST be used consistently across all chapters.
+### VI. Ethical and Inclusive Design
+Content MUST address ethical issues (bias in HRI, privacy concerns) and accessibility (low-cost prototypes). Societal impact discussions MUST be integrated throughout, not isolated. Examples MUST include diverse applications and consider global deployment challenges.
 
-### VII. Discoverability and Navigation
-To ensure ease of access and a seamless user experience, all chapters MUST be easily discoverable.
--   **Navigation Bar**: Every new chapter must be added to the main navigation sidebar.
--   **Home Page**: The home page must be updated to include a link to every new chapter, providing a central point of entry for all content.
+### VII. Homepage Content Integration
+All documentation files created in the docs folder MUST automatically appear on the welcome page. The welcome page MUST dynamically display all available chapters and sections without manual updates. New content MUST be immediately discoverable from the main landing page through automatic navigation generation. Every section and chapter MUST be prominently featured on the welcome page with direct links.
 
-### VIII. Simplified Depth and Visual Storytelling
-Every chapter MUST be both detailed and simplified. Complex topics should be broken down into easy-to-understand explanations without losing technical depth. To enhance comprehension, diagrams, flowcharts, and visual aids MUST be used extensively to illustrate concepts, processes, and architectures.
+### VIII. Modern UI Design and Aesthetics
+The interface MUST be redesigned to be super modern and beautiful with cutting-edge visual design. This includes contemporary typography, sophisticated color palettes, smooth animations, micro-interactions, and responsive layouts. The design MUST follow 2025 web design trends with glassmorphism, neumorphism, gradient overlays, and modern CSS techniques. The user experience MUST be premium and visually stunning while maintaining academic functionality.
 
-## Writing and Content Standards
+### IX. Custom Branding and Visual Identity
+The site MUST remove all default Docusaurus branding elements including logos, default colors, and generic styling. All visual elements MUST reflect the Physical & Humanoid Robotics book identity with custom theming, professional typography, and cohesive color scheme. The interface MUST maintain academic professionalism while being visually distinct from default templates.
 
-### Tone, Language, and Reading Level
--   **Tone**: Authoritative, professional, and educational.
--   **Voice**: Active voice is preferred over passive voice.
--   **Reading Level**: Assumes a college-level understanding of engineering and computer science fundamentals.
+## Academic Standards
 
-### Formatting Rules
--   **Headings**: Strictly follow Markdown's heading hierarchy (H1 for title, H2 for major sections, etc.).
--   **Code Blocks**: All code MUST be formatted correctly with the appropriate language identifier (e.g., ` ```python`).
--   **Mathematical Notation**: Use LaTeX within Markdown for all mathematical formulas and equations for clarity and consistency.
+### Content Quality Requirements
+- All mathematical derivations MUST be complete and verifiable
+- Code examples MUST be tested and functional
+- Diagrams MUST be high-resolution and properly labeled
+- Case studies MUST use real data from recent deployments
+- Exercises MUST range from theoretical proofs to hands-on implementations
 
-### Content Creation Standards
--   **Code Examples**: Must be complete, runnable, and accompanied by comments explaining the logic.
--   **Diagrams**: Must include captions and be referenced in the text.
--   **Glossary**: Each new technical term must be defined and added to the chapter's glossary section.
+### Target Audience Progression
+- **Part 1**: Assumes basic calculus and linear algebra
+- **Part 2**: Requires control theory and programming fundamentals
+- **Part 3**: Assumes graduate-level mathematics and research experience
+- Each part MUST build upon previous foundations while remaining independently valuable
 
-## Quality and Consistency
+## Content Development
 
-### Cross-Chapter Consistency
-A uniform style, tone, and structure MUST be maintained across all chapters. This includes consistent use of terminology, formatting, and explanation patterns. The global glossary is the single source of truth for all definitions.
+### Pedagogical Tools
+Each chapter MUST include:
+- End-of-chapter summaries with key takeaways
+- Concept quizzes for self-assessment
+- Hands-on projects (e.g., build mini-humanoid arm)
+- Cross-references to related topics
+- Further reading suggestions with recent papers
 
-### Quality Gates
-Before publication, every chapter MUST pass a quality review checklist, which includes:
--   Verification of technical accuracy.
--   Adherence to all principles and standards in this constitution.
--   Checks for clarity, grammar, and spelling.
--   Validation of all code examples and exercises.
+### Review and Validation Process
+- Content MUST undergo peer review by academics and industry practitioners
+- Technical accuracy MUST be validated through simulation and real-world testing
+- Examples MUST be updated with emerging tech (e.g., NVIDIA GTC 2025 Physical AI sessions)
+- All content MUST support multiple learning styles (visual, analytical, practical)
 
 ## Governance
 
-### Versioning
-This constitution follows Semantic Versioning (Major.Minor.Patch):
--   **MAJOR**: For backward-incompatible changes or fundamental shifts in principles.
--   **MINOR**: For the addition of new principles or significant expansions to existing ones.
--   **PATCH**: For clarifications, typo fixes, or minor formatting updates.
+This constitution supersedes all other development practices. Amendments require documentation, approval from project maintainers, and migration plan for existing content. All content development MUST verify compliance with these principles before integration.
 
-### Amendment Process
-Any proposed changes to this constitution must be submitted as a formal proposal, reviewed for its impact on the project, and approved before implementation. All changes must be documented in the preamble of this document.
-
-### Attribution
-All published content under this project MUST provide clear attribution. The following links must be included in an "About the Author" or equivalent section:
--   **GitHub**: [https://github.com/muhammadariyan](https://github.com/muhammadariyan)
--   **Portfolio**: [https://thebestaryan.vercel.app](https://thebestaryan.vercel.app)
--   **LinkedIn**: [https://linkedin.com/in/muhammad-aryan](https://linkedin.com/in/muhammad-aryan)
-
-**Version**: 1.1.0 | **Ratified**: 2025-12-05 | **Last Amended**: 2025-12-07
+**Version**: 1.3.0 | **Ratified**: 2025-12-07 | **Last Amended**: 2025-12-07

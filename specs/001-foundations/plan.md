@@ -1,31 +1,25 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: Navigation and UI Modernization
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
+**Branch**: `001-foundations` | **Date**: 2025-12-07 | **Spec**: /specs/001-foundations/spec.md
+**Input**: Feature specification for Part 1 Foundations + constitutional amendments for welcome page integration and modern UI design
 
-**Note**: This template is filled in by the `/sp.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
+**Note**: This plan addresses both the foundational content requirements and the new constitutional mandates for welcome page integration and modern UI design.
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+This plan implements comprehensive navigation and UI modernization for the Physical & Humanoid Robotics book, focusing on: (1) Dynamic welcome page integration that automatically displays all documentation sections and chapters, (2) Super modern and beautiful UI design using 2025 web design trends including glassmorphism, neumorphism, and advanced CSS techniques, (3) Enhanced navigation with automatic content discovery, and (4) Custom branding that removes default Docusaurus elements while maintaining academic professionalism.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: TypeScript/JavaScript (ES2022) + React 18  
+**Primary Dependencies**: Docusaurus 3.9.2, React 18, CSS-in-JS (Emotion), Framer Motion  
+**Storage**: Static markdown files + JSON metadata for content indexing  
+**Testing**: Jest + React Testing Library + Playwright for E2E  
+**Target Platform**: Modern web browsers (Chrome 90+, Firefox 88+, Safari 14+) with responsive design  
+**Project Type**: Static web application with JAMstack architecture  
+**Performance Goals**: <3s initial load, <1s navigation transitions, 90+ Lighthouse performance score  
+**Constraints**: Static site generation, SEO optimization, accessibility WCAG 2.1 AA compliance  
+**Scale/Scope**: 40+ chapters, 800+ pages, multi-language support, global CDN deployment
 
 ## Constitution Check
 
@@ -93,51 +87,49 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
+# Web application structure (Docusaurus + React)
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+├── components/
+│   ├── HomepageFeatures/
+│   ├── WelcomePage/
+│   ├── ModernUI/
+│   │   ├── GlassCard/
+│   │   ├── GradientButton/
+│   │   └── AnimatedSection/
+│   └── Navigation/
+│       ├── DynamicSidebar/
+│       └── ContentGrid/
+├── css/
+│   ├── custom.css
+│   ├── modern-theme.css
+│   └── animations.css
+├── pages/
+│   ├── index.tsx (enhanced welcome page)
+│   └── markdown-page.md
+├── theme/
+│   ├── NavbarItem/
+│   └── Layout/
+└── utils/
+    ├── contentIndexer.ts
+    └── navigationGenerator.ts
 
-tests/
-├── contract/
-├── integration/
-└── unit/
+static/
+├── img/
+│   ├── robotics-hero/
+│   └── custom-branding/
+└── css/
 
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+docs/
+├── intro-to-robotics/
+├── humanoid-robotics-course/
+├── part1-foundations-for-beginners/
+├── part2-university-level/
+└── tutorial-basics/
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Docusaurus static site with custom React components for modern UI, enhanced welcome page, and dynamic navigation generation.
 
 ## Complexity Tracking
 

@@ -146,7 +146,30 @@ Examples of foundational tasks (adjust based on your project):
 
 ---
 
-## Phase N: Polish & Cross-Cutting Concerns
+## Phase N: Welcome Page Integration & Modern UI (Cross-Cutting)
+
+**Purpose**: Ensure all content appears on welcome page with modern, beautiful design
+
+### Welcome Page Integration Tasks
+- [ ] T[WELCOME-001] Implement dynamic welcome page content generation from docs folder
+- [ ] T[WELCOME-002] Ensure every section and chapter prominently featured on welcome page
+- [ ] T[WELCOME-003] Create automatic navigation for all new documentation files
+- [ ] T[WELCOME-004] Ensure content discoverability without manual updates
+
+### Modern UI Design Tasks
+- [ ] T[UI-001] Implement super modern and beautiful visual design
+- [ ] T[UI-002] Apply 2025 web design trends (glassmorphism, neumorphism, gradients)
+- [ ] T[UI-003] Add smooth animations and micro-interactions
+- [ ] T[UI-004] Create premium user experience with responsive layouts
+- [ ] T[UI-005] Design contemporary typography and sophisticated color palettes
+
+### Custom Branding Tasks  
+- [ ] T[BRAND-001] Remove all default Docusaurus logos and branding elements
+- [ ] T[BRAND-002] Implement custom color scheme and typography
+- [ ] T[BRAND-003] Create academic professional visual identity
+- [ ] T[BRAND-004] Customize footer and navigation elements
+
+## Phase N+1: Polish & Cross-Cutting Concerns
 
 **Purpose**: Improvements that affect multiple user stories
 
@@ -156,6 +179,22 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
 - [ ] TXXX Security hardening
 - [ ] TXXX Run quickstart.md validation
+
+---
+
+## Academic Content Enhancement *(Constitution Compliance)*
+
+**Purpose**: Ensure content meets academic rigor and physical embodiment requirements
+
+- [ ] TXXX [P] Add mathematical foundations and derivations
+- [ ] TXXX [P] Create high-quality diagrams and figures (2-5 per subsection)
+- [ ] TXXX [P] Integrate real-world case studies and examples
+- [ ] TXXX [P] Incorporate 2025 state-of-the-art research and deployments
+- [ ] TXXX [P] Add practical code examples (Python/ROS)
+- [ ] TXXX [P] Include hands-on exercises and projects
+- [ ] TXXX [P] Add ethical considerations and accessibility discussions
+- [ ] TXXX [P] Verify interdisciplinary connections (biomechanics, AI, ethics)
+- [ ] TXXX [P] Update with recent research citations (2019-2025)
 
 ---
 

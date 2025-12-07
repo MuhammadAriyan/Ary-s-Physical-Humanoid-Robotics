@@ -89,12 +89,25 @@
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
-- **FR-006**: System MUST use diagrams and visual aids to explain complex topics, ensuring clarity and simplicity.
+
+### Academic Content Requirements *(Constitution Compliance)*
+
+- **AC-001**: Content MUST provide university-level depth with mathematical foundations
+- **AC-002**: Content MUST emphasize physical robotics implementation over simulation
+- **AC-003**: Content MUST include 2-5 figures per subsection with proper labeling
+- **AC-004**: Content MUST integrate real-world case studies and current examples
+- **AC-005**: Content MUST incorporate 2025 state-of-the-art advancements
+- **AC-006**: Content MUST address ethical implications and accessibility considerations
+- **AC-007**: All new documentation MUST automatically appear on welcome page
+- **AC-008**: Every section and chapter MUST be prominently featured on welcome page
+- **AC-009**: Site MUST implement super modern and beautiful visual design
+- **AC-010**: Site MUST remove all default Docusaurus branding elements
+- **AC-011**: Visual design MUST maintain academic professionalism with custom theming
 
 *Example of marking unclear requirements:*
 
-- **FR-007**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-008**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
 
 ### Key Entities *(include if feature involves data)*
 
