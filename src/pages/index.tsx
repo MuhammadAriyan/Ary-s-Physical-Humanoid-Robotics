@@ -47,7 +47,7 @@ function HeroSection() {
           <div className={styles.heroActions}>
             <Link
               className={clsx('button button--primary button--lg', styles.primaryButton)}
-              to="/docs/humanoid-robotics-course/01-introduction-to-humanoid-robotics">
+              to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics">
               🎯 Start Your Journey
             </Link>
             <Link
@@ -68,7 +68,7 @@ function ChapterSection() {
       title: "01 - Introduction to Humanoid Robotics",
       description: "🎯 Begin your journey into the fascinating world of humanoid robots. Discover their history, fundamental concepts, and the core principles that make them unique. Learn about the evolution from industrial robots to modern humanoid systems.",
       icon: "🤖",
-      link: "/docs/humanoid-robotics-course/01-introduction-to-humanoid-robotics",
+      link: "/docs/humanoid-robotics-course/introduction-to-humanoid-robotics",
       color: "#6366f1",
       duration: "15 min read",
       level: "Beginner",
@@ -78,7 +78,7 @@ function ChapterSection() {
       title: "02 - Sensors and Perception",
       description: "👁️ Explore how robots perceive and understand their environment through advanced sensing technologies. Master vision systems, proximity sensors, and the fusion of multiple sensor inputs for comprehensive environmental awareness.",
       icon: "👁️",
-      link: "/docs/humanoid-robotics-course/02-sensors-and-perception",
+      link: "/docs/humanoid-robotics-course/sensors-and-perception",
       color: "#8b5cf6",
       duration: "20 min read",
       level: "Beginner",
@@ -88,7 +88,7 @@ function ChapterSection() {
       title: "03 - Actuators and Movement",
       description: "⚙️ Learn about the mechanical systems that enable robots to move and interact with the physical world. Understand servo motors, hydraulic systems, and the biomechanical principles that inspire humanoid robot design.",
       icon: "⚙️",
-      link: "/docs/humanoid-robotics-course/03-actuators-and-movement",
+      link: "/docs/humanoid-robotics-course/actuators-and-movement",
       color: "#ec4899",
       duration: "25 min read",
       level: "Intermediate",
@@ -98,7 +98,7 @@ function ChapterSection() {
       title: "04 - Control Systems",
       description: "🎮 Master the algorithms and systems that govern robot behavior and decision-making processes. Dive into PID controllers, state machines, and advanced AI-driven control strategies for smooth, intelligent robot operation.",
       icon: "🎮",
-      link: "/docs/humanoid-robotics-course/04-control-systems",
+      link: "/docs/humanoid-robotics-course/control-systems",
       color: "#f59e0b",
       duration: "30 min read",
       level: "Intermediate",
@@ -108,7 +108,7 @@ function ChapterSection() {
       title: "05 - Path Planning and Navigation",
       description: "🗺️ Understand how robots navigate complex environments and plan optimal paths to their goals. Learn about SLAM algorithms, obstacle avoidance, and the mathematics behind autonomous navigation in dynamic environments.",
       icon: "🗺️",
-      link: "/docs/humanoid-robotics-course/05-path-planning-and-navigation",
+      link: "/docs/humanoid-robotics-course/path-planning-and-navigation",
       color: "#10b981",
       duration: "35 min read",
       level: "Advanced",
@@ -257,7 +257,7 @@ function WelcomeSection() {
           <div className={styles.welcomeActions}>
             <Link
               className={clsx('button button--primary button--lg', styles.welcomeButton)}
-              to="/docs/humanoid-robotics-course/01-introduction-to-humanoid-robotics">
+              to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics">
               🚀 Start Learning Now
             </Link>
           </div>
