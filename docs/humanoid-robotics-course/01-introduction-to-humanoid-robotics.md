@@ -282,7 +282,7 @@ Research Platforms:
 └─────────────────┘
 
 Applications:
-• University research
+• Academic research
 • STEM education
 • Public demonstrations
 • Human-robot interaction studies
