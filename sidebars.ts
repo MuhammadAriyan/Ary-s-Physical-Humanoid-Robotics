@@ -19,38 +19,35 @@ const sidebars: SidebarsConfig = {
   // But you can create a sidebar manually
   tutorialSidebar: [
     'intro',
-    'robotics-intro',
-    'ml-robotics',
     {
       type: 'category',
       label: '🤖 Physical Humanoid Robotics Crash Course',
       items: [
-        'humanoid-robotics-course/01-introduction-to-humanoid-robotics',
-        'humanoid-robotics-course/02-sensors-and-perception',
-        'humanoid-robotics-course/03-actuators-and-movement',
-        'humanoid-robotics-course/04-control-systems',
-        'humanoid-robotics-course/05-path-planning-and-navigation',
+        'humanoid-robotics-course/introduction-to-humanoid-robotics',
+        'humanoid-robotics-course/sensors-and-perception',
+        'humanoid-robotics-course/actuators-and-movement',
+        'humanoid-robotics-course/control-systems',
+        'humanoid-robotics-course/path-planning-and-navigation',
       ],
     },
     {
       type: 'category',
-      label: '📚 General Robotics Course',
+      label: '📖 Tutorial Basics',
       items: [
-        'robotics-course/introduction',
-        'robotics-course/sensors-perception',
-        'robotics-course/actuators-movement',
-        'robotics-course/control-systems',
-        'robotics-course/path-planning',
+        'tutorial-basics/create-a-document',
+        'tutorial-basics/create-a-page',
+        'tutorial-basics/create-a-blog-post',
+        'tutorial-basics/deploy-your-site',
+        'tutorial-basics/markdown-features',
+        'tutorial-basics/congratulations',
       ],
     },
     {
       type: 'category',
-      label: '🔧 Core Topics',
+      label: '⚙️ Tutorial Extras',
       items: [
-        'robot-sensors',
-        'actuators-movement',
-        'control-systems',
-        'path-planning',
+        'tutorial-extras/manage-docs-versions',
+        'tutorial-extras/translate-your-site',
       ],
     },
     {
