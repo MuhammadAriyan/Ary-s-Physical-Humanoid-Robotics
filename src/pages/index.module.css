@@ -21,3 +21,26 @@
   align-items: center;
   justify-content: center;
 }
+
+.heroIntroduction {
+  padding: 2rem 0;
+  text-align: center;
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+}
+
+.chapters {
+  padding: 2rem 0;
+  text-align: center;
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+}
+
+.chapters h2 {
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.chapters .button {
+  margin: 0.5rem;
+}
