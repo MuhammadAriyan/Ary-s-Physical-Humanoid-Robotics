@@ -1,59 +1,100 @@
-import React from 'react';
-import clsx from 'clsx';
+import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import Heading from '@theme/Heading';
 
-import styles from './index.module.css';
+// Navigation Component
+function Navbar() {
+  const [isScrolled, setIsScrolled] = useState(false);
 
-function HeroSection() {
-  const {siteConfig} = useDocusaurusContext();
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section className={styles.heroSection}>
-      <div className={styles.heroBackground}>
-        <div className={styles.heroGrid}></div>
-        <div className={styles.heroGradient}></div>
+    <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+      <div className="navbar-container">
+        <Link to="/" className="navbar-logo">
+          Ary's Robotics
+        </Link>
+        <div className="navbar-menu">
+          <Link to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics" className="navbar-link">
+            Book
+          </Link>
+          <Link to="/docs" className="navbar-link">
+            Docs
+          </Link>
+          <Link to="#features" className="navbar-link">
+            Features
+          </Link>
+          <ThemeToggle />
+        </div>
       </div>
+    </nav>
+  );
+}
+
+// Theme Toggle Component
+function ThemeToggle() {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+    
+    document.documentElement.setAttribute('data-theme', theme);
+    setIsDark(theme === 'dark');
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    setIsDark(!isDark);
+  };
+
+  return (
+    <button 
+      className="theme-toggle" 
+      onClick={toggleTheme}
+      aria-label="Toggle theme"
+    >
+      <div className="theme-toggle-slider">
+        {isDark ? '🌙' : '☀️'}
+      </div>
+    </button>
+  );
+}
+
+// Hero Section
+function Hero() {
+  return (
+    <section className="hero">
       <div className="container">
-        <div className={styles.heroContent}>
-          <Heading as="h1" className={styles.heroTitle}>
-            <span className={styles.titleLine}>Welcome to Ary's</span>
-            <span className={styles.titleLine}>Physical & Humanoid</span>
-            <span className={styles.titleLine}>Robotics</span>
-          </Heading>
-          <p className={styles.heroSubtitle}>
-            An AI-driven comprehensive guide to the future of robotics
+        <div className="hero-content animate-fade-in-up">
+          <h1 className="hero-title">
+            Ary's Physical & Humanoid Robotics
+          </h1>
+          <p className="hero-subtitle">
+            A comprehensive guide to the fascinating world of robotics, 
+            from fundamental concepts to advanced applications in humanoid systems.
           </p>
-          <div className={styles.heroDescription}>
-            <p>
-              🚀 <strong>Embark on an Extraordinary Journey!</strong> Welcome to your comprehensive gateway 
-              to the fascinating world of physical and humanoid robotics. This innovative, AI-powered book 
-              provides cutting-edge insights and continuously updated content in the rapidly evolving field 
-              of robotics.
-            </p>
-            <p>
-              📚 <strong>What You'll Discover:</strong> From fundamental robotics principles to advanced 
-              humanoid systems, each chapter is carefully crafted to build your knowledge progressively. 
-              Whether you're a beginner or an experienced engineer, you'll find valuable insights and 
-              practical applications that will accelerate your learning journey.
-            </p>
-            <p>
-              🤖 <strong>Why This Book?</strong> Unlike traditional textbooks, this AI-driven resource 
-              evolves with the field, ensuring you always have access to the latest advancements and 
-              best practices in robotics engineering.
-            </p>
-          </div>
-          <div className={styles.heroActions}>
+          <div className="hero-actions">
             <Link
-              className={clsx('button button--primary button--lg', styles.primaryButton)}
-              to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics">
-              🎯 Start Your Journey
+              to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics"
+              className="btn btn-primary"
+            >
+              Start Learning
             </Link>
             <Link
-              className={clsx('button button--secondary button--lg', styles.secondaryButton)}
-              to="#chapters">
-              📖 Explore All Chapters
+              to="#chapters"
+              className="btn btn-secondary"
+            >
+              View Chapters
             </Link>
           </div>
         </div>
@@ -62,164 +103,56 @@ function HeroSection() {
   );
 }
 
-function ChapterSection() {
-  const chapters = [
-    {
-      title: "01 - Introduction to Humanoid Robotics",
-      description: "🎯 Begin your journey into the fascinating world of humanoid robots. Discover their history, fundamental concepts, and the core principles that make them unique. Learn about the evolution from industrial robots to modern humanoid systems.",
-      icon: "🤖",
-      link: "/docs/humanoid-robotics-course/introduction-to-humanoid-robotics",
-      color: "#6366f1",
-      duration: "15 min read",
-      level: "Beginner",
-      topics: ["History of Robotics", "Humanoid Robot Classification", "Fundamental Components", "Applications & Future Trends"]
-    },
-    {
-      title: "02 - Sensors and Perception",
-      description: "👁️ Explore how robots perceive and understand their environment through advanced sensing technologies. Master vision systems, proximity sensors, and the fusion of multiple sensor inputs for comprehensive environmental awareness.",
-      icon: "👁️",
-      link: "/docs/humanoid-robotics-course/sensors-and-perception",
-      color: "#8b5cf6",
-      duration: "20 min read",
-      level: "Beginner",
-      topics: ["Computer Vision", "Depth Sensors", "Sensor Fusion", "Environmental Mapping"]
-    },
-    {
-      title: "03 - Actuators and Movement",
-      description: "⚙️ Learn about the mechanical systems that enable robots to move and interact with the physical world. Understand servo motors, hydraulic systems, and the biomechanical principles that inspire humanoid robot design.",
-      icon: "⚙️",
-      link: "/docs/humanoid-robotics-course/actuators-and-movement",
-      color: "#ec4899",
-      duration: "25 min read",
-      level: "Intermediate",
-      topics: ["Servo Motors", "Hydraulic Actuators", "Biomechanics", "Joint Design"]
-    },
-    {
-      title: "04 - Control Systems",
-      description: "🎮 Master the algorithms and systems that govern robot behavior and decision-making processes. Dive into PID controllers, state machines, and advanced AI-driven control strategies for smooth, intelligent robot operation.",
-      icon: "🎮",
-      link: "/docs/humanoid-robotics-course/control-systems",
-      color: "#f59e0b",
-      duration: "30 min read",
-      level: "Intermediate",
-      topics: ["PID Control", "State Machines", "AI Control", "Feedback Systems"]
-    },
-    {
-      title: "05 - Path Planning and Navigation",
-      description: "🗺️ Understand how robots navigate complex environments and plan optimal paths to their goals. Learn about SLAM algorithms, obstacle avoidance, and the mathematics behind autonomous navigation in dynamic environments.",
-      icon: "🗺️",
-      link: "/docs/humanoid-robotics-course/path-planning-and-navigation",
-      color: "#10b981",
-      duration: "35 min read",
-      level: "Advanced",
-      topics: ["SLAM", "Path Planning", "Obstacle Avoidance", "Autonomous Navigation"]
-    }
-  ];
-
-  return (
-    <section id="chapters" className={styles.chapterSection}>
-      <div className="container">
-        <div className={styles.sectionHeader}>
-          <Heading as="h2" className={styles.sectionTitle}>
-            📚 Complete Course Curriculum
-          </Heading>
-          <p className={styles.sectionSubtitle}>
-            Master humanoid robotics from fundamentals to advanced applications
-          </p>
-        </div>
-        <div className={styles.chapterGrid}>
-          {chapters.map((chapter, index) => (
-            <Link
-              key={index}
-              to={chapter.link}
-              className={styles.chapterCard}
-              style={{ '--card-accent': chapter.color } as React.CSSProperties}>
-              <div className={styles.chapterIcon}>
-                <span>{chapter.icon}</span>
-              </div>
-              <div className={styles.chapterContent}>
-                <div className={styles.chapterMeta}>
-                  <span className={styles.chapterLevel}>{chapter.level}</span>
-                  <span className={styles.chapterDuration}>{chapter.duration}</span>
-                </div>
-                <h3 className={styles.chapterTitle}>{chapter.title}</h3>
-                <p className={styles.chapterDescription}>{chapter.description}</p>
-                <div className={styles.chapterTopics}>
-                  <strong>Key Topics:</strong>
-                  <ul>
-                    {chapter.topics.map((topic, topicIndex) => (
-                      <li key={topicIndex}>{topic}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className={styles.chapterLink}>
-                  <span>🚀 Start Chapter</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function FeaturesSection() {
+// Features Section
+function Features() {
   const features = [
     {
-      title: "🧠 AI-Driven Content",
-      description: "Continuously updated with the latest advancements in robotics research and technology. Our AI ensures you're always learning cutting-edge concepts.",
-      icon: "🧠"
+      icon: '🧠',
+      title: 'AI-Driven Content',
+      description: 'Continuously updated with the latest advancements in robotics research and technology.'
     },
     {
-      title: "📚 Comprehensive Coverage",
-      description: "From basic principles to advanced humanoid systems, covering all essential topics. Each chapter builds systematically on previous knowledge.",
-      icon: "📚"
+      icon: '📚',
+      title: 'Comprehensive Coverage',
+      description: 'From basic principles to advanced humanoid systems, covering all essential topics.'
     },
     {
-      title: "🔧 Practical Examples",
-      description: "Real-world applications and hands-on examples to reinforce learning. See theory come alive with practical robotics implementations.",
-      icon: "🔧"
+      icon: '🔧',
+      title: 'Practical Examples',
+      description: 'Real-world applications and hands-on examples to reinforce learning.'
     },
     {
-      title: "✨ Interactive Learning",
-      description: "Engaging content with visualizations and interactive demonstrations. Complex concepts made simple through intuitive explanations.",
-      icon: "✨"
+      icon: '✨',
+      title: 'Interactive Learning',
+      description: 'Engaging content with visualizations and interactive demonstrations.'
     },
     {
-      title: "🎯 Progressive Learning Path",
-      description: "Carefully structured curriculum that takes you from beginner to advanced. Each chapter has clear prerequisites and learning outcomes.",
-      icon: "🎯"
+      icon: '🎯',
+      title: 'Progressive Path',
+      description: 'Carefully structured curriculum from beginner to advanced topics.'
     },
     {
-      title: "🌟 Always Up-to-Date",
-      description: "Content evolves with the field of robotics. Learn the latest techniques and best practices as they emerge.",
-      icon: "🌟"
+      icon: '🌟',
+      title: 'Always Current',
+      description: 'Content evolves with the field of robotics and latest best practices.'
     }
   ];
 
   return (
-    <section className={styles.featuresSection}>
+    <section id="features" className="features">
       <div className="container">
-        <div className={styles.sectionHeader}>
-          <Heading as="h2" className={styles.sectionTitle}>
-            🌟 Why Choose This Robotics Book?
-          </Heading>
-          <p className={styles.sectionSubtitle}>
-            Experience a revolutionary approach to learning robotics
+        <div className="features-header">
+          <h2 className="features-title">Why Choose This Robotics Book?</h2>
+          <p className="features-subtitle">
+            Experience a revolutionary approach to learning robotics with cutting-edge content
           </p>
         </div>
-        <div className={styles.featuresGrid}>
+        <div className="features-grid">
           {features.map((feature, index) => (
-            <div key={index} className={styles.featureCard}>
-              <div className={styles.featureIcon}>
-                <span>{feature.icon}</span>
-              </div>
-              <h3 className={styles.featureTitle}>{feature.title}</h3>
-              <p className={styles.featureDescription}>{feature.description}</p>
+            <div key={index} className="feature-card animate-fade-in-up">
+              <div className="feature-icon">{feature.icon}</div>
+              <h3 className="feature-title">{feature.title}</h3>
+              <p className="feature-description">{feature.description}</p>
             </div>
           ))}
         </div>
@@ -228,57 +161,98 @@ function FeaturesSection() {
   );
 }
 
-function WelcomeSection() {
+// Chapters Section
+function Chapters() {
+  const chapters = [
+    {
+      icon: '🤖',
+      title: 'Introduction to Humanoid Robotics',
+      description: 'Begin your journey into the fascinating world of humanoid robots and their fundamental concepts.',
+      link: '/docs/humanoid-robotics-course/introduction-to-humanoid-robotics',
+      level: 'Beginner',
+      duration: '15 min'
+    },
+    {
+      icon: '👁️',
+      title: 'Sensors and Perception',
+      description: 'Explore how robots perceive and understand their environment through advanced sensing technologies.',
+      link: '/docs/humanoid-robotics-course/sensors-and-perception',
+      level: 'Beginner',
+      duration: '20 min'
+    },
+    {
+      icon: '⚙️',
+      title: 'Actuators and Movement',
+      description: 'Learn about mechanical systems that enable robots to move and interact with the physical world.',
+      link: '/docs/humanoid-robotics-course/actuators-and-movement',
+      level: 'Intermediate',
+      duration: '25 min'
+    },
+    {
+      icon: '🎮',
+      title: 'Control Systems',
+      description: 'Master algorithms and systems that govern robot behavior and decision-making processes.',
+      link: '/docs/humanoid-robotics-course/control-systems',
+      level: 'Intermediate',
+      duration: '30 min'
+    },
+    {
+      icon: '🗺️',
+      title: 'Path Planning and Navigation',
+      description: 'Understand how robots navigate complex environments and plan optimal paths to their goals.',
+      link: '/docs/humanoid-robotics-course/path-planning-and-navigation',
+      level: 'Advanced',
+      duration: '35 min'
+    },
+    {
+      icon: '🚀',
+      title: 'Advanced Topics',
+      description: 'Explore cutting-edge research in machine learning, computer vision, and human-robot interaction.',
+      link: '/docs',
+      level: 'Advanced',
+      duration: '40 min'
+    }
+  ];
+
   return (
-    <section className={styles.welcomeSection}>
+    <section id="chapters" className="chapters">
       <div className="container">
-        <div className={styles.welcomeContent}>
-          <Heading as="h2" className={styles.welcomeTitle}>
-            🎉 Your Journey Starts Here!
-          </Heading>
-          <div className={styles.welcomeText}>
-            <p>
-              <strong>Welcome, future robotics engineer!</strong> You're about to embark on an exciting 
-              adventure into one of the most fascinating fields of modern technology. Whether you're 
-              taking your first steps into robotics or looking to deepen your expertise, this comprehensive 
-              guide is designed to transform your understanding and skills.
-            </p>
-            <p>
-              <strong>What makes this journey special?</strong> This isn't just another textbook – 
-              it's a living, breathing resource that grows with the field. Each chapter has been carefully 
-              crafted by AI to provide you with the most current, relevant, and practical knowledge available.
-            </p>
-            <p>
-              <strong>Ready to begin?</strong> Start with Chapter 1 and work your way through, or jump 
-              to any chapter that matches your current level. Each module is self-contained but builds 
-              upon a foundation of shared principles.
-            </p>
-          </div>
-          <div className={styles.welcomeActions}>
-            <Link
-              className={clsx('button button--primary button--lg', styles.welcomeButton)}
-              to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics">
-              🚀 Start Learning Now
+        <div className="chapters-header">
+          <h2 className="chapters-title">Complete Course Curriculum</h2>
+          <p className="chapters-subtitle">
+            Master humanoid robotics from fundamentals to advanced applications
+          </p>
+        </div>
+        <div className="chapters-grid">
+          {chapters.map((chapter, index) => (
+            <Link key={index} to={chapter.link} className="chapter-card">
+              <div className="chapter-header">
+                <div className="chapter-icon">{chapter.icon}</div>
+                <h3 className="chapter-title">{chapter.title}</h3>
+              </div>
+              <p className="chapter-description">{chapter.description}</p>
+              <div className="chapter-meta">
+                <span className="chapter-tag">{chapter.level}</span>
+                <span className="chapter-tag">{chapter.duration}</span>
+              </div>
             </Link>
-          </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
+// Main Component
 export default function Home(): React.ReactNode {
-  const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`${siteConfig.title} - AI-Driven Robotics Book`}
-      description="An innovative, AI-driven comprehensive guide to Physical & Humanoid Robotics">
-      <HeroSection />
-      <main>
-        <WelcomeSection />
-        <ChapterSection />
-        <FeaturesSection />
-      </main>
+      title="Ary's Physical & Humanoid Robotics"
+      description="A comprehensive guide to Physical & Humanoid Robotics">
+      <Navbar />
+      <Hero />
+      <Features />
+      <Chapters />
     </Layout>
   );
 }
