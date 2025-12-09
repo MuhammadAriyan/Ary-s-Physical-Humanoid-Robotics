@@ -1,22 +1,22 @@
 ---
-title: "Chapter 5: Humanoid Path Planning and Navigation"
+title: "Chapter 5: Path Planning and Navigation"
 sidebar_position: 5
 ---
 
-# Chapter 5: Humanoid Path Planning and Navigation
+# Chapter 5: Path Planning and Navigation
 
 ## Learning Objectives
 
 By the end of this chapter, you will be able to:
-- Understand the unique challenges of humanoid robot navigation
-- Implement various path planning algorithms for humanoid robots
-- Analyze the trade-offs between different planning approaches
-- Design navigation systems for complex human environments
-- Evaluate navigation strategies for real-world applications
+- Understand comprehensive navigation challenges for humanoid robots
+- Implement advanced path planning algorithms with AI integration
+- Analyze trade-offs between classical and learning-based approaches
+- Design intelligent navigation systems for complex human environments
+- Evaluate modern navigation strategies with SLAM and real-time adaptation
 
-## Introduction to Humanoid Navigation
+## Introduction
 
-**Path planning enables humanoid robots to move from start to goal** while avoiding obstacles and optimizing for various criteria like time, energy, or safety. Unlike wheeled robots, humanoid robots must consider additional constraints including balance, step placement, and human-like movement patterns.
+Path planning and navigation form the cognitive foundation that enables humanoid robots to autonomously traverse complex environments. Just as humans combine mental maps, sensory perception, and motor planning to navigate spaces, humanoid robots must integrate perception, planning, and control to move safely and efficiently through dynamic human environments. This chapter explores both classical path planning algorithms and modern AI-driven approaches that enable intelligent navigation.
 
 ### The Humanoid Navigation Problem
 

@@ -1,22 +1,22 @@
 ---
-title: "Chapter 3: Humanoid Actuators and Movement"
+title: "Chapter 3: Actuators and Movement Systems"
 sidebar_position: 3
 ---
 
-# Chapter 3: Humanoid Actuators and Movement
+# Chapter 3: Actuators and Movement Systems
 
 ## Learning Objectives
 
 By the end of this chapter, you will be able to:
-- Understand the specialized actuators required for humanoid robots
-- Explain the principles of bipedal locomotion and balance
+- Understand the comprehensive actuator ecosystem in humanoid robotics
+- Explain the principles of bipedal locomotion and balance control
 - Analyze different actuation technologies for human-like movement
-- Design movement systems for humanoid robot applications
-- Evaluate the trade-offs between different actuator types
+- Design integrated movement systems for humanoid applications
+- Evaluate the trade-offs between hydraulic, electric, and advanced actuator types
 
-## Introduction to Humanoid Actuation
+## Introduction
 
-**Actuators are the muscles of a humanoid robot** - they convert energy into physical motion to perform tasks and interact with the environment. Unlike industrial robots that prioritize precision and speed, humanoid actuators must balance strength, efficiency, safety, and human-like movement patterns.
+Actuators and movement systems form the muscular foundation of humanoid robotics, enabling robots to walk, grasp, and interact with the physical world. Just as human muscles convert metabolic energy into mechanical work, robotic actuators transform electrical, hydraulic, or pneumatic energy into controlled motion. This chapter explores the diverse actuation technologies that power modern humanoid robots, from high-power hydraulic systems to advanced bio-inspired artificial muscles.
 
 ### Humanoid Actuator Classification
 

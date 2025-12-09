@@ -49,7 +49,7 @@ const config: Config = {
         },
 
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: ['./src/css/custom.css', './src/css/docs.css'],
         },
       } satisfies Preset.Options,
     ],
@@ -62,19 +62,12 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'My Site',
+      title: "Ary's Physical Humanoid Robotics",
       logo: {
-        alt: 'My Site Logo',
+        alt: "Ary's Physical Humanoid Robotics Logo",
         src: 'img/logo.svg',
       },
       items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Book',
-        },
-
         {
           href: 'https://github.com/MuhammadAriyan/Ary-s-Physical-Humanoid-Robotics',
           label: 'GitHub',

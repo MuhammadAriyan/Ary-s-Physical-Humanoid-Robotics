@@ -21,12 +21,9 @@ function Navbar() {
           Ary's Robotics
         </Link>
         <div className="navbar-menu">
-          <Link to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics" className="navbar-link">
-            Book
-          </Link>
-          <Link to="/docs" className="navbar-link">
-            Docs
-          </Link>
+        <Link to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics" className="navbar-link">
+          Book
+        </Link>
           <Link to="#features" className="navbar-link">
             Features
           </Link>
@@ -80,7 +77,7 @@ function Hero() {
             Ary's Physical & Humanoid Robotics
           </h1>
           <p className="hero-subtitle">
-            A comprehensive guide to the fascinating world of robotics, 
+            A comprehensive guide to fascinating world of robotics, 
             from fundamental concepts to advanced applications in humanoid systems.
           </p>
           <div className="hero-actions">
@@ -88,13 +85,13 @@ function Hero() {
               to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics"
               className="btn btn-primary"
             >
-              Start Learning
+              <span>Start Learning</span>
             </Link>
             <Link
               to="#chapters"
               className="btn btn-secondary"
             >
-              View Chapters
+              <span>View Chapters</span>
             </Link>
           </div>
         </div>
@@ -149,7 +146,7 @@ function Features() {
         </div>
         <div className="features-grid">
           {features.map((feature, index) => (
-            <div key={index} className="feature-card animate-fade-in-up">
+            <div key={index} className={`feature-card animate-fade-in-up animate-stagger-${index + 1}`}>
               <div className="feature-icon">{feature.icon}</div>
               <h3 className="feature-title">{feature.title}</h3>
               <p className="feature-description">{feature.description}</p>
@@ -208,7 +205,7 @@ function Chapters() {
       icon: '🚀',
       title: 'Advanced Topics',
       description: 'Explore cutting-edge research in machine learning, computer vision, and human-robot interaction.',
-      link: '/docs',
+      link: '/docs/humanoid-robotics-course/advanced-topics',
       level: 'Advanced',
       duration: '40 min'
     }
@@ -225,7 +222,7 @@ function Chapters() {
         </div>
         <div className="chapters-grid">
           {chapters.map((chapter, index) => (
-            <Link key={index} to={chapter.link} className="chapter-card">
+            <Link key={index} to={chapter.link} className={`chapter-card animate-fade-in-up animate-stagger-${index + 1}`}>
               <div className="chapter-header">
                 <div className="chapter-icon">{chapter.icon}</div>
                 <h3 className="chapter-title">{chapter.title}</h3>
@@ -249,10 +246,15 @@ export default function Home(): React.ReactNode {
     <Layout
       title="Ary's Physical & Humanoid Robotics"
       description="A comprehensive guide to Physical & Humanoid Robotics">
+      <a href="#main-content" className="skip-to-main">
+        Skip to main content
+      </a>
       <Navbar />
-      <Hero />
-      <Features />
-      <Chapters />
+      <main id="main-content">
+        <Hero />
+        <Features />
+        <Chapters />
+      </main>
     </Layout>
   );
 }

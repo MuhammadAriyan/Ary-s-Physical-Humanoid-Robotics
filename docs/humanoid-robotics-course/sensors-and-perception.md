@@ -1,22 +1,22 @@
 ---
-title: "Chapter 2: Humanoid Robot Sensors and Perception"
+title: "Chapter 2: Sensors and Perception Systems"
 sidebar_position: 2
 ---
 
-# Chapter 2: Humanoid Robot Sensors and Perception
+# Chapter 2: Sensors and Perception Systems
 
 ## Learning Objectives
 
 By the end of this chapter, you will be able to:
-- Understand the specialized sensors required for humanoid robots
-- Explain how humanoid robots process sensory data for human-like perception
-- Describe sensor fusion techniques for robust environmental understanding
-- Analyze the unique perception challenges faced by humanoid robots
-- Design perception systems for humanoid robot applications
+- Understand the comprehensive sensor ecosystem in humanoid robotics
+- Explain how robots process sensory data for environmental perception
+- Describe sensor fusion techniques for robust understanding
+- Analyze perception challenges in dynamic human environments
+- Design integrated perception systems for humanoid applications
 
-## Introduction to Humanoid Robot Perception
+## Introduction
 
-Humanoid robot perception is the process of **interpreting sensory data** to understand and interact with human environments. Unlike industrial robots that operate in controlled settings, humanoid robots must navigate complex, dynamic spaces designed for humans.
+Sensors and perception systems form the sensory foundation of humanoid robotics, enabling robots to interact with and understand their environment. Just as humans rely on their five senses to navigate the world, humanoid robots depend on sophisticated sensor arrays to gather, process, and interpret information about their surroundings and internal states. This chapter explores the comprehensive sensor ecosystem that powers modern humanoid robots, from basic proximity detection to advanced AI-driven perception.
 
 ### The Humanoid Perception Pipeline
 
