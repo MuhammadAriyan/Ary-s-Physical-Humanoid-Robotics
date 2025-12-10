@@ -1,4 +1,4 @@
-name: Deploy Application with Backend
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -7,7 +7,6 @@ on:
       - 'src/**'
       - 'package.json'
       - 'docusaurus.config.ts'
-      - 'backend/**'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
@@ -17,116 +16,46 @@ permissions:
   id-token: write
 
 concurrency:
-  group: 'deploy'
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:
-  deploy-backend:
+  build:
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      
-      - name: Install backend dependencies
-        run: |
-          cd backend
-          pip install -r requirements.txt
-      
-      - name: Create database tables
-        env:
-          NEON_DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
-        run: |
-          cd backend
-          python -c "from app.database.init import create_db_and_tables; create_db_and_tables()"
-      
-      - name: Run backend tests
-        env:
-          NEON_DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENAI_BASE_URL: https://openrouter.ai/api/v1
-          APP_ENV: production
-          BACKEND_CORS_ORIGINS: "${{ secrets.FRONTEND_URL }}"
-        run: |
-          cd backend
-          python -m pytest tests/ -v
-      
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-      
-      - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          cd backend
-          railway login --token $RAILWAY_TOKEN
-          railway up
-      
-      - name: Backend health check simulation
-        run: |
-          cd backend
-          python -c "from app.main import app; print('Backend configuration validated')"
-
-  deploy-frontend:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: deploy-backend
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Node
+        
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20.19.5'
+          node-version: '20'
           cache: 'npm'
+          
       - name: Install dependencies
         run: npm ci
+        
       - name: Type check
         run: npm run typecheck
+        
       - name: Build
         run: npm run build
+        
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v4
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './build'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-  integration-tests:
-    runs-on: ubuntu-latest
-    needs: [deploy-backend, deploy-frontend]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.19.5'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Install Playwright
-        run: npx playwright install --with-deps
-      
-      - name: Run Playwright tests
-        run: npx playwright test
-      
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
