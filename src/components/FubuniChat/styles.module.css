@@ -94,9 +94,14 @@
   color: var(--ifm-button-color);
   border: 1px solid var(--ifm-color-emphasis-300);
   border-radius: var(--ifm-button-border-radius);
-  padding: var(--ifm-button-padding-vertical) var(--ifm-button-padding-horizontal);
+  padding: 0.25rem 0.5rem;
   cursor: pointer;
   font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
 }
 
 .fubuni-chat-btn:hover {
