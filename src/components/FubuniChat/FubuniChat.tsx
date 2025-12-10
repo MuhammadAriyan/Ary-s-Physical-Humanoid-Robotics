@@ -17,7 +17,7 @@ interface FubuniChatProps {
   backendUrl?: string;
 }
 
-const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:8000' }) => {
+const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = process.env.NODE_ENV === 'production' ? 'https://your-backend-url.railway.app' : 'http://localhost:8000' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
