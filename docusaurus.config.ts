@@ -3,6 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+// GitHub Pages deployment configuration
 
 const config: Config = {
   title: 'Ary\'s Physical & Humanoid Robotics',
