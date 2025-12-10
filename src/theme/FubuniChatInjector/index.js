@@ -4,7 +4,7 @@ import FubuniChat from '../../components/FubuniChat/FubuniChat';
 const FubuniChatInjector = () => {
   const backendUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
     ? 'http://localhost:8000'
-    : 'https://your-app-name.railway.app';  // Replace with your Railway URL
+    : 'https://humanoid-robotics-book-production.up.railway.app';  // Updated Railway URL
   
   return <FubuniChat backendUrl={backendUrl} />;
 };

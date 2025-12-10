@@ -7,23 +7,23 @@
 
 /* Fubuni Bubble Styles */
 .fubuni-bubble {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--ifm-color-primary), var(--ifm-color-primary-dark));
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  transition: all 0.3s ease;
-  border: none;
-  font-size: 24px;
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  z-index: 9999 !important;
+  transition: all 0.3s ease !important;
+  border: none !important;
+  font-size: 24px !important;
 }
 
 .fubuni-bubble:hover {
