@@ -1,5 +1,5 @@
 import React from 'react';
-import FubuniChat from '@site/src/components/FubuniChat/FubuniChat';
+import FubuniChat from '../../components/FubuniChat/FubuniChat';
 
 const FubuniChatInjector = () => {
   const backendUrl = process.env.NODE_ENV === 'production' 

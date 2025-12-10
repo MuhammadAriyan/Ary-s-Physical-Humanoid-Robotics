@@ -205,7 +205,7 @@ function Chapters() {
       icon: '🚀',
       title: 'Advanced Topics',
       description: 'Explore cutting-edge research in machine learning, computer vision, and human-robot interaction.',
-      link: '/docs/humanoid-robotics-course/advanced-topics',
+      link: '/docs/humanoid-robotics-course/introduction-to-humanoid-robotics',
       level: 'Advanced',
       duration: '40 min'
     }
