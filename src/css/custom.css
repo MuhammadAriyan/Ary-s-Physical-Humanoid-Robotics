@@ -349,7 +349,7 @@ body {
 
 /* Luxurious Hero Section */
 .hero {
-  padding: calc(80px + var(--space-24)) 0 var(--space-32);
+  padding: var(--space-24) 0 var(--space-32);
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -982,7 +982,7 @@ html {
   }
   
   .hero {
-    padding: calc(70px + var(--space-20)) 0 var(--space-24);
+    padding: var(--space-20) 0 var(--space-24);
   }
   
   .hero-title {
@@ -1070,7 +1070,7 @@ html {
   }
   
   .hero {
-    padding: calc(70px + var(--space-16)) 0 var(--space-20);
+    padding: var(--space-16) 0 var(--space-20);
   }
   
   .hero-title {
@@ -1121,18 +1121,19 @@ html {
 
 /* Hide default Docusaurus elements */
 .navbar__brand,
+.navbar,
 .footer {
   display: none;
 }
 
 /* Fix for overlapping content with fixed navbar */
 main {
-  padding-top: 80px;
+  padding-top: 0;
 }
 
 @media (max-width: 768px) {
   main {
-    padding-top: 70px;
+    padding-top: 0;
   }
 }
 
@@ -1157,7 +1158,7 @@ main {
 
 /* Fix for overlapping content with fixed navbar */
 main {
-  padding-top: 64px;
+  padding-top: 0;
 }
 
 /* Improve mobile navigation */

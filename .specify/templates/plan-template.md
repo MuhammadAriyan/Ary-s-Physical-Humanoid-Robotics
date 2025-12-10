@@ -31,7 +31,14 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify compliance with Fubuni Docs Agent Constitution:
+- Agent MUST be named "Fubuni" and never hallucinate (respond with "I'm not sure yet, teach me!" when lacking knowledge)
+- Implementation MUST use only OpenAI-compatible providers via OPENAI_BASE_URL (no direct API vendor locks)
+- Backend MUST be in Python 3.11 using official OpenAI Agents SDK
+- Frontend MUST perfectly match Docusaurus theme and use React + TypeScript
+- Implementation MUST be fully static deployable with no Node server at runtime
+- Initial implementation MUST NOT include vector DB, crawling, or embeddings
+- System architecture MUST support later documentation ingestion
 
 ## Project Structure
 

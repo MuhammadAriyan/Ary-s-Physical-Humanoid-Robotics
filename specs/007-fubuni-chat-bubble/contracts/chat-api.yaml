@@ -1,0 +1,232 @@
+openapi: 3.0.0
+info:
+  title: Fubuni Chat API
+  description: API for interacting with the Fubuni AI assistant
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://api.fubuni.example.com
+    description: Production server
+
+paths:
+  /api/chat:
+    post:
+      summary: Send a message to Fubuni and receive a response
+      description: Streams the response from Fubuni as Server-Sent Events (SSE)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Streaming response with Fubuni's reply
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/StreamEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      parameters:
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            enum: [text/event-stream]
+          example: text/event-stream
+
+  /api/chat/history/{session_id}:
+    get:
+      summary: Retrieve chat history for a specific session
+      description: Returns the complete chat history for the given session
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The session ID to retrieve history for
+      responses:
+        '200':
+          description: Chat history for the session
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session_id:
+                    type: string
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChatMessage'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/chat/sessions:
+    get:
+      summary: Retrieve chat sessions for a user
+      description: Returns a list of chat sessions for the authenticated user
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The user ID to retrieve sessions for
+      responses:
+        '200':
+          description: List of chat sessions for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatSession'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: The user's message/query for Fubuni
+          example: "How do I install this package?"
+        session_id:
+          type: string
+          description: Optional session identifier to maintain context (will be created if not provided)
+          example: "sess_abc123"
+        user_id:
+          type: string
+          description: Optional user identifier for associating messages with a user
+          example: "user_123"
+        stream:
+          type: boolean
+          description: Whether to stream the response (default: true)
+          default: true
+
+    ChatMessage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the message
+        sender:
+          type: string
+          enum: [user, fubuni]
+          description: Indicates whether the message is from user or Fubuni
+        content:
+          type: string
+          description: The text content of the message
+        timestamp:
+          type: string
+          format: date-time
+          description: When the message was created/sent
+        chat_session_id:
+          type: string
+          description: Reference to the parent chat session
+        sequence_number:
+          type: integer
+          description: Order of the message in the conversation
+      example:
+        id: "msg_123"
+        sender: "user"
+        content: "How do I install this package?"
+        timestamp: "2025-12-09T10:00:00Z"
+        chat_session_id: "sess_abc123"
+        sequence_number: 1
+
+    ChatSession:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the session
+        user_id:
+          type: string
+          description: Identifier for the user
+        created_at:
+          type: string
+          format: date-time
+          description: When the session was started
+        last_interaction:
+          type: string
+          format: date-time
+          description: When the last message was sent
+        is_active:
+          type: boolean
+          description: Whether the session is currently active
+        title:
+          type: string
+          description: Optional title for the session
+      example:
+        id: "sess_abc123"
+        user_id: "user_123"
+        created_at: "2025-12-09T10:00:00Z"
+        last_interaction: "2025-12-09T10:05:00Z"
+        is_active: true
+        title: "How to install package?"
+
+    StreamEvent:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [text, tool_call, complete]
+          description: The type of event being streamed
+        content:
+          type: string
+          description: The content of the event
+        timestamp:
+          type: string
+          format: date-time
+          description: When the event occurred
+      example:
+        type: text
+        content: "To install the package, run: npm install package-name"
+        timestamp: "2025-12-09T10:00:00Z"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Invalid request format"
+        details:
+          type: string
+          description: Additional error details
