@@ -70,9 +70,7 @@ export const auth = betterAuth({
   trustedOrigins: corsOrigins,
 
   // Advanced configuration
-  advanced: {
-    generateId: () => crypto.randomUUID(),
-  },
+  advanced: {},
 });
 
 export type Auth = typeof auth;
