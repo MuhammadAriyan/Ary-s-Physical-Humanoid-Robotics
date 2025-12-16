@@ -1,0 +1,319 @@
+openapi: 3.0.3
+info:
+  title: Fubuni Chat API (Protected Endpoints)
+  description: FastAPI chat endpoints with authentication
+  version: 2.0.0
+  contact:
+    name: Fubuni Team
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://maryanrar-fubuni-chat-api.hf.space
+    description: Production server (Hugging Face Spaces)
+
+paths:
+  /health:
+    get:
+      summary: Health check (PUBLIC)
+      operationId: healthCheck
+      tags:
+        - System
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+
+  /api/chat:
+    post:
+      summary: Send chat message (PROTECTED)
+      operationId: sendMessage
+      tags:
+        - Chat
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Chat response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/chat/stream:
+    post:
+      summary: Send chat message with streaming response (PROTECTED)
+      operationId: sendMessageStream
+      tags:
+        - Chat
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Server-Sent Events stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: SSE formatted response chunks
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/chat/sessions:
+    get:
+      summary: Get user's chat sessions (PROTECTED)
+      operationId: getChatSessions
+      tags:
+        - Chat
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of chat sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatSession'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/chat/history/{session_id}:
+    get:
+      summary: Get chat history for session (PROTECTED)
+      operationId: getChatHistory
+      tags:
+        - Chat
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Chat session ID
+      responses:
+        '200':
+          description: Chat messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChatMessage'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Session belongs to different user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/chat/test:
+    post:
+      summary: Test endpoint (PUBLIC)
+      operationId: testChat
+      tags:
+        - System
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Mock response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+
+  /api/rag/search:
+    post:
+      summary: Search knowledge base (PUBLIC)
+      operationId: ragSearch
+      tags:
+        - RAG
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RAGSearchRequest'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RAGSearchResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: JWT token from auth-service session
+
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: User message
+          example: What is humanoid robotics?
+        session_id:
+          type: string
+          nullable: true
+          description: Existing session ID (optional)
+        stream:
+          type: boolean
+          default: true
+          description: Whether to stream response
+
+    ChatResponse:
+      type: object
+      properties:
+        response:
+          type: string
+          description: Fubuni's response
+        session_id:
+          type: string
+          description: Chat session ID
+        timestamp:
+          type: string
+          format: date-time
+        error:
+          type: string
+          nullable: true
+
+    ChatSession:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        title:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        last_interaction:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean
+
+    ChatMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        sender:
+          type: string
+          enum: [user, fubuni]
+        content:
+          type: string
+        chat_session_id:
+          type: string
+        sequence_number:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+
+    RAGSearchRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+        top_k:
+          type: integer
+          default: 5
+        min_similarity:
+          type: number
+          default: 0.7
+        include_metadata:
+          type: boolean
+          default: true
+
+    RAGSearchResponse:
+      type: object
+      properties:
+        query:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+        total_results:
+          type: integer
+        search_time_ms:
+          type: number
+
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: Not authenticated

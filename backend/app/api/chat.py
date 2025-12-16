@@ -10,19 +10,26 @@ from ..agents.fubuni_agent import get_fubuni_agent
 from ..config.database import get_session
 from ..utils.streaming import create_sse_stream
 from ..config.settings import settings
+from ..middleware.auth import AuthUser, require_auth
 
 
 router = APIRouter()
 
 
 @router.get("/chat/sessions")
-async def get_chat_sessions(session: Session = Depends(get_session)):
+async def get_chat_sessions(
+    session: Session = Depends(get_session),
+    current_user: AuthUser = Depends(require_auth),
+):
     """
-    Get all chat sessions for a user
+    Get all chat sessions for the authenticated user.
+    Requires authentication.
     """
     try:
-        # For now, return all sessions (in a real implementation, this would be filtered by user)
-        chat_sessions = session.exec(select(ChatSession)).all()
+        # Filter sessions by authenticated user
+        chat_sessions = session.exec(
+            select(ChatSession).where(ChatSession.user_id == current_user.id)
+        ).all()
         return chat_sessions
     except Exception as e:
         raise HTTPException(
@@ -31,14 +38,22 @@ async def get_chat_sessions(session: Session = Depends(get_session)):
 
 
 @router.get("/chat/history/{session_id}")
-async def get_chat_history(session_id: str, session: Session = Depends(get_session)):
+async def get_chat_history(
+    session_id: str,
+    session: Session = Depends(get_session),
+    current_user: AuthUser = Depends(require_auth),
+):
     """
-    Get chat history for a specific session
+    Get chat history for a specific session.
+    Requires authentication and validates ownership.
     """
     try:
-        # Check if session exists
+        # Check if session exists and belongs to the authenticated user
         chat_session = session.exec(
-            select(ChatSession).where(ChatSession.id == session_id)
+            select(ChatSession).where(
+                ChatSession.id == session_id,
+                ChatSession.user_id == current_user.id,
+            )
         ).first()
 
         if not chat_session:
@@ -52,6 +67,8 @@ async def get_chat_history(session_id: str, session: Session = Depends(get_sessi
         ).all()
 
         return {"session": chat_session, "messages": messages}
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Error retrieving chat history: {str(e)}"
@@ -60,23 +77,29 @@ async def get_chat_history(session_id: str, session: Session = Depends(get_sessi
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(
-    chat_request: ChatRequest, session: Session = Depends(get_session)
+    chat_request: ChatRequest,
+    session: Session = Depends(get_session),
+    current_user: AuthUser = Depends(require_auth),
 ):
     """
-    Chat endpoint that processes user messages and returns Fubuni's response
+    Chat endpoint that processes user messages and returns Fubuni's response.
+    Requires authentication.
     """
     # Get or create a chat session
     chat_session: Optional[ChatSession] = None
     if chat_request.session_id:
-        # Try to find existing session
+        # Try to find existing session owned by this user
         chat_session = session.exec(
-            select(ChatSession).where(ChatSession.id == chat_request.session_id)
+            select(ChatSession).where(
+                ChatSession.id == chat_request.session_id,
+                ChatSession.user_id == current_user.id,
+            )
         ).first()
 
     # If no session provided or found, create a new one
     if not chat_session:
         chat_session = ChatSession(
-            user_id=f"anonymous_{uuid.uuid4()}",
+            user_id=current_user.id,  # Use authenticated user ID
             title=chat_request.message[:50]
             if len(chat_request.message) > 50
             else chat_request.message,
@@ -130,21 +153,28 @@ async def chat_endpoint(
 
 @router.post("/chat/stream")
 async def chat_stream_endpoint(
-    chat_request: ChatRequest, session: Session = Depends(get_session)
+    chat_request: ChatRequest,
+    session: Session = Depends(get_session),
+    current_user: AuthUser = Depends(require_auth),
 ):
     """
-    Streaming chat endpoint that returns Fubuni's response as Server-Sent Events
+    Streaming chat endpoint that returns Fubuni's response as Server-Sent Events.
+    Requires authentication.
     """
     # Get or create a chat session (similar to above)
     chat_session: Optional[ChatSession] = None
     if chat_request.session_id:
+        # Only allow access to sessions owned by this user
         chat_session = session.exec(
-            select(ChatSession).where(ChatSession.id == chat_request.session_id)
+            select(ChatSession).where(
+                ChatSession.id == chat_request.session_id,
+                ChatSession.user_id == current_user.id,
+            )
         ).first()
 
     if not chat_session:
         chat_session = ChatSession(
-            user_id=f"anonymous_{uuid.uuid4()}",
+            user_id=current_user.id,  # Use authenticated user ID
             title=chat_request.message[:50]
             if len(chat_request.message) > 50
             else chat_request.message,

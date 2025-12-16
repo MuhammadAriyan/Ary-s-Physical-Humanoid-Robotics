@@ -213,6 +213,8 @@ See `.specify/memory/constitution.md` for code quality, testing, performance, se
 - Python 3.11, TypeScript/JavaScript, React 18 + FastAPI, OpenAI Agents SDK (agents package), Docusaurus 3, React, TypeScript (007-fubuni-chat-bubble)
 - N/A (no persistent storage needed - all state is session-based) (007-fubuni-chat-bubble)
 - Neon Serverless Postgres database for storing chat sessions and messages (007-fubuni-chat-bubble)
+- Node.js 20 (auth-service), Python 3.11 (FastAPI), TypeScript 5.6 (React) + Better Auth, Express, FastAPI, React 19, Docusaurus 3 (008-better-auth)
+- Neon PostgreSQL (shared, `ba_` prefix for auth tables) (008-better-auth)
 
 ## Recent Changes
 - 007-fubuni-chat-bubble: Added Python 3.11, TypeScript/JavaScript, React 18 + FastAPI, OpenAI Agents SDK (agents package), Docusaurus 3, React, TypeScript
