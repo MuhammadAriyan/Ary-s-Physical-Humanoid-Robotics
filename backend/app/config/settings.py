@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     qdrant_api_key: str = os.getenv("QDRANT_API_KEY", "")
     qdrant_collection_name: str = os.getenv("QDRANT_COLLECTION_NAME", "robotics_docs")
 
+    # Auth service settings
+    auth_service_url: str = os.getenv("AUTH_SERVICE_URL", "http://localhost:4000")
+
     model_config = {"extra": "ignore"}
 
 
