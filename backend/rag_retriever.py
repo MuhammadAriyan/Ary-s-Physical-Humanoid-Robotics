@@ -5,12 +5,12 @@ Uses Sentence Transformers (HuggingFace) for FREE embeddings - no OpenAI needed!
 
 import os
 import logging
-from typing import List, Optional
+from typing import List
 import hashlib
 
 from qdrant_client import QdrantClient
-from langchain_qdrant import Qdrant
-from langchain.docstore.document import Document
+from langchain_qdrant import QdrantVectorStore
+from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 
 # Import settings
@@ -40,8 +40,8 @@ def get_qdrant_config():
         os.getenv("QDRANT_COLLECTION_NAME", "robotics_docs")
     )
 
-# Initialize global retriever instance
-_retriever = None
+# Initialize global instances
+_vector_store = None
 _embeddings = None
 
 # Query cache
@@ -61,18 +61,18 @@ def get_embeddings():
         logger.info("HuggingFace embeddings initialized successfully")
     return _embeddings
 
-def initialize_retriever():
-    """Initialize the RAG retriever with Qdrant and Sentence Transformers"""
-    global _retriever
+def get_vector_store():
+    """Get or create the Qdrant vector store"""
+    global _vector_store
 
     if not RAG_ENABLED:
         logger.info("RAG is disabled via RAG_ENABLED environment variable")
         return None
 
-    if _retriever is not None:
-        return _retriever
+    if _vector_store is not None:
+        return _vector_store
 
-    logger.info("Initializing RAG retriever with Qdrant + Sentence Transformers...")
+    logger.info("Initializing Qdrant vector store...")
 
     qdrant_url, qdrant_api_key, qdrant_collection_name = get_qdrant_config()
 
@@ -81,40 +81,29 @@ def initialize_retriever():
         return None
 
     try:
-        # Initialize HuggingFace embeddings (FREE!)
         embeddings = get_embeddings()
 
-        # Connect to Qdrant
-        if qdrant_api_key:
-            client = QdrantClient(url=qdrant_url, api_key=qdrant_api_key)
-        else:
-            client = QdrantClient(url=qdrant_url)
-
-        # Check if collection exists
-        try:
-            client.get_collection(qdrant_collection_name)
-        except Exception as e:
-            logger.warning(f"Qdrant collection '{qdrant_collection_name}' not found: {e}")
-            return None
-
-        # Create Qdrant vector store
-        qdrant_store = Qdrant(
-            client=client,
+        # Connect to Qdrant using QdrantVectorStore
+        _vector_store = QdrantVectorStore.from_existing_collection(
+            embedding=embeddings,
             collection_name=qdrant_collection_name,
-            embeddings=embeddings,
+            url=qdrant_url,
+            api_key=qdrant_api_key if qdrant_api_key else None,
         )
 
-        # Create retriever (no compression - keeps it simple and fast)
-        _retriever = qdrant_store.as_retriever(
-            search_kwargs={"k": 5}
-        )
-
-        logger.info("RAG retriever initialized successfully with Sentence Transformers!")
-        return _retriever
+        logger.info("Qdrant vector store initialized successfully!")
+        return _vector_store
 
     except Exception as e:
-        logger.error(f"Error initializing RAG retriever: {e}")
+        logger.error(f"Error initializing Qdrant vector store: {e}")
         return None
+
+def initialize_retriever():
+    """Initialize the RAG retriever - for backwards compatibility"""
+    store = get_vector_store()
+    if store:
+        return store.as_retriever(search_kwargs={"k": 5})
+    return None
 
 def get_relevant_documents(query: str) -> List[Document]:
     """Retrieve relevant documents for a query"""
@@ -124,13 +113,14 @@ def get_relevant_documents(query: str) -> List[Document]:
         logger.info(f"Cache hit for query: {query[:50]}...")
         return _query_cache[query_hash]
 
-    retriever = initialize_retriever()
-    if retriever is None:
-        logger.warning("RAG retriever not available")
+    store = get_vector_store()
+    if store is None:
+        logger.warning("Vector store not available")
         return []
 
     try:
-        documents = retriever.get_relevant_documents(query)
+        # Use similarity_search directly on the vector store
+        documents = store.similarity_search(query, k=5)
         logger.info(f"Retrieved {len(documents)} documents for: {query[:50]}...")
 
         # Cache results
@@ -144,25 +134,12 @@ def get_relevant_documents(query: str) -> List[Document]:
 
 def get_relevant_documents_with_scores(query: str, top_k: int = 5) -> List[tuple]:
     """Retrieve documents with similarity scores"""
-    if initialize_retriever() is None:
+    store = get_vector_store()
+    if store is None:
         return []
 
     try:
-        qdrant_url, qdrant_api_key, qdrant_collection_name = get_qdrant_config()
-        embeddings = get_embeddings()
-
-        if qdrant_api_key:
-            client = QdrantClient(url=qdrant_url, api_key=qdrant_api_key)
-        else:
-            client = QdrantClient(url=qdrant_url)
-
-        qdrant_store = Qdrant(
-            client=client,
-            collection_name=qdrant_collection_name,
-            embeddings=embeddings,
-        )
-
-        results = qdrant_store.similarity_search_with_score(query, k=top_k)
+        results = store.similarity_search_with_score(query, k=top_k)
         return results
     except Exception as e:
         logger.error(f"Error retrieving documents with scores: {e}")
