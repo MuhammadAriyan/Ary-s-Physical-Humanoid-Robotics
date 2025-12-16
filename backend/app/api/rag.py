@@ -1,9 +1,20 @@
 from fastapi import APIRouter, HTTPException
 import logging
+import sys
+import os
 from pydantic import BaseModel, Field
 from typing import Optional
 import time
-from ...rag_retriever import get_relevant_documents_with_scores, RAG_ENABLED
+
+# Add parent directory to path for rag_retriever import
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+
+try:
+    from rag_retriever import get_relevant_documents_with_scores, RAG_ENABLED
+except ImportError:
+    RAG_ENABLED = False
+    def get_relevant_documents_with_scores(query, top_k):
+        return []
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
