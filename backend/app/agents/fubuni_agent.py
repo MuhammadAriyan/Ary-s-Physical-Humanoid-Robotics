@@ -7,6 +7,7 @@ from agents import (
 )
 from agents.run import RunConfig
 import os
+import sys
 from dotenv import load_dotenv
 from openai.types.responses import ResponseTextDeltaEvent
 from ..config.settings import settings
@@ -14,6 +15,14 @@ import asyncio
 
 # Enable verbose logging for stdout
 from agents import enable_verbose_stdout_logging
+
+# Import RAG functionality (rag_retriever.py is in the backend folder)
+import os.path as osp
+current_dir = osp.dirname(osp.abspath(__file__))
+backend_dir = osp.join(current_dir, '..', '..')  # Go up 2 levels to backend
+sys.path.insert(0, backend_dir)
+
+from rag_retriever import search_knowledge_base as rag_search_knowledge_base
 
 # debugging
 enable_verbose_stdout_logging()  # Enable verbose logging for stdout
@@ -69,13 +78,60 @@ async def get_robotics_info(topic: str) -> str:
     return f"Here's some information about {topic}: This is a robotics documentation platform. You can find detailed information about various robotics topics in the documentation."
 
 
+# RAG tool for searching the knowledge base
+@function_tool
+async def search_knowledge_base(query: str) -> str:
+    """Search private documents for factual information. Use only when user asks about specific topics likely covered in docs."""
+    # Call the RAG function from rag_retriever module
+    result = rag_search_knowledge_base(query)
+    return result
+
+# Tool to determine if a query should use RAG
+@function_tool
+async def should_use_rag(query: str) -> str:
+    """Determine if the user's query is likely to require factual/technical information from the knowledge base."""
+    # Simple heuristic: check if query contains keywords suggesting factual/technical nature
+    query_lower = query.lower()
+    technical_keywords = [
+        'what is', 'how does', 'explain', 'describe', 'define', 'specification',
+        'procedure', 'process', 'method', 'technique', 'component', 'system',
+        'architecture', 'design', 'principle', 'mechanism', 'algorithm', 'formula',
+        'data', 'statistics', 'research', 'study', 'findings', 'results'
+    ]
+
+    # Check if query contains technical keywords
+    for keyword in technical_keywords:
+        if keyword in query_lower:
+            return "yes"
+
+    # Check if query asks about specific documented topics
+    documented_topics = [
+        'robot', 'humanoid', 'actuator', 'sensor', 'balance', 'locomotion',
+        'control system', 'programming', 'calibration', 'safety', 'protocol',
+        'spec', 'documentation', 'manual', 'guide', 'handbook', 'tutorial'
+    ]
+
+    for topic in documented_topics:
+        if topic in query_lower:
+            return "yes"
+
+    # If no strong indicators, default to not using RAG
+    return "no"
+
+
 class FubuniAgent:
     def __init__(self):
         _initialize_agent()
         self.agent = Agent(
             name="Fubuni",
-            instructions="You are Fubuni, an AI assistant for Physical Humanoid Robotics documentation platform. Always respond helpfully and accurately. If you don't know something, respond with 'I'm not sure yet, teach me!'. Be concise but informative in your responses. Use the get_robotics_info tool when users ask about specific robotics topics.",
-            tools=[get_robotics_info],
+            instructions="You are Fubuni, an AI assistant for Physical Humanoid Robotics documentation platform. Always respond helpfully and accurately. If you don't know something, respond with 'I'm not sure yet, teach me!'. Be concise but informative in your responses.\n\n"
+                         "When a user asks a question, first consider if it's likely to require factual or technical information from the documentation. "
+                         "Use the should_use_rag tool to help determine this. If the answer is 'yes', use the search_knowledge_base tool to retrieve "
+                         "relevant information from the documentation. Always prioritize information from the knowledge base for factual topics. "
+                         "If no relevant documents are found, fall back to your general knowledge but clearly indicate that you're not referencing the documentation. "
+                         "Use the get_robotics_info tool when users ask about general robotics topics that might not be in the specific documentation.\n\n"
+                         "Always cite sources when using information from the knowledge base.",
+            tools=[get_robotics_info, search_knowledge_base, should_use_rag],
         )
 
     async def process_message(self, message: str, session_id: str = None) -> str:

@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config.settings import settings
-from .api import chat, test_chat
+from .api import chat, test_chat, rag
+from .database.init import create_db_and_tables
 import json
 
 
@@ -30,6 +31,11 @@ def create_app():
     # Include API routes
     app.include_router(chat.router, prefix="/api", tags=["chat"])
     app.include_router(test_chat.router, prefix="/api", tags=["test"])
+    app.include_router(rag.router, prefix="/api", tags=["rag"])
+
+    @app.on_event("startup")
+    def on_startup():
+        create_db_and_tables()
 
     return app
 
