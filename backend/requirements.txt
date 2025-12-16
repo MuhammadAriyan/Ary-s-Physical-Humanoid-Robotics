@@ -12,8 +12,9 @@ openai-agents==0.0.4
 mangum==0.17.0
 pytest==8.3.3
 pytest-asyncio==0.24.0
-# RAG dependencies
+# RAG dependencies (using FREE HuggingFace embeddings)
 langchain>=0.1.0
-langchain-openai>=0.0.5
 langchain-qdrant>=0.1.0
+langchain-huggingface>=0.0.1
+sentence-transformers>=2.2.0
 qdrant-client>=1.7.0
