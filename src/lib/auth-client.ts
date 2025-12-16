@@ -5,8 +5,10 @@ const getAuthUrl = () => {
   if (typeof window !== "undefined") {
     // Client-side: check for production or use localhost
     if (window.location.hostname !== "localhost") {
-      // Production: use relative path or configured URL
-      return process.env.REACT_APP_AUTH_URL || "https://your-auth-service.hf.space";
+      // Production: use environment variable or fallback to deployed auth service
+      return process.env.REACT_APP_AUTH_URL ||
+             process.env.AUTH_URL ||
+             "https://ary-s-physical-humanoid-robotics.vercel.app";
     }
   }
   return "http://localhost:4000";
