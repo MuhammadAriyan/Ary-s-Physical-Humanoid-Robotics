@@ -16,13 +16,20 @@ import asyncio
 # Enable verbose logging for stdout
 from agents import enable_verbose_stdout_logging
 
-# Import RAG functionality (rag_retriever.py is in the backend folder)
+# Import RAG functionality (rag_retriever.py is at /app/ in Docker)
 import os.path as osp
 current_dir = osp.dirname(osp.abspath(__file__))
-backend_dir = osp.join(current_dir, '..', '..')  # Go up 2 levels to backend
-sys.path.insert(0, backend_dir)
+# In Docker: /app/app/agents/ -> need /app/
+# Locally: backend/app/agents/ -> need backend/
+app_root = osp.join(current_dir, '..', '..')  # Go up to /app or backend
+sys.path.insert(0, app_root)
 
-from rag_retriever import search_knowledge_base as rag_search_knowledge_base
+try:
+    from rag_retriever import search_knowledge_base as rag_search_knowledge_base
+except ImportError:
+    # Fallback: RAG not available
+    def rag_search_knowledge_base(query: str) -> str:
+        return "RAG system not available. Please check configuration."
 
 # debugging
 enable_verbose_stdout_logging()  # Enable verbose logging for stdout

@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY app/ ./app/
+COPY rag_retriever.py ./
 
 # Hugging Face Spaces uses port 7860
 EXPOSE 7860
