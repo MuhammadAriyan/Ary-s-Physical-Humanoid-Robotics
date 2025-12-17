@@ -1,4 +1,4 @@
-# Claude Code Rules
+# Gemini CLI Rules
 
 This file is generated during init for the selected agent.
 
@@ -208,15 +208,3 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
-
-## Active Technologies
-- Python 3.11, TypeScript/JavaScript, React 18 + FastAPI, OpenAI Agents SDK (agents package), Docusaurus 3, React, TypeScript (007-fubuni-chat-bubble)
-- N/A (no persistent storage needed - all state is session-based) (007-fubuni-chat-bubble)
-- Neon Serverless Postgres database for storing chat sessions and messages (007-fubuni-chat-bubble)
-- Node.js 20 (auth-service), Python 3.11 (FastAPI), TypeScript 5.6 (React) + Better Auth, Express, FastAPI, React 19, Docusaurus 3 (008-better-auth)
-- Neon PostgreSQL (shared, `ba_` prefix for auth tables) (008-better-auth)
-- TypeScript 5.6 (React components), Python 3.11 (FastAPI backend) + Docusaurus 3.9.2, React 19, FastAPI, OpenAI SDK (Python) (010-i18n-floating-toggle)
-- Neon PostgreSQL (existing `ba_` prefixed tables + new `chapter_translations` table) (010-i18n-floating-toggle)
-
-## Recent Changes
-- 007-fubuni-chat-bubble: Added Python 3.11, TypeScript/JavaScript, React 18 + FastAPI, OpenAI Agents SDK (agents package), Docusaurus 3, React, TypeScript

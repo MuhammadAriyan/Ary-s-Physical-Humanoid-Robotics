@@ -30,3 +30,7 @@ class ChatMessage(ChatMessageBase, table=True):
 
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
     timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+
+# Import the new translation model
+from .translation import ChapterTranslationDB

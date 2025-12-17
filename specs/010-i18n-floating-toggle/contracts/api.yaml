@@ -1,0 +1,294 @@
+openapi: 3.0.3
+info:
+  title: i18n Translation API
+  description: API for AI-powered chapter translation and translation storage
+  version: 1.0.0
+  contact:
+    name: Ary's Physical Humanoid Robotics
+
+servers:
+  - url: /api
+    description: Backend API (relative path)
+
+tags:
+  - name: Translation
+    description: AI translation operations
+  - name: Translations Storage
+    description: CRUD operations for saved translations
+
+paths:
+  /translate:
+    post:
+      tags:
+        - Translation
+      summary: Trigger AI translation of chapter content
+      description: |
+        Translates the provided content to Urdu using an OpenAI-compatible provider.
+        Requires authentication. Does not save the translation automatically.
+      operationId: translateContent
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslateRequest'
+            example:
+              chapterId: "humanoid-robotics-course/introduction"
+              content: "# Introduction to Humanoid Robotics\n\nThis chapter covers..."
+              targetLocale: "ur"
+      responses:
+        '200':
+          description: Translation successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslateResponse'
+              example:
+                success: true
+                translation: "# انسان نما روبوٹکس کا تعارف\n\nیہ باب..."
+        '400':
+          description: Invalid request (missing fields, invalid locale)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Rate limit exceeded. Please try again in 60 seconds."
+        '500':
+          description: Translation failed (AI provider error)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                error: "Translation service temporarily unavailable"
+
+  /translations:
+    post:
+      tags:
+        - Translations Storage
+      summary: Save a translation
+      description: |
+        Persists an AI-generated translation to the database.
+        Requires authentication. Overwrites existing translation for same chapter/locale.
+      operationId: saveTranslation
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveTranslationRequest'
+            example:
+              chapterId: "humanoid-robotics-course/introduction"
+              locale: "ur"
+              content: "# انسان نما روبوٹکس کا تعارف\n\nیہ باب..."
+      responses:
+        '201':
+          description: Translation saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveTranslationResponse'
+              example:
+                success: true
+                translationId: 42
+                message: "Translation saved successfully"
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Database error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /translations/{chapterId}/{locale}:
+    get:
+      tags:
+        - Translations Storage
+      summary: Get saved translation
+      description: |
+        Retrieves a saved translation for a specific chapter and locale.
+        Does not require authentication (public read).
+      operationId: getTranslation
+      parameters:
+        - name: chapterId
+          in: path
+          required: true
+          description: URL-encoded chapter identifier (e.g., humanoid-robotics-course%2Fintroduction)
+          schema:
+            type: string
+          example: "humanoid-robotics-course/introduction"
+        - name: locale
+          in: path
+          required: true
+          description: Target locale code
+          schema:
+            type: string
+            enum: [ur]
+          example: "ur"
+      responses:
+        '200':
+          description: Translation found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTranslationResponse'
+              example:
+                exists: true
+                translation:
+                  id: 42
+                  content: "# انسان نما روبوٹکس کا تعارف\n\nیہ باب..."
+                  translatedBy: "Muhammad Ariyan"
+                  updatedAt: "2025-12-17T10:30:00Z"
+        '404':
+          description: No translation exists for this chapter/locale
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTranslationResponse'
+              example:
+                exists: false
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Better Auth JWT token
+
+  schemas:
+    TranslateRequest:
+      type: object
+      required:
+        - chapterId
+        - content
+        - targetLocale
+      properties:
+        chapterId:
+          type: string
+          description: Unique identifier for the chapter (derived from URL path)
+          maxLength: 255
+          pattern: '^[a-z0-9-]+/[a-z0-9-]+$'
+          example: "humanoid-robotics-course/introduction"
+        content:
+          type: string
+          description: Markdown content to translate
+          minLength: 1
+          maxLength: 100000
+        targetLocale:
+          type: string
+          description: Target language code
+          enum: [ur]
+
+    TranslateResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+        translation:
+          type: string
+          description: Translated markdown content (present when success=true)
+        error:
+          type: string
+          description: Error message (present when success=false)
+
+    SaveTranslationRequest:
+      type: object
+      required:
+        - chapterId
+        - locale
+        - content
+      properties:
+        chapterId:
+          type: string
+          maxLength: 255
+          pattern: '^[a-z0-9-]+/[a-z0-9-]+$'
+        locale:
+          type: string
+          enum: [ur]
+        content:
+          type: string
+          description: Translated markdown content
+          minLength: 1
+
+    SaveTranslationResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+        translationId:
+          type: integer
+          description: Database ID of saved translation
+        message:
+          type: string
+        error:
+          type: string
+
+    GetTranslationResponse:
+      type: object
+      required:
+        - exists
+      properties:
+        exists:
+          type: boolean
+          description: Whether a translation exists
+        translation:
+          type: object
+          description: Translation data (present when exists=true)
+          properties:
+            id:
+              type: integer
+            content:
+              type: string
+            translatedBy:
+              type: string
+              description: Name of user who saved the translation
+            updatedAt:
+              type: string
+              format: date-time
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          type: string
+          description: Human-readable error message

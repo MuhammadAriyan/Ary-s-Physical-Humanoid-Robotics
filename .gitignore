@@ -1,68 +1,82 @@
 # Dependencies
-/node_modules
-
-# Production
-/build
-/dist
-
-# Generated files
-.docusaurus
-.cache-loader
-
-# Python
+node_modules/
+backend/.venv/
+backend/venv/
+backend/requirements/*.txt
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
+*.pyc
+*.pyo
+*.pyd
 .Python
 env/
-venv/
 .venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-.git/index.lock
-.git/shallow
-.pytest_cache/
-.hypothesis/
+venv/
+ENV/
+.venv.bak/
+venv.bak/
 
-# Backend Python
-backend/__pycache__/
-backend/*.py[cod]
-backend/*$py.class
-backend/venv/
-backend/.venv/
+# Build outputs
+build/
+dist/
+dist/*
+*.min.js
+*.min.css
+*.bundle.js
+coverage/
+.nyc_output
+.nyc_coverage
 
-# Production
-backend/build/
-backend/dist/
-
-# Database
-*.sqlite
-*.db
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Misc
-.DS_Store
-.env.development.local
-.env.test.local
-.env.production.local
+# Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# OpenCode
-.opencode.json
-backend/myenv/
+# Environment variables
+.env*
+!.env.example
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vscode-test/
+
+# Docusaurus
+.docusaurus/
+.checkdb/
+.checkdb-test/
+
+# Backend
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/.pytest_cache/
+backend/.coverage
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Temporary folders
+tmp/
+temp/

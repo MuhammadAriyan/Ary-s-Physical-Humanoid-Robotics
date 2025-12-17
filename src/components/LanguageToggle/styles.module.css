@@ -1,0 +1,123 @@
+.languageToggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  z-index: 9998;
+  backdrop-filter: blur(10px);
+  background: var(--glass-bg-light, rgba(255, 255, 255, 0.2));
+  box-shadow: var(--glass-shadow-light, 0 4px 30px rgba(0, 0, 0, 0.1));
+  transition: all var(--transition-smooth, 0.3s ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid var(--glass-border-light, rgba(255, 255, 255, 0.3));
+  padding: 0;
+}
+
+.languageToggle:hover {
+  background: var(--glass-bg-light-hover, rgba(255, 255, 255, 0.3));
+  transform: scale(1.1);
+}
+
+.languageToggleIcon {
+  font-size: 20px;
+  color: var(--ifm-color-emphasis-900);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.languageCode {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-900);
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background: var(--glass-bg-light, rgba(255, 255, 255, 0.2));
+  padding: 2px 4px;
+  border-radius: 3px;
+  backdrop-filter: blur(5px);
+}
+
+.languageToggleContainer {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9998;
+}
+
+/* Dropdown styles */
+.languageToggleDropdown {
+  position: absolute;
+  background: var(--glass-bg-light, rgba(255, 255, 255, 0.2));
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  box-shadow: var(--glass-shadow-light, 0 4px 30px rgba(0, 0, 0, 0.1));
+  border: 1px solid var(--glass-border-light, rgba(255, 255, 255, 0.3));
+  padding: 8px 0;
+  min-width: 120px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.languageToggleOption {
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: var(--ifm-color-emphasis-900);
+  font-size: 14px;
+}
+
+.languageToggleOption:hover {
+  background: var(--glass-bg-light-hover, rgba(255, 255, 255, 0.3));
+}
+
+.languageToggleOption:focus {
+  outline: 2px solid var(--ifm-color-primary);
+}
+
+.languageToggleOptionActive {
+  background: var(--glass-bg-light-hover, rgba(255, 255, 255, 0.3));
+  font-weight: 600;
+}
+
+.checkmark {
+  margin-left: 8px;
+  color: var(--ifm-color-success);
+  font-weight: bold;
+}
+
+/* Dark theme support */
+[data-theme='dark'] .languageToggle {
+  background: var(--glass-bg-dark, rgba(0, 0, 0, 0.2));
+  border: 1px solid var(--glass-border-dark, rgba(255, 255, 255, 0.1));
+}
+
+[data-theme='dark'] .languageToggle:hover {
+  background: var(--glass-bg-dark-hover, rgba(0, 0, 0, 0.3));
+}
+
+[data-theme='dark'] .languageToggleOption {
+  color: var(--ifm-color-emphasis-100);
+}
+
+[data-theme='dark'] .languageToggleOption:hover {
+  background: var(--glass-bg-dark-hover, rgba(0, 0, 0, 0.3));
+}
+
+/* RTL support - for when the toggle is used in RTL context */
+[dir='rtl'] .languageToggleDropdown {
+  right: 0;
+  left: auto;
+}

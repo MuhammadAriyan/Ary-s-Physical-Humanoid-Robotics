@@ -1,0 +1,27 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install minimal dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Copy and install Python requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY app ./app/
+COPY rag_retriever.py ./
+
+# HF Spaces uses port 7860
+EXPOSE 7860
+
+# Environment variables (secrets set in HF Space settings)
+ENV APP_ENV=production
+# AUTH_SERVICE_URL will be set in HF secrets to point to Vercel auth service
+
+# Run FastAPI
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7860"]

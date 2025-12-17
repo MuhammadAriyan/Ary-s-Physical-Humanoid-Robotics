@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+backend/.venv/
+backend/venv/
+backend/requirements/*.txt
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build outputs
+build/
+dist/
+*.min.js
+*.min.css
+*.bundle.js
+
+# Logs
+*.log
+
+# Environment variables
+.env*
+!.env.example
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE specific
+.vscode/
+.idea/
+
+# Docusaurus
+.docusaurus/
+
+# Backend
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/.pytest_cache/
+
+# Git
+.git/
+.gitignore
+
+# Tests
+tests/
+test/
+
+# Coverage
+coverage/
+.nyc_output
+.nyc_coverage
