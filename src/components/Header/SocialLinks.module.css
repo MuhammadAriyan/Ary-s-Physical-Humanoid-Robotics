@@ -1,0 +1,110 @@
+/**
+ * SocialLinks Component Styles
+ * Social media icon links with hover effects
+ */
+
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+.socialLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ==========================================================================
+   Social Link Button
+   ========================================================================== */
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-black);
+  text-decoration: none;
+  transition: all var(--transition-smooth);
+}
+
+.socialLink:hover {
+  background: var(--gray-100);
+  color: var(--color-black);
+  transform: translateY(-2px);
+}
+
+.socialLink:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: 2px;
+}
+
+.socialLink:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Dark Mode
+   ========================================================================== */
+
+[data-theme='dark'] .socialLink {
+  color: var(--color-white);
+}
+
+[data-theme='dark'] .socialLink:hover {
+  background: var(--gray-800);
+  color: var(--color-white);
+}
+
+[data-theme='dark'] .socialLink:focus-visible {
+  outline-color: var(--color-white);
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .socialLink {
+    width: 32px;
+    height: 32px;
+  }
+
+  .socialLinks {
+    gap: var(--space-1);
+  }
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .socialLink {
+    transition: none;
+  }
+
+  .socialLink:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   High Contrast Mode
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  .socialLink {
+    border: 1px solid currentColor;
+  }
+
+  .socialLink:hover {
+    border-color: var(--color-black);
+  }
+
+  [data-theme='dark'] .socialLink:hover {
+    border-color: var(--color-white);
+  }
+}

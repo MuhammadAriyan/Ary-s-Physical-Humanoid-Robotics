@@ -1,0 +1,168 @@
+/**
+ * MobileMenu Component Styles
+ * Slide-in drawer with glassmorphism design
+ */
+
+/* ==========================================================================
+   Backdrop Overlay
+   ========================================================================== */
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--z-fixed) + 10);
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Drawer Panel
+   ========================================================================== */
+
+.drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  background: var(--glass-white-heavy);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-left: var(--border-light);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  overflow-y: auto;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+[data-theme='dark'] .drawer {
+  background: var(--glass-black-heavy);
+  border-left-color: rgba(255, 255, 255, 0.1);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   Drawer Header
+   ========================================================================== */
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: var(--space-4);
+  border-bottom: var(--border-light);
+}
+
+[data-theme='dark'] .drawerHeader {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   Close Button
+   ========================================================================== */
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-black);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-smooth);
+}
+
+.closeButton:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: 2px;
+}
+
+.closeButton:active {
+  transform: scale(0.95);
+}
+
+[data-theme='dark'] .closeButton {
+  color: var(--color-white);
+}
+
+[data-theme='dark'] .closeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .closeButton:focus-visible {
+  outline-color: var(--color-white);
+}
+
+/* ==========================================================================
+   Drawer Content
+   ========================================================================== */
+
+.drawerContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+  gap: var(--space-4);
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop {
+    animation: none;
+  }
+
+  .drawer {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   High Contrast Mode
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  .drawer {
+    border-left: 2px solid var(--color-black);
+  }
+
+  [data-theme='dark'] .drawer {
+    border-left-color: var(--color-white);
+  }
+
+  .drawerHeader {
+    border-bottom-width: 2px;
+  }
+}

@@ -1,0 +1,205 @@
+/**
+ * LanguageSelector Component Styles
+ * Dropdown selector with glassmorphism design
+ */
+
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+.languageSelector {
+  position: relative;
+  display: inline-flex;
+}
+
+/* ==========================================================================
+   Selector Button
+   ========================================================================== */
+
+.selectorButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-black);
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-smooth);
+  white-space: nowrap;
+}
+
+.selectorButton:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.selectorButton:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: 2px;
+}
+
+.selectorButton:disabled {
+  cursor: default;
+}
+
+[data-theme='dark'] .selectorButton {
+  color: var(--color-white);
+}
+
+[data-theme='dark'] .selectorButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme='dark'] .selectorButton:focus-visible {
+  outline-color: var(--color-white);
+}
+
+/* ==========================================================================
+   Flag and Label
+   ========================================================================== */
+
+.flag {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.label {
+  display: inline-block;
+}
+
+.chevron {
+  transition: transform var(--transition-smooth);
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   Dropdown Menu
+   ========================================================================== */
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 160px;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  background: var(--glass-white-heavy);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevated);
+  z-index: calc(var(--z-fixed) + 5);
+  animation: dropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-theme='dark'] .dropdown {
+  background: var(--glass-black-heavy);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   Dropdown Items
+   ========================================================================== */
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-black);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-smooth);
+}
+
+.dropdownItem:hover,
+.dropdownItem:focus-visible {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.dropdownItem:focus-visible {
+  outline: 2px solid var(--color-black);
+  outline-offset: -2px;
+}
+
+.dropdownItem.active {
+  font-weight: 600;
+}
+
+[data-theme='dark'] .dropdownItem {
+  color: var(--color-white);
+}
+
+[data-theme='dark'] .dropdownItem:hover,
+[data-theme='dark'] .dropdownItem:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .dropdownItem:focus-visible {
+  outline-color: var(--color-white);
+}
+
+/* ==========================================================================
+   Checkmark
+   ========================================================================== */
+
+.checkmark {
+  margin-left: auto;
+  color: var(--color-black);
+  font-size: var(--text-sm);
+}
+
+[data-theme='dark'] .checkmark {
+  color: var(--color-white);
+}
+
+/* ==========================================================================
+   Reduced Motion Support
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .dropdown {
+    animation: none;
+  }
+
+  .chevron {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Mobile Adjustments
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .selectorButton {
+    padding: var(--space-2);
+  }
+
+  .dropdown {
+    right: auto;
+    left: 0;
+    min-width: 140px;
+  }
+}

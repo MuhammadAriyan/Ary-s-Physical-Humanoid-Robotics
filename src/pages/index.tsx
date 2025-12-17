@@ -2,70 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 
-// Navigation Component
-function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
-      <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
-          Ary's Robotics
-        </Link>
-        <div className="navbar-menu">
-        <Link to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics" className="navbar-link">
-          Book
-        </Link>
-          <Link to="#features" className="navbar-link">
-            Features
-          </Link>
-          <ThemeToggle />
-        </div>
-      </div>
-    </nav>
-  );
-}
-
-// Theme Toggle Component
-function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-    
-    document.documentElement.setAttribute('data-theme', theme);
-    setIsDark(theme === 'dark');
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = isDark ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    setIsDark(!isDark);
-  };
-
-  return (
-    <button 
-      className="theme-toggle" 
-      onClick={toggleTheme}
-      aria-label="Toggle theme"
-    >
-      <div className="theme-toggle-slider">
-        {isDark ? '🌙' : '☀️'}
-      </div>
-    </button>
-  );
-}
 
 // Hero Section
 function Hero() {
@@ -87,12 +24,12 @@ function Hero() {
             >
               <span>Start Learning</span>
             </Link>
-            <Link
-              to="#chapters"
+            <a
+              href="#chapters"
               className="btn btn-secondary"
             >
               <span>View Chapters</span>
-            </Link>
+            </a>
           </div>
         </div>
       </div>
@@ -249,7 +186,6 @@ export default function Home(): React.ReactNode {
       <a href="#main-content" className="skip-to-main">
         Skip to main content
       </a>
-      <Navbar />
       <main id="main-content">
         <Hero />
         <Features />

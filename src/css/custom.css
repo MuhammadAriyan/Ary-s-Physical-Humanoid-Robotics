@@ -148,7 +148,7 @@ body {
 }
 
 /* Luxurious Navigation */
-.navbar {
+.custom-navbar {
   position: fixed;
   top: 0;
   left: 0;
@@ -162,7 +162,7 @@ body {
   box-shadow: var(--shadow-subtle);
 }
 
-.navbar::after {
+.custom-navbar::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -173,16 +173,16 @@ body {
   opacity: 0.5;
 }
 
-[data-theme='dark'] .navbar {
+[data-theme='dark'] .custom-navbar {
   background: var(--glass-white-heavy);
   border-bottom: var(--border-light);
 }
 
-[data-theme='dark'] .navbar::after {
+[data-theme='dark'] .custom-navbar::after {
   background: linear-gradient(90deg, transparent, var(--gray-700), transparent);
 }
 
-.navbar-container {
+.custom-navbar-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-4);
@@ -193,18 +193,18 @@ body {
 }
 
 @media (min-width: 640px) {
-  .navbar-container {
+  .custom-navbar-container {
     padding: 0 var(--space-6);
   }
 }
 
 @media (min-width: 1024px) {
-  .navbar-container {
+  .custom-navbar-container {
     padding: 0 var(--space-8);
   }
 }
 
-.navbar-logo {
+.custom-navbar-logo {
   font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
@@ -216,7 +216,7 @@ body {
   position: relative;
 }
 
-.navbar-logo::before {
+.custom-navbar-logo::before {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -227,23 +227,23 @@ body {
   transition: width var(--transition-smooth);
 }
 
-.navbar-logo:hover::before {
+.custom-navbar-logo:hover::before {
   width: 100%;
 }
 
-.navbar-logo:hover {
+.custom-navbar-logo:hover {
   opacity: 0.8;
 }
 
-[data-theme='dark'] .navbar-logo {
+[data-theme='dark'] .custom-navbar-logo {
   color: var(--color-white);
 }
 
-[data-theme='dark'] .navbar-logo::before {
+[data-theme='dark'] .custom-navbar-logo::before {
   background: var(--color-white);
 }
 
-.navbar-menu {
+.custom-navbar-menu {
   display: flex;
   align-items: center;
   gap: var(--space-5);
@@ -251,12 +251,12 @@ body {
 }
 
 @media (min-width: 768px) {
-  .navbar-menu {
+  .custom-navbar-menu {
     gap: var(--space-6);
   }
 }
 
-.navbar-link {
+.custom-navbar-link {
   color: var(--color-black);
   text-decoration: none;
   font-weight: 500;
@@ -269,22 +269,22 @@ body {
   border-radius: var(--radius-md);
 }
 
-[data-theme='dark'] .navbar-link {
+[data-theme='dark'] .custom-navbar-link {
   color: var(--color-white);
 }
 
-.navbar-link:hover {
+.custom-navbar-link:hover {
   color: var(--color-black);
   background: var(--gray-100);
   transform: translateY(-1px);
 }
 
-[data-theme='dark'] .navbar-link:hover {
+[data-theme='dark'] .custom-navbar-link:hover {
   color: var(--color-white);
   background: var(--gray-800);
 }
 
-.navbar-link::after {
+.custom-navbar-link::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -296,11 +296,11 @@ body {
   transform: translateX(-50%);
 }
 
-.navbar-link:hover::after {
+.custom-navbar-link:hover::after {
   width: 60%;
 }
 
-[data-theme='dark'] .navbar-link::after {
+[data-theme='dark'] .custom-navbar-link::after {
   background: var(--color-white);
 }
 
@@ -355,6 +355,7 @@ body {
   align-items: center;
   position: relative;
   background: var(--color-white);
+  padding-top: 80px; /* Account for fixed navbar height */
 }
 
 [data-theme='dark'] .hero {
@@ -1119,12 +1120,6 @@ html {
   }
 }
 
-/* Hide default Docusaurus elements */
-.navbar__brand,
-.navbar,
-.footer {
-  display: none;
-}
 
 /* Fix for overlapping content with fixed navbar */
 main {
@@ -1138,19 +1133,19 @@ main {
 }
 
 /* Better navbar positioning */
-.navbar {
+.custom-navbar {
   z-index: 1000;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
 /* Fix navbar container overflow */
-.navbar-container {
+.custom-navbar-container {
   overflow: visible;
 }
 
 /* Improve navbar menu layout */
-.navbar-menu {
+.custom-navbar-menu {
   align-items: center;
   gap: 1.5rem;
   flex-wrap: nowrap;
@@ -1163,27 +1158,27 @@ main {
 
 /* Improve mobile navigation */
 @media (max-width: 768px) {
-  .navbar-menu {
+  .custom-navbar-menu {
     gap: var(--space-2);
     flex-wrap: wrap;
   }
-  
-  .navbar-link {
+
+  .custom-navbar-link {
     font-size: 0.8rem;
     padding: var(--space-1) var(--space-2);
   }
-  
+
   .theme-toggle {
     width: 40px;
     height: 20px;
   }
-  
+
   .theme-toggle-slider {
     width: 16px;
     height: 16px;
     font-size: 10px;
   }
-  
+
   [data-theme='dark'] .theme-toggle-slider {
     transform: translateX(20px);
   }
