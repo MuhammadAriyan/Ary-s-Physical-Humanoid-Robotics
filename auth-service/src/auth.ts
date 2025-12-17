@@ -69,8 +69,19 @@ export const auth = betterAuth({
   // Trusted origins for CORS
   trustedOrigins: corsOrigins,
 
-  // Advanced configuration
-  advanced: {},
+  // Advanced configuration for cross-domain deployment
+  advanced: {
+    // Cross-origin cookie settings (GitHub Pages -> Vercel)
+    crossSubDomainCookies: {
+      enabled: false, // Different domains, not subdomains
+    },
+    useSecureCookies: process.env.NODE_ENV === "production", // HTTPS required in production
+    defaultCookieAttributes: {
+      sameSite: "none", // Required for cross-origin requests
+      secure: process.env.NODE_ENV === "production", // Must be true when sameSite is "none"
+      path: "/",
+    },
+  },
 });
 
 export type Auth = typeof auth;

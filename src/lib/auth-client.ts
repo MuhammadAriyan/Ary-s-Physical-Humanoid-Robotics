@@ -2,13 +2,16 @@ import { createAuthClient } from "better-auth/react";
 
 // Environment-aware auth service URL
 const getAuthUrl = () => {
+  // Check for build-time environment variable first (set during GitHub Actions build)
+  if (process.env.REACT_APP_AUTH_URL) {
+    return process.env.REACT_APP_AUTH_URL;
+  }
+
   if (typeof window !== "undefined") {
     // Client-side: check for production or use localhost
     if (window.location.hostname !== "localhost") {
-      // Production: use environment variable or fallback to deployed auth service
-      return process.env.REACT_APP_AUTH_URL ||
-             process.env.AUTH_URL ||
-             "https://ary-s-physical-humanoid-robotics.vercel.app";
+      // Production: fallback to deployed auth service on Vercel
+      return "https://ary-s-physical-humanoid-robotics-lrmuq08ij.vercel.app";
     }
   }
   return "http://localhost:4000";
@@ -16,6 +19,9 @@ const getAuthUrl = () => {
 
 export const authClient = createAuthClient({
   baseURL: getAuthUrl(),
+  fetchOptions: {
+    credentials: "include", // Required for cross-origin cookies
+  },
 });
 
 // Export typed hooks and functions

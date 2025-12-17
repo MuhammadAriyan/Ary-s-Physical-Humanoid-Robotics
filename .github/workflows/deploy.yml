@@ -40,6 +40,8 @@ jobs:
         
       - name: Build
         run: npm run build
+        env:
+          REACT_APP_AUTH_URL: https://ary-s-physical-humanoid-robotics-lrmuq08ij.vercel.app
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
