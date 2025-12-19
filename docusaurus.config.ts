@@ -3,7 +3,12 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-// GitHub Pages deployment configuration
+// Supports multiple deployments:
+// - GitHub Pages: BASE_URL=/Ary-s-Physical-Humanoid-Robotics/ (default)
+// - Vercel: BASE_URL=/
+
+const baseUrl = process.env.BASE_URL || '/Ary-s-Physical-Humanoid-Robotics/';
+const url = process.env.SITE_URL || 'https://MuhammadAriyan.github.io';
 
 const config: Config = {
   title: 'Ary\'s Physical & Humanoid Robotics',
@@ -16,10 +21,10 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://MuhammadAriyan.github.io',
+  url: url,
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/Ary-s-Physical-Humanoid-Robotics/',
+  // Configured via BASE_URL environment variable
+  baseUrl: baseUrl,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
