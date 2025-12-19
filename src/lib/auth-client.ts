@@ -42,9 +42,9 @@ export const signInWithGoogle = async () => {
 // Types for auth state
 export interface AuthUser {
   id: string;
-  email: string;
-  name: string | null;
-  image: string | null;
+  email?: string;
+  name: string;
+  image?: string;
   emailVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
