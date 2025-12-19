@@ -5,8 +5,6 @@ import ChatDrawer from './ChatDrawer';
 import ChatModal from './ChatModal';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
-import { AuthModal, useAuth } from '../Auth';
-import { getSession, signOut } from '../../lib/auth-client';
 
 interface Message {
   id: string;
@@ -20,14 +18,11 @@ interface FubuniChatProps {
 }
 
 const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:8000' }) => {
-  const { isAuthenticated, isLoading: authLoading, user, refetch } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [sessionId, setSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -38,21 +33,30 @@ const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:
     scrollToBottom();
   }, [messages]);
 
+  // Add welcome message when chat opens for the first time
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      const welcomeMessage: Message = {
+        id: 'welcome',
+        sender: 'fubuni',
+        content: 'Hi! I\'m Fubuni, your robotics learning assistant. Ask me anything about Physical & Humanoid Robotics!',
+        timestamp: new Date(),
+      };
+      setMessages([welcomeMessage]);
+    }
+  }, [isOpen, messages.length]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || isLoading) return;
 
-    // Check if user is authenticated before sending
-    if (!isAuthenticated) {
-      setShowAuthModal(true);
-      return;
-    }
+    const userMessageContent = inputValue;
 
     // Add user message to the chat
     const userMessage: Message = {
       id: Date.now().toString(),
       sender: 'user',
-      content: inputValue,
+      content: userMessageContent,
       timestamp: new Date(),
     };
 
@@ -61,40 +65,18 @@ const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:
     setIsLoading(true);
 
     try {
-      // Get current session token for Authorization header
-      const session = await getSession();
-      const token = session?.data?.session?.token;
-
-      // Build headers with Authorization if token available
-      const headers: HeadersInit = {
-        'Content-Type': 'application/json',
-      };
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-
       // Send message to backend
       const response = await fetch(`${backendUrl}/api/chat`, {
         method: 'POST',
-        headers,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
         body: JSON.stringify({
-          message: inputValue,
-          session_id: sessionId || undefined,
+          message: userMessageContent,
+          stream: false,
         }),
       });
-
-      // Handle 401 Unauthorized - show auth modal
-      if (response.status === 401) {
-        setShowAuthModal(true);
-        const errorMessage: Message = {
-          id: `error-${Date.now()}`,
-          sender: 'fubuni',
-          content: 'Your session has expired. Please sign in again to continue.',
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, errorMessage]);
-        return;
-      }
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -113,10 +95,6 @@ const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:
       // Add message to display
       setMessages(prev => [...prev, fubuniMessage]);
 
-      // Update session ID if it was returned
-      if (data.session_id && !sessionId) {
-        setSessionId(data.session_id);
-      }
     } catch (error) {
       console.error('Error sending message:', error);
 
@@ -124,7 +102,7 @@ const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         sender: 'fubuni',
-        content: 'Sorry, I encountered an error processing your request. Please try again.',
+        content: 'Sorry, I encountered an error. The chat service might be unavailable. Please try again later.',
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -134,36 +112,7 @@ const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:
   };
 
   const toggleChat = () => {
-    // Show auth modal if not authenticated when trying to open chat
-    if (!isOpen && !isAuthenticated && !authLoading) {
-      setShowAuthModal(true);
-      return;
-    }
     setIsOpen(!isOpen);
-  };
-
-  const handleAuthSuccess = () => {
-    refetch();
-    setShowAuthModal(false);
-    // Open chat after successful authentication
-    setIsOpen(true);
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      // Clear local state
-      setMessages([]);
-      setSessionId(null);
-      setIsOpen(false);
-      setIsFullscreen(false);
-      // Refresh auth state
-      refetch();
-      // Show auth modal
-      setShowAuthModal(true);
-    } catch (error) {
-      console.error('Sign out error:', error);
-    }
   };
 
   const toggleFullscreen = () => {
@@ -172,6 +121,10 @@ const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:
 
   const minimizeFullscreen = () => {
     setIsFullscreen(false);
+  };
+
+  const clearChat = () => {
+    setMessages([]);
   };
 
   const renderMessages = () => (
@@ -183,26 +136,26 @@ const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:
           content={message.content}
         />
       ))}
+      {isLoading && (
+        <div className={styles['fubuni-message'] + ' ' + styles['fubuni']}>
+          <p className={styles['fubuni-message-content']}>
+            <span className={styles['typing-indicator']}>Thinking...</span>
+          </p>
+        </div>
+      )}
       <div ref={messagesEndRef} />
     </>
   );
 
   return (
     <div className={styles['fubuni-chat-container']}>
-      {/* Auth Modal */}
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onSuccess={handleAuthSuccess}
-      />
-
       {isOpen && !isFullscreen && (
         <ChatDrawer
           isOpen={isOpen}
           onClose={toggleChat}
           onExpand={toggleFullscreen}
-          onSignOut={isAuthenticated ? handleSignOut : undefined}
-          userName={user?.name || user?.email}
+          onSignOut={messages.length > 1 ? clearChat : undefined}
+          userName={messages.length > 1 ? "Clear Chat" : undefined}
         >
           {renderMessages()}
           <ChatInput
@@ -219,8 +172,8 @@ const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:
           isOpen={isFullscreen}
           onClose={toggleChat}
           onMinimize={minimizeFullscreen}
-          onSignOut={isAuthenticated ? handleSignOut : undefined}
-          userName={user?.name || user?.email}
+          onSignOut={messages.length > 1 ? clearChat : undefined}
+          userName={messages.length > 1 ? "Clear Chat" : undefined}
         >
           {renderMessages()}
           <ChatInput
