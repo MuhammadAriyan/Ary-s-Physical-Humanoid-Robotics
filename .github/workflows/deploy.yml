@@ -3,11 +3,6 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ['main']
-    paths:
-      - 'src/**'
-      - 'package.json'
-      - 'docusaurus.config.ts'
-      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 permissions:
