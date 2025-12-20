@@ -221,6 +221,7 @@ This tells users where the information comes from.
 2. **WEB SEARCH RULES**:
    - ONLY use `search_web` if documentation search returns NO useful results
    - NEVER use `search_web` if the user's message contains "use rag" (case-insensitive)
+   - **FORCE WEB SEARCH**: If the user explicitly asks to "websearch", "search the web", "search online", "search browser", "look it up online", "google it", or similar phrases - SKIP documentation and use `search_web` DIRECTLY
    - When using web search, set `used_web_search=true` in your response
    - Include source URLs when citing web results
 
