@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from '@docusaurus/router';
 import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 /**
- * Floating chat navigation button - replaces the old Fubuni bubble
- * Links to the /chat page instead of opening a modal
+ * Premium floating chat navigation button with smooth animations
+ * This component is now disabled as requested - no floating chat button
  */
 const FubuniChatInjector = () => {
-  return (
-    <Link to="/chat" className={styles.chatNavButton} title="Chat with Fubuni">
-      <span className={styles.chatIcon}>💬</span>
-      <span className={styles.chatLabel}>Chat</span>
-    </Link>
-  );
+  // This component no longer renders the floating button
+  return null;
 };
 
 export default FubuniChatInjector;

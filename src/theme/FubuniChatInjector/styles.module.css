@@ -1,67 +1,353 @@
-/* Chat Navigation Button - Floating button that links to /chat */
+/* Premium Chat Navigation Button - Floating button with smooth animations */
+
+/* ==========================================
+   CSS Custom Properties for Theming
+   ========================================== */
+:root {
+  --chat-btn-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  --chat-btn-bg-hover: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+  --chat-btn-text: #ffffff;
+  --chat-btn-glow: rgba(99, 102, 241, 0.4);
+  --chat-btn-glow-strong: rgba(99, 102, 241, 0.6);
+  --chat-btn-pulse: rgba(99, 102, 241, 0.3);
+  --chat-btn-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5),
+                     0 4px 20px -5px rgba(99, 102, 241, 0.3);
+  --chat-btn-shadow-hover: 0 20px 60px -15px rgba(0, 0, 0, 0.6),
+                           0 8px 30px -8px rgba(99, 102, 241, 0.5);
+}
+
+[data-theme='dark'] {
+  --chat-btn-bg: linear-gradient(135deg, #fafafa 0%, #f5f5f5 50%, #e8e8e8 100%);
+  --chat-btn-bg-hover: linear-gradient(135deg, #ffffff 0%, #fafafa 50%, #f5f5f5 100%);
+  --chat-btn-text: #1a1a2e;
+  --chat-btn-glow: rgba(255, 255, 255, 0.3);
+  --chat-btn-glow-strong: rgba(255, 255, 255, 0.5);
+  --chat-btn-pulse: rgba(255, 255, 255, 0.2);
+  --chat-btn-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3),
+                     0 4px 20px -5px rgba(255, 255, 255, 0.2);
+  --chat-btn-shadow-hover: 0 20px 60px -15px rgba(0, 0, 0, 0.4),
+                           0 8px 30px -8px rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================
+   Main Button Styles
+   ========================================== */
 .chatNavButton {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: 28px;
+  right: 28px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background: var(--color-black, #000000);
-  color: var(--color-white, #ffffff);
-  border-radius: 50px;
+  gap: 10px;
+  padding: 14px 24px;
+  background: var(--chat-btn-bg);
+  color: var(--chat-btn-text);
+  border-radius: 100px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 14px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  box-shadow: var(--chat-btn-shadow);
   z-index: 1000;
-  transition: all 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  /* Initial state - hidden */
+  opacity: 0;
+  transform: translateY(100px) scale(0.8);
+  pointer-events: none;
+
+  /* Smooth transitions */
+  transition:
+    opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    background 0.4s ease;
 }
 
+/* Visible state with entrance animation */
+.chatNavButton.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Hover state */
 .chatNavButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
-  color: var(--color-white, #ffffff);
+  color: var(--chat-btn-text);
   text-decoration: none;
+  box-shadow: var(--chat-btn-shadow-hover);
+  background: var(--chat-btn-bg-hover);
 }
 
+.chatNavButton.hovered {
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Active/Click state */
 .chatNavButton:active {
-  transform: translateY(0);
+  transform: translateY(-1px) scale(0.98);
+  transition: transform 0.1s ease;
 }
 
-[data-theme='dark'] .chatNavButton {
-  background: var(--color-white, #ffffff);
-  color: var(--color-black, #000000);
+/* ==========================================
+   Glow Ring Effect
+   ========================================== */
+.glowRing {
+  position: absolute;
+  inset: -3px;
+  border-radius: 100px;
+  background: linear-gradient(
+    45deg,
+    var(--chat-btn-glow),
+    transparent 40%,
+    transparent 60%,
+    var(--chat-btn-glow)
+  );
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
 }
 
-[data-theme='dark'] .chatNavButton:hover {
-  color: var(--color-black, #000000);
+.chatNavButton.hovered .glowRing {
+  opacity: 1;
+  animation: rotateGlow 3s linear infinite;
+}
+
+@keyframes rotateGlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================
+   Pulse Ring Animation
+   ========================================== */
+.pulseRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  background: transparent;
+  border: 2px solid var(--chat-btn-pulse);
+  opacity: 0;
+  z-index: -2;
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.chatNavButton.visible .pulseRing {
+  animation-delay: 1s;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
+}
+
+/* Stop pulse on hover for cleaner look */
+.chatNavButton.hovered .pulseRing {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+/* ==========================================
+   Icon Wrapper & SVG Icon
+   ========================================== */
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 22px;
+  height: 22px;
 }
 
 .chatIcon {
-  font-size: 18px;
-  line-height: 1;
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chatNavButton.hovered .chatIcon {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+/* Animated chat lines inside the bubble */
+.chatLine1,
+.chatLine2 {
+  stroke-dasharray: 6;
+  stroke-dashoffset: 6;
+  transition: stroke-dashoffset 0.4s ease;
+}
+
+.chatNavButton.hovered .chatLine1 {
+  stroke-dashoffset: 0;
+  transition-delay: 0.1s;
+}
+
+.chatNavButton.hovered .chatLine2 {
+  stroke-dashoffset: 0;
+  transition-delay: 0.2s;
+}
+
+/* ==========================================
+   Label with Slide Animation
+   ========================================== */
+.labelWrapper {
+  overflow: hidden;
+  position: relative;
 }
 
 .chatLabel {
-  letter-spacing: 0.02em;
+  display: inline-block;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Hide on the /chat page itself */
-:global(.chat-page) .chatNavButton {
-  display: none;
+.chatNavButton.hovered .chatLabel {
+  animation: labelBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Responsive */
+@keyframes labelBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(1px);
+  }
+}
+
+/* ==========================================
+   Shine Effect
+   ========================================== */
+.shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+.chatNavButton.hovered .shine {
+  animation: shine 0.8s ease-in-out;
+}
+
+@keyframes shine {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 200%;
+  }
+}
+
+/* ==========================================
+   Floating Animation (Subtle bob)
+   ========================================== */
+.chatNavButton.visible {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1);
+  }
+}
+
+/* Pause floating on hover */
+.chatNavButton.hovered {
+  animation-play-state: paused;
+}
+
+/* ==========================================
+   Responsive Design
+   ========================================== */
+@media (max-width: 768px) {
+  .chatNavButton {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .iconWrapper,
+  .chatIcon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 @media (max-width: 480px) {
   .chatNavButton {
-    padding: 10px 16px;
-    font-size: 13px;
     bottom: 16px;
     right: 16px;
+    padding: 12px 18px;
+    font-size: 13px;
   }
 
+  .iconWrapper,
   .chatIcon {
-    font-size: 16px;
+    width: 18px;
+    height: 18px;
   }
+}
+
+/* ==========================================
+   Reduced Motion Preferences
+   ========================================== */
+@media (prefers-reduced-motion: reduce) {
+  .chatNavButton,
+  .chatIcon,
+  .chatLabel,
+  .glowRing,
+  .pulseRing,
+  .shine {
+    animation: none !important;
+    transition-duration: 0.1s !important;
+  }
+
+  .chatNavButton.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .chatNavButton.hovered {
+    transform: translateY(-2px) scale(1.01);
+  }
+}
+
+/* ==========================================
+   Focus States for Accessibility
+   ========================================== */
+.chatNavButton:focus-visible {
+  outline: 3px solid var(--chat-btn-glow-strong);
+  outline-offset: 4px;
 }

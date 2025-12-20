@@ -208,7 +208,10 @@ function ChatContent() {
             setTimeout(() => {
               setIsFlipping(true); // Trigger Fubuni flip
               setLayoutStage('horizontalSplit');
-              setTimeout(() => setIsFlipping(false), 800); // Flip duration
+              // Reset the flip state after animation completes
+              setTimeout(() => {
+                setIsFlipping(false);
+              }, 800); // Match the animation duration
             }, 1500); // Delay for user to notice split-screen
           } else {
             // For subsequent navigations, stay in horizontal split
