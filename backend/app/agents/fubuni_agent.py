@@ -174,8 +174,9 @@ async def search_web(query: str) -> str:
     """
     global _last_web_search_results
     try:
-        with DDGS() as ddgs:
-            results = list(ddgs.text(query, max_results=10))
+        # Note: Don't use context manager - it returns 0 results in some environments
+        ddgs = DDGS()
+        results = list(ddgs.text(query, max_results=10))
 
         if not results:
             _last_web_search_results = []
