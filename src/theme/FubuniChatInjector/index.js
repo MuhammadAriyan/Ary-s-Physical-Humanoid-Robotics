@@ -1,12 +1,18 @@
 import React from 'react';
-import FubuniChat from '../../components/FubuniChat/FubuniChat';
+import Link from '@docusaurus/Link';
+import styles from './styles.module.css';
 
+/**
+ * Floating chat navigation button - replaces the old Fubuni bubble
+ * Links to the /chat page instead of opening a modal
+ */
 const FubuniChatInjector = () => {
-  const backendUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-    ? 'http://localhost:8000'
-    : 'https://maryanrar-fubuni-chat-api.hf.space';  // Hugging Face Spaces
-  
-  return <FubuniChat backendUrl={backendUrl} />;
+  return (
+    <Link to="/chat" className={styles.chatNavButton} title="Chat with Fubuni">
+      <span className={styles.chatIcon}>💬</span>
+      <span className={styles.chatLabel}>Chat</span>
+    </Link>
+  );
 };
 
 export default FubuniChatInjector;
