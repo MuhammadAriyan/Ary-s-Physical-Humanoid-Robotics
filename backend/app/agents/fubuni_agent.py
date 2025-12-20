@@ -8,10 +8,12 @@ from agents import (
 from agents.run import RunConfig
 from agents.exceptions import MaxTurnsExceeded
 from pydantic import BaseModel, field_validator
-from typing import Optional
+from typing import Optional, List
 import os
 import sys
+import logging
 from dotenv import load_dotenv
+from duckduckgo_search import DDGS
 from openai.types.responses import ResponseTextDeltaEvent
 from ..config.settings import settings
 import asyncio
@@ -25,13 +27,24 @@ VALID_CHAPTERS = [
     "path-planning-and-navigation",
 ]
 
+# WebSearchResult for storing web search results
+class WebSearchResult(BaseModel):
+    """Single web search result from DuckDuckGo"""
+    title: str
+    url: str
+    snippet: str
+
+
 # T004: Structured response model for documentation navigation
 class AgentResponse(BaseModel):
-    """Structured agent response with documentation navigation hints"""
+    """Structured agent response with documentation navigation and web search hints"""
     response: str
     chapter: Optional[str] = None
     section: Optional[str] = None
     should_navigate: bool = False
+    # Web search fields
+    web_sources: Optional[List[WebSearchResult]] = None
+    used_web_search: bool = False
 
     @field_validator('chapter')
     @classmethod
@@ -142,10 +155,43 @@ async def search_knowledge_base_detailed(query: str, context: str) -> str:
 
 
 @function_tool
+async def search_web(query: str) -> str:
+    """
+    Search the web using DuckDuckGo for robotics information NOT found in documentation.
+
+    ONLY use this tool if:
+    1. search_knowledge_base returned no relevant results or insufficient information
+    2. The user's message does NOT contain "use rag" (case-insensitive)
+
+    Returns web search results with source URLs for verification.
+    The user will see these sources in a dedicated panel.
+    """
+    try:
+        with DDGS() as ddgs:
+            results = list(ddgs.text(query, max_results=5))
+
+        if not results:
+            return "No web search results found for this query. Try using get_robotics_info for general knowledge."
+
+        # Format results with title, snippet, and URL
+        formatted_results = []
+        for r in results:
+            title = r.get('title', 'No title')[:200]
+            snippet = r.get('body', '')[:500]
+            url = r.get('href', '')
+            formatted_results.append(f"**{title}**\n{snippet}\nSource: {url}")
+
+        return "🌐 **Web Search Results:**\n\n" + "\n\n---\n\n".join(formatted_results)
+    except Exception as e:
+        logging.warning(f"Web search failed: {e}")
+        return "Web search is temporarily unavailable. Please try the documentation search or general knowledge."
+
+
+@function_tool
 async def get_robotics_info(topic: str) -> str:
     """
-    ONLY use this as a LAST RESORT after search_knowledge_base returns no results.
-    This provides general robotics information not from the documentation.
+    ONLY use this as a LAST RESORT after both search_knowledge_base AND search_web return no results.
+    This provides general robotics information not from the documentation or web.
     """
     return f"[General Knowledge - Not from docs] Information about {topic}: This is general robotics knowledge. For specific documentation, the knowledge base search didn't find relevant results."
 
@@ -157,31 +203,46 @@ class FubuniAgent:
             name="Fubuni",
             instructions="""You are Fubuni, an AI assistant for Physical Humanoid Robotics documentation platform.
 
-## RESPONSE FORMAT - ALWAYS START WITH SOURCE:
-Start EVERY response with: "📚 **Source: Documentation Knowledge Base**\n\n"
+## RESPONSE FORMAT - SOURCE INDICATORS:
+- For documentation results: Start with "📚 **Source: Documentation Knowledge Base**\n\n"
+- For web search results: Start with "🌐 **Source: Web Search**\n\n"
 This tells users where the information comes from.
+
+## TOOL PRIORITY ORDER (CRITICAL):
+1. **search_knowledge_base** - ALWAYS try this FIRST for any technical question
+2. **search_knowledge_base_detailed** - Use if first search needs more context
+3. **search_web** - ONLY use if documentation search returns no useful results
+4. **get_robotics_info** - LAST RESORT for general knowledge
 
 ## CRITICAL RULES:
 
-1. **SEARCH FIRST**: For ANY technical question - call `search_knowledge_base` ONCE with a good query BEFORE answering.
+1. **DOCUMENTATION FIRST**: For ANY technical question - call `search_knowledge_base` FIRST.
 
-2. **BE EFFICIENT**: Make only 1-2 searches maximum. Don't over-search. If the first search returns good results, USE THEM and respond immediately.
+2. **WEB SEARCH RULES**:
+   - ONLY use `search_web` if documentation search returns NO useful results
+   - NEVER use `search_web` if the user's message contains "use rag" (case-insensitive)
+   - **FORCE WEB SEARCH**: If the user explicitly asks to "websearch", "search the web", "search online", "search browser", "look it up online", "google it", or similar phrases - SKIP documentation and use `search_web` DIRECTLY
+   - When using web search, set `used_web_search=true` in your response
+   - Include source URLs when citing web results
 
-3. **RESPOND QUICKLY**: After getting search results, synthesize and respond. Don't keep searching endlessly.
+3. **BE EFFICIENT**: Make only 1-2 documentation searches. If still no results, try ONE web search.
 
-4. **SEARCH STRATEGY** (max 2 searches):
-   - Search 1: Main topic keywords (e.g., "humanoid robot balance")
-   - Search 2 (only if needed): Alternative terms (e.g., "stability control")
-   - THEN respond with what you found
+4. **RESPOND QUICKLY**: After getting results (from docs OR web), synthesize and respond.
 
-5. **CITE IN RESPONSE**: Include "According to the documentation..." when presenting findings.
+5. **SEARCH STRATEGY**:
+   - Search 1: Documentation with main keywords
+   - Search 2 (if needed): Documentation with alternative terms
+   - Search 3 (only if docs failed): Web search
+   - THEN respond
 
-6. **IF NO RESULTS**: After 1-2 searches with no results, say: "I couldn't find this in the documentation, but based on general knowledge..." and provide a helpful answer.
+6. **CITE PROPERLY**:
+   - Documentation: "According to the documentation..."
+   - Web search: "According to web sources..." with URLs
 
 7. **SIMPLE QUESTIONS**: For greetings or simple questions, respond directly without searching.
 
-## DOCUMENTATION NAVIGATION (T007):
-When your response relates to a specific documentation topic, set the chapter field to help users navigate:
+## DOCUMENTATION NAVIGATION:
+When your response relates to a specific documentation topic, set the chapter field:
 
 CHAPTER MAPPINGS:
 - "introduction-to-humanoid-robotics" → basics, overview, what is humanoid robot, getting started
@@ -193,8 +254,8 @@ CHAPTER MAPPINGS:
 Set should_navigate=true when the user should definitely read that chapter for more details.
 Set chapter=null for general greetings or questions not related to a specific chapter.
 
-Remember: Be helpful and efficient. Users want answers, not endless searching.""",
-            tools=[search_knowledge_base, search_knowledge_base_detailed, get_robotics_info],
+Remember: Documentation is your PRIMARY source. Web search is a FALLBACK for topics not in docs.""",
+            tools=[search_knowledge_base, search_knowledge_base_detailed, search_web, get_robotics_info],
             output_type=AgentResponse,  # T006: Structured output
         )
 

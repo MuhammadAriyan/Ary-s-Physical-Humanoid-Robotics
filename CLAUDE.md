@@ -217,6 +217,8 @@ See `.specify/memory/constitution.md` for code quality, testing, performance, se
 - Neon PostgreSQL (shared, `ba_` prefix for auth tables) (008-better-auth)
 - Python 3.11 (backend), TypeScript 5.6 (frontend) (009-chat-page-chatkit)
 - N/A (session-based state, existing chat session DB) (009-chat-page-chatkit)
+- Python 3.12 (backend), TypeScript 5.x (frontend) + FastAPI, OpenAI Agents SDK, duckduckgo-search, React, Docusaurus 3 (010-fubuni-web-search)
+- Neon PostgreSQL (existing chat sessions) (010-fubuni-web-search)
 
 ## Recent Changes
 - 007-fubuni-chat-bubble: Added Python 3.11, TypeScript/JavaScript, React 18 + FastAPI, OpenAI Agents SDK (agents package), Docusaurus 3, React, TypeScript
