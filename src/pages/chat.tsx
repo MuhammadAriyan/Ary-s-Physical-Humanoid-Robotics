@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback, FormEvent } from 'reac
 import Layout from '@theme/Layout';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import ReactMarkdown from 'react-markdown';
 import {
   DOC_CHAPTERS,
   CHAPTER_TITLES,
@@ -415,7 +416,9 @@ function ChatContent() {
                       : styles.botMessage
                   }`}
                 >
-                  <div className={styles.messageBubble}>{message.content}</div>
+                  <div className={styles.messageBubble}>
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
                   {message.navigatedTo && (
                     <div className={styles.navigationIndicator}>
                       <span
