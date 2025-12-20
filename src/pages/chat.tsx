@@ -22,6 +22,15 @@ interface Message {
 }
 
 /**
+ * Web search result from DuckDuckGo
+ */
+interface WebSearchResult {
+  title: string;
+  url: string;
+  snippet: string;
+}
+
+/**
  * Backend response structure
  */
 interface BackendResponse {
@@ -29,6 +38,8 @@ interface BackendResponse {
   chapter?: string;
   section?: string;
   should_navigate?: boolean;
+  web_sources?: WebSearchResult[];
+  used_web_search?: boolean;
 }
 
 /**
@@ -110,6 +121,57 @@ function formatTime(date: Date): string {
 }
 
 /**
+ * Web Sources Panel component - slides in from right
+ */
+function WebSourcesPanel({
+  sources,
+  onClose,
+}: {
+  sources: WebSearchResult[];
+  onClose: () => void;
+}) {
+  return (
+    <div className={styles.webSourcesPanel}>
+      {/* Close button */}
+      <button
+        type="button"
+        className={styles.closeSourcesButton}
+        onClick={onClose}
+        aria-label="Close web sources panel"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      <div className={styles.sourcesHeader}>
+        <span className={styles.sourcesIcon} role="img" aria-label="Web sources">
+          🌐
+        </span>
+        <h3 className={styles.sourcesTitle}>Web Sources</h3>
+      </div>
+
+      <div className={styles.sourcesList}>
+        {sources.map((source, index) => (
+          <a
+            key={index}
+            href={source.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.sourceItem}
+          >
+            <h4 className={styles.sourceTitle}>{source.title}</h4>
+            <p className={styles.sourceSnippet}>{source.snippet}</p>
+            <span className={styles.sourceUrl}>{source.url}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
  * Main chat content component (client-side only)
  */
 function ChatContent() {
@@ -124,6 +186,10 @@ function ChatContent() {
   // Docs panel visibility - starts hidden, slides in on first navigation
   const [docsVisible, setDocsVisible] = useState<boolean>(false);
   const [hasNavigatedOnce, setHasNavigatedOnce] = useState<boolean>(false);
+
+  // Web sources panel visibility and data
+  const [sourcesVisible, setSourcesVisible] = useState<boolean>(false);
+  const [webSources, setWebSources] = useState<WebSearchResult[]>([]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -178,10 +244,18 @@ function ChatContent() {
   }, []);
 
   /**
+   * Handle closing the web sources panel
+   */
+  const handleCloseSources = useCallback(() => {
+    setSourcesVisible(false);
+  }, []);
+
+  /**
    * Handle agent response and auto-navigate if needed
    */
   const handleAgentResponse = useCallback(
     (response: BackendResponse, messageId: string) => {
+      // Handle documentation navigation
       if (response.should_navigate && response.chapter) {
         const targetChapter = response.chapter;
 
@@ -207,6 +281,12 @@ function ChatContent() {
             )
           );
         }
+      }
+
+      // Handle web sources - T023: Only show panel if there are sources
+      if (response.used_web_search && response.web_sources && response.web_sources.length > 0) {
+        setWebSources(response.web_sources);
+        setSourcesVisible(true);
       }
     },
     [hasNavigatedOnce]
@@ -325,8 +405,16 @@ function ChatContent() {
     []
   );
 
+  // Determine layout class based on which panels are visible
+  const getLayoutClass = () => {
+    if (docsVisible && sourcesVisible) return styles.withAll;
+    if (docsVisible) return styles.withDocs;
+    if (sourcesVisible) return styles.withSources;
+    return styles.chatOnly;
+  };
+
   return (
-    <div className={`${styles.container} ${docsVisible ? styles.withDocs : styles.chatOnly}`}>
+    <div className={`${styles.container} ${getLayoutClass()}`}>
       {/* Documentation viewer panel - slides in from left */}
       <div className={styles.docViewer}>
         {/* Close button */}
@@ -485,6 +573,11 @@ function ChatContent() {
           </form>
         </div>
       </div>
+
+      {/* Web Sources Panel - slides in from right */}
+      {webSources.length > 0 && (
+        <WebSourcesPanel sources={webSources} onClose={handleCloseSources} />
+      )}
     </div>
   );
 }

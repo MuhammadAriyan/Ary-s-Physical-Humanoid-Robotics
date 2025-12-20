@@ -149,7 +149,19 @@ async def chat_endpoint(
         session.add(chat_session)
         session.commit()
 
-        # Return structured response with chapter navigation fields
+        # Convert web_sources from agent to API model format
+        web_sources = None
+        if hasattr(agent_response, 'web_sources') and agent_response.web_sources:
+            from ..api.models import WebSearchResult as APIWebSearchResult
+            web_sources = [
+                APIWebSearchResult(
+                    title=src.title,
+                    url=src.url,
+                    snippet=src.snippet
+                ) for src in agent_response.web_sources
+            ]
+
+        # Return structured response with chapter navigation and web search fields
         return ChatResponse(
             response=response_text,
             session_id=chat_session.id,
@@ -157,6 +169,8 @@ async def chat_endpoint(
             chapter=agent_response.chapter if hasattr(agent_response, 'chapter') else None,
             section=agent_response.section if hasattr(agent_response, 'section') else None,
             should_navigate=agent_response.should_navigate if hasattr(agent_response, 'should_navigate') else False,
+            web_sources=web_sources,
+            used_web_search=agent_response.used_web_search if hasattr(agent_response, 'used_web_search') else False,
         )
     except Exception as e:
         raise HTTPException(

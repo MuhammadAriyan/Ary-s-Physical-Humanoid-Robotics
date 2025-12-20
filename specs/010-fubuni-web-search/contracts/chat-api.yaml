@@ -1,0 +1,132 @@
+openapi: 3.0.3
+info:
+  title: Fubuni Chat API - Web Search Extension
+  description: Extended chat API with web search capabilities
+  version: 2.0.0
+
+paths:
+  /api/chat:
+    post:
+      summary: Send chat message to Fubuni
+      description: |
+        Processes user message through Fubuni agent.
+        Tool priority: RAG → Web Search → General Knowledge.
+        If message contains "use rag", web search is disabled.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: User's message to Fubuni
+          example: "What is Tesla Optimus Gen 3?"
+        session_id:
+          type: string
+          description: Optional session ID for conversation continuity
+          example: "abc123-def456"
+        stream:
+          type: boolean
+          default: false
+          description: Whether to stream the response
+
+    ChatResponse:
+      type: object
+      required:
+        - response
+        - session_id
+        - timestamp
+      properties:
+        response:
+          type: string
+          description: Fubuni's response text
+        session_id:
+          type: string
+          description: Chat session identifier
+        timestamp:
+          type: string
+          format: date-time
+          description: Response timestamp
+        chapter:
+          type: string
+          nullable: true
+          description: Relevant documentation chapter for navigation
+          enum:
+            - introduction-to-humanoid-robotics
+            - sensors-and-perception
+            - actuators-and-movement
+            - control-systems
+            - path-planning-and-navigation
+        section:
+          type: string
+          nullable: true
+          description: Specific section within the chapter
+        should_navigate:
+          type: boolean
+          default: false
+          description: Whether frontend should auto-navigate to the chapter
+        web_sources:
+          type: array
+          nullable: true
+          description: Web search results used (NEW)
+          items:
+            $ref: '#/components/schemas/WebSearchResult'
+        used_web_search:
+          type: boolean
+          default: false
+          description: Whether web search was used for this response (NEW)
+
+    WebSearchResult:
+      type: object
+      required:
+        - title
+        - url
+        - snippet
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          description: Page title from search result
+          example: "Tesla Optimus Gen 3: Latest Updates"
+        url:
+          type: string
+          format: uri
+          description: Full URL to the source page
+          example: "https://example.com/tesla-optimus"
+        snippet:
+          type: string
+          maxLength: 500
+          description: Text excerpt from the search result
+          example: "Tesla announced Optimus Gen 3 with improved..."
+
+    ErrorResponse:
+      type: object
+      required:
+        - detail
+      properties:
+        detail:
+          type: string
+          description: Error message
+          example: "Error processing message: connection timeout"

@@ -874,3 +874,321 @@
 [data-theme='dark'] .showDocsButton:focus-visible {
   outline-color: var(--color-white, #ffffff);
 }
+
+/* ==========================================
+   Web Sources Panel - Slides from right
+   ========================================== */
+
+.webSourcesPanel {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 1) 100%);
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.06);
+  padding: var(--space-4, 1rem);
+}
+
+[data-theme='dark'] .webSourcesPanel {
+  background: linear-gradient(135deg,
+    rgba(15, 15, 15, 0.98) 0%,
+    rgba(15, 15, 15, 1) 100%);
+  border-left-color: rgba(255, 255, 255, 0.12);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Hidden state - slides from right */
+.chatOnly .webSourcesPanel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 30%;
+  height: 100%;
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s ease-out, opacity 0.3s ease-out;
+}
+
+/* With sources only - 70% chat, 30% sources */
+.withSources {
+  grid-template-columns: 70% 30%;
+  transition: grid-template-columns 0.4s ease-out;
+}
+
+.withSources .webSourcesPanel {
+  position: relative;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+  transition: transform 0.4s ease-out, opacity 0.3s ease-out;
+}
+
+/* All three panels - 40% docs, 30% chat, 30% sources */
+.withAll {
+  grid-template-columns: 40% 30% 30%;
+  transition: grid-template-columns 0.4s ease-out;
+}
+
+.withAll .webSourcesPanel {
+  position: relative;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.withAll .docViewer {
+  position: relative;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Close button for sources panel */
+.closeSourcesButton {
+  position: absolute;
+  top: var(--space-4, 1rem);
+  right: var(--space-4, 1rem);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.closeSourcesButton:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.15);
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.closeSourcesButton:active {
+  transform: scale(0.95) rotate(90deg);
+}
+
+.closeSourcesButton svg {
+  color: var(--gray-600, #525252);
+  transition: transform 0.2s ease;
+}
+
+[data-theme='dark'] .closeSourcesButton {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='dark'] .closeSourcesButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme='dark'] .closeSourcesButton svg {
+  color: var(--gray-300, #d4d4d4);
+}
+
+/* Sources header */
+.sourcesHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3, 0.75rem);
+  margin-bottom: var(--space-4, 1rem);
+  padding-bottom: var(--space-3, 0.75rem);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] .sourcesHeader {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+.sourcesIcon {
+  font-size: 1.5rem;
+}
+
+.sourcesTitle {
+  font-size: var(--text-lg, 1.125rem);
+  font-weight: 600;
+  color: var(--color-black, #000000);
+  margin: 0;
+}
+
+[data-theme='dark'] .sourcesTitle {
+  color: var(--color-white, #ffffff);
+}
+
+/* Sources list */
+.sourcesList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 0.75rem);
+}
+
+.sourceItem {
+  display: block;
+  padding: var(--space-3, 0.75rem);
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.8) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-lg, 0.75rem);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.sourceItem:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 1) 100%);
+  border-color: rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] .sourceItem {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.1) 100%);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .sourceItem:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.15) 100%);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.sourceTitle {
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 600;
+  color: var(--color-black, #000000);
+  margin: 0 0 var(--space-2, 0.5rem) 0;
+  line-height: 1.4;
+}
+
+[data-theme='dark'] .sourceTitle {
+  color: var(--color-white, #ffffff);
+}
+
+.sourceSnippet {
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--gray-600, #525252);
+  margin: 0 0 var(--space-2, 0.5rem) 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .sourceSnippet {
+  color: var(--gray-400, #a3a3a3);
+}
+
+.sourceUrl {
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--gray-500, #737373);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-theme='dark'] .sourceUrl {
+  color: var(--gray-500, #737373);
+}
+
+/* Responsive styles for web sources panel */
+@media (max-width: 1024px) {
+  .withSources {
+    grid-template-columns: 65% 35%;
+  }
+
+  .withAll {
+    grid-template-columns: 35% 30% 35%;
+  }
+}
+
+@media (max-width: 768px) {
+  /* On mobile, stack vertically when sources are visible */
+  .withSources {
+    grid-template-columns: 1fr;
+    grid-template-rows: 70vh 30vh;
+  }
+
+  .withSources .webSourcesPanel {
+    border-left: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.06);
+  }
+
+  [data-theme='dark'] .withSources .webSourcesPanel {
+    border-top-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* All three panels on mobile - stack vertically */
+  .withAll {
+    grid-template-columns: 1fr;
+    grid-template-rows: 35vh 35vh 30vh;
+  }
+
+  .chatOnly .webSourcesPanel {
+    width: 100%;
+    height: 30vh;
+    transform: translateY(100%);
+  }
+}
+
+@media (max-width: 480px) {
+  .withSources {
+    grid-template-rows: 65vh 35vh;
+  }
+
+  .withAll {
+    grid-template-rows: 30vh 35vh 35vh;
+  }
+
+  .sourcesHeader {
+    padding: var(--space-2, 0.5rem);
+    margin-bottom: var(--space-2, 0.5rem);
+  }
+
+  .sourcesTitle {
+    font-size: var(--text-base, 1rem);
+  }
+
+  .sourceItem {
+    padding: var(--space-2, 0.5rem);
+  }
+}
+
+/* Focus styles for sources panel */
+.closeSourcesButton:focus-visible {
+  outline: 2px solid var(--color-black, #000000);
+  outline-offset: 2px;
+}
+
+[data-theme='dark'] .closeSourcesButton:focus-visible {
+  outline-color: var(--color-white, #ffffff);
+}
+
+/* Reduced motion for sources panel */
+@media (prefers-reduced-motion: reduce) {
+  .webSourcesPanel {
+    animation: none;
+    transition: none;
+  }
+}

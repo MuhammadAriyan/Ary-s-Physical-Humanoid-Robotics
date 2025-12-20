@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
 
@@ -9,8 +9,15 @@ class ChatRequest(BaseModel):
     stream: bool = True
 
 
+class WebSearchResult(BaseModel):
+    """Single web search result from DuckDuckGo"""
+    title: str = Field(..., max_length=200)
+    url: str
+    snippet: str = Field(..., max_length=500)
+
+
 class ChatResponse(BaseModel):
-    """T008: Updated with chapter navigation fields"""
+    """T008: Updated with chapter navigation and web search fields"""
     response: str
     session_id: str
     timestamp: datetime
@@ -18,6 +25,9 @@ class ChatResponse(BaseModel):
     section: Optional[str] = None  # Section anchor within chapter
     should_navigate: bool = False  # Whether UI should auto-navigate
     error: Optional[str] = None
+    # Web search fields
+    web_sources: Optional[List[WebSearchResult]] = None
+    used_web_search: bool = False
 
 
 class StreamEvent(BaseModel):
