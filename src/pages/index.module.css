@@ -139,8 +139,9 @@
 }
 
 .primaryButton:hover {
+  background: #000000;
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
 .secondaryButton {
@@ -156,8 +157,8 @@
 }
 
 .secondaryButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: #000000;
+  border-color: #000000;
   transform: translateY(-2px);
 }
 
