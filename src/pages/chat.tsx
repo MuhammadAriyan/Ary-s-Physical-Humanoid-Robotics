@@ -376,7 +376,7 @@ function ChatContent() {
             𝄞⨾𓍢ִ໋
           </div>
           <div className={styles.chatHeaderInfo}>
-            <h1 className={styles.chatTitle}>FUBUNI Ი︵𐑼</h1>
+            <h1 className={styles.chatTitle}>.𖥔 ݁FUBUNI .˖</h1>
             <p className={styles.chatSubtitle}>Robotics Learning Assistant</p>
           </div>
           {/* Show docs button when docs are hidden */}
