@@ -316,10 +316,26 @@
   color: var(--color-black, #000000);
   font-family: var(--font-primary, 'Inter', sans-serif);
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 [data-theme='dark'] .chatTitle {
   color: var(--color-white, #ffffff);
+}
+
+.playwrightBadge {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  font-style: italic;
+  color: #737373;
+  letter-spacing: 0.02em;
+}
+
+[data-theme='dark'] .playwrightBadge {
+  color: #a3a3a3;
 }
 
 .chatSubtitle {
