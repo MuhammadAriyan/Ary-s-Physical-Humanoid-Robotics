@@ -139,12 +139,13 @@ Be friendly and efficient!""",
         """Detect which chapter the response relates to based on keywords."""
         text = (message + " " + response).lower()
 
+        # Order matters - more specific chapters first
         chapter_keywords = {
-            "introduction-to-humanoid-robotics": ["introduction", "basics", "overview", "what is", "getting started", "humanoid robot"],
-            "sensors-and-perception": ["sensor", "camera", "lidar", "perception", "vision", "detection", "sensing", "imu", "gyroscope"],
-            "actuators-and-movement": ["actuator", "motor", "servo", "movement", "joint", "dof", "locomotion", "degrees of freedom"],
-            "control-systems": ["control", "pid", "feedback", "stability", "controller", "loop"],
-            "path-planning-and-navigation": ["navigation", "path planning", "slam", "trajectory", "waypoint", "obstacle avoidance"],
+            "control-systems": ["pid", "control system", "feedback loop", "controller", "control-systems"],
+            "sensors-and-perception": ["sensor", "camera", "lidar", "perception", "vision", "imu", "gyroscope", "sensors-and-perception"],
+            "actuators-and-movement": ["actuator", "motor", "servo", "joint", "dof", "locomotion", "actuators-and-movement"],
+            "path-planning-and-navigation": ["path planning", "slam", "trajectory", "waypoint", "navigation", "path-planning"],
+            "introduction-to-humanoid-robotics": ["introduction", "basics", "overview", "what is humanoid", "getting started"],
         }
 
         for chapter, keywords in chapter_keywords.items():

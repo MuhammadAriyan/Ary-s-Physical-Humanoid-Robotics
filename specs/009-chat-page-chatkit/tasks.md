@@ -119,9 +119,9 @@
 - [x] T036 [P] Add loading state/skeleton for iframe while doc loads in src/pages/chat.tsx
 - [x] T037 [P] Add error handling for failed chat API requests in src/pages/chat.tsx
 - [x] T038 Add /chat link to navbar in docusaurus.config.ts
-- [ ] T039 Deploy frontend to GitHub Pages via existing workflow
-- [ ] T040 Deploy backend to Hugging Face Spaces via huggingface_hub
-- [ ] T041 Verify full integration in production environment
+- [x] T039 Deploy frontend to GitHub Pages via existing workflow
+- [x] T040 Deploy backend to Hugging Face Spaces via huggingface_hub
+- [x] T041 Verify full integration in production environment
 
 ---
 
