@@ -451,13 +451,15 @@ body {
 
 .btn:hover {
   color: var(--color-white);
-  border-color: var(--color-black);
+  background: #000000;
+  border-color: #000000;
   box-shadow: var(--shadow-medium);
   transform: translateY(-1px);
 }
 
 .btn:hover::before {
   transform: translateY(0);
+  background: #000000;
 }
 
 .btn:active {
