@@ -314,8 +314,9 @@
   font-size: var(--text-xl, 1.25rem);
   font-weight: 700;
   color: var(--color-black, #000000);
-  font-family: 'Playwrite DE Grund', cursive;
+  font-family: 'Storybook', 'Comic Sans MS', 'Chalkboard', cursive;
   margin: 0;
+  padding: 1.5px;
 }
 
 [data-theme='dark'] .chatTitle {
