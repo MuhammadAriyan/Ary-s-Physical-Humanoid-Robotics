@@ -89,8 +89,8 @@ function TypingIndicator() {
 function WelcomeMessage() {
   return (
     <div className={styles.welcomeMessage}>
-      <div className={styles.welcomeIcon} role="img" aria-label="Robot">
-        🤖
+      <div className={styles.welcomeIcon} role="img" aria-label="Fubuni">
+        𝄞⨾𓍢ִ໋
       </div>
       <h2 className={styles.welcomeTitle}>Chat with Fubuni</h2>
       <p className={styles.welcomeText}>
@@ -119,12 +119,10 @@ function ChatContent() {
   const [inputValue, setInputValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [iframeLoading, setIframeLoading] = useState<boolean>(true);
-  // New state for docs panel visibility
+
+  // Docs panel visibility - starts hidden, slides in on first navigation
   const [docsVisible, setDocsVisible] = useState<boolean>(false);
-  // Enhanced state for multi-stage layout
-  const [layoutStage, setLayoutStage] = useState<'chatOnly' | 'verticalSplit' | 'horizontalSplit'>('chatOnly');
-  const [isFlipping, setIsFlipping] = useState<boolean>(false);
-  const [firstNavigation, setFirstNavigation] = useState<boolean>(true);
+  const [hasNavigatedOnce, setHasNavigatedOnce] = useState<boolean>(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -167,24 +165,16 @@ function ChatContent() {
    * Handle closing/minimizing the docs panel
    */
   const handleCloseDocs = useCallback(() => {
-    setLayoutStage('chatOnly');
-    setFirstNavigation(true);
+    setDocsVisible(false);
   }, []);
 
   /**
    * Handle opening the docs panel manually
    */
   const handleOpenDocs = useCallback(() => {
-    if (firstNavigation) {
-      setLayoutStage('verticalSplit');
-      setTimeout(() => {
-        setLayoutStage('horizontalSplit');
-      }, 100);
-    } else {
-      setLayoutStage('horizontalSplit');
-    }
+    setDocsVisible(true);
     setIframeLoading(true);
-  }, [firstNavigation]);
+  }, []);
 
   /**
    * Handle agent response and auto-navigate if needed
@@ -199,24 +189,13 @@ function ChatContent() {
           setCurrentChapter(targetChapter);
           setIframeLoading(true);
 
-          // If this is the first navigation, trigger the multi-stage transition
-          if (firstNavigation) {
-            setFirstNavigation(false);
-            setLayoutStage('verticalSplit'); // Trigger Stage 1
-
-            // Auto-transition to Stage 2 after delay
-            setTimeout(() => {
-              setIsFlipping(true); // Trigger Fubuni flip
-              setLayoutStage('horizontalSplit');
-              // Reset the flip state after animation completes
-              setTimeout(() => {
-                setIsFlipping(false);
-              }, 800); // Match the animation duration
-            }, 1500); // Delay for user to notice split-screen
-          } else {
-            // For subsequent navigations, stay in horizontal split
-            setLayoutStage('horizontalSplit');
+          // First navigation - trigger slide-in animation
+          if (!hasNavigatedOnce) {
+            setHasNavigatedOnce(true);
           }
+
+          // Show docs panel (slides in from left)
+          setDocsVisible(true);
 
           // Update the message to show navigation indicator
           setMessages((prev) =>
@@ -229,7 +208,7 @@ function ChatContent() {
         }
       }
     },
-    [firstNavigation]
+    [hasNavigatedOnce]
   );
 
   /**
@@ -346,7 +325,7 @@ function ChatContent() {
   );
 
   return (
-    <div className={`${styles.container} ${styles[layoutStage]}`}>
+    <div className={`${styles.container} ${docsVisible ? styles.withDocs : styles.chatOnly}`}>
       {/* Documentation viewer panel - slides in from left */}
       <div className={styles.docViewer}>
         {/* Close button */}
@@ -393,14 +372,14 @@ function ChatContent() {
         {/* Chat header */}
         <header className={styles.chatHeader}>
           <div className={styles.chatAvatar} role="img" aria-label="Fubuni">
-            🤖
+            𝄞⨾𓍢ִ໋
           </div>
           <div className={styles.chatHeaderInfo}>
-            <h1 className={`${styles.chatTitle} ${isFlipping ? styles.flip : ''}`}>Fubuni</h1>
+            <h1 className={styles.chatTitle}>Fubuni</h1>
             <p className={styles.chatSubtitle}>Robotics Learning Assistant</p>
           </div>
           {/* Show docs button when docs are hidden */}
-          {layoutStage === 'chatOnly' && (
+          {!docsVisible && (
             <button
               type="button"
               className={styles.showDocsButton}

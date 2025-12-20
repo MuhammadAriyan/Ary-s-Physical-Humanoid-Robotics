@@ -1,16 +1,15 @@
 /**
- * Chat Page Styles - Multi-stage documentation panel
+ * Chat Page Styles - Slide-in documentation panel
  * Premium black & white design matching the site aesthetic
  */
 
-/* Main container - multi-stage layout */
+/* Main container - dynamic layout */
 .container {
   display: grid;
   height: 100vh;
   width: 100%;
   overflow: hidden;
   background: var(--color-white, #ffffff);
-  transition: all 0.6s ease-in-out;
   position: relative;
 }
 
@@ -18,159 +17,56 @@
   background: var(--color-black, #000000);
 }
 
-/* Stage: chatOnly */
+/* ==========================================
+   Layout States
+   ========================================== */
+
+/* Chat only - full width chat, no docs */
 .chatOnly {
-  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  transition: grid-template-columns 0.4s ease-out;
 }
 
 .chatOnly .chatPanel {
-  height: 100%;
   width: 100%;
+  height: 100%;
 }
 
 .chatOnly .docViewer {
-  display: none;
-}
-
-/* Stage: verticalSplit */
-.verticalSplit {
-  grid-template-rows: 50% 50%;
-  transition: grid-template-rows 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.verticalSplit .chatPanel {
-  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 60%;
   height: 100%;
-  order: 1; /* Chat on top */
-  transition: all 0.5s ease;
-}
-
-.verticalSplit .docViewer {
-  width: 100%;
-  height: 100%;
-  order: 2; /* Docs on bottom */
-  animation: fadeInSlideUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: translateX(-100%);
   opacity: 0;
-  transform: translateY(20px);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
+  pointer-events: none;
+  transition: transform 0.4s ease-out, opacity 0.3s ease-out;
 }
 
-[data-theme='dark'] .verticalSplit .docViewer {
-  border-top-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
-}
-
-/* Fade in and slide up animation for vertical split */
-@keyframes fadeInSlideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Stage: horizontalSplit - 60% docs, 40% chat */
-.horizontalSplit {
+/* With docs - 60% docs, 40% chat */
+.withDocs {
   grid-template-columns: 60% 40%;
-  grid-template-rows: 1fr;
-  transition: grid-template-columns 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: grid-template-columns 0.4s ease-out;
 }
 
-.horizontalSplit .docViewer {
-  border-right: 1px solid rgba(0, 0, 0, 0.08);
-  order: 1;
-  /* Smooth slide animation from bottom to left */
-  animation: slideInBottomLeft 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  opacity: 0;
-  transform: translateY(100%) translateX(-20px);
-  transform-origin: bottom left;
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+.withDocs .docViewer {
+  position: relative;
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+  transition: transform 0.4s ease-out, opacity 0.3s ease-out;
 }
 
-[data-theme='dark'] .horizontalSplit .docViewer {
-  border-right-color: rgba(255, 255, 255, 0.12);
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
-}
-
-.horizontalSplit .chatPanel {
+.withDocs .chatPanel {
   width: 100%;
   height: 100%;
-  order: 2;
-  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Animation: slide in from bottom to final position, then slide left */
-@keyframes slideInBottomLeft {
-  0% {
-    opacity: 0;
-    transform: translateY(100%) translateX(-20px);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0);
-  }
-  50% {
-    opacity: 0.7;
-    transform: translateY(20px) translateX(-10px);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.03);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) translateX(0);
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
-  }
-}
+/* ==========================================
+   Documentation Viewer Panel
+   ========================================== */
 
-/* Premium animation for vertical split - docs panel scales in from center */
-@keyframes scaleFadeInPremium {
-  0% {
-    opacity: 0;
-    transform: scale(0.85) translateY(30%);
-    filter: blur(4px);
-  }
-  40% {
-    opacity: 0.5;
-    filter: blur(2px);
-  }
-  70% {
-    opacity: 0.9;
-    transform: scale(1.01) translateY(-2%);
-    filter: blur(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    filter: blur(0);
-  }
-}
-
-/* Subtle entrance shimmer effect */
-@keyframes shimmerEntrance {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-/* For backward compatibility */
-.slideToLeft {
-  animation: premiumSlideIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-[data-theme='dark'] .horizontalSplit .docViewer {
-  border-right-color: var(--gray-800, #262626);
-}
-
-.horizontalSplit .chatPanel {
-  width: 100%;
-  height: 100%;
-  order: 2;
-}
-
-/* Documentation viewer panel */
 .docViewer {
   position: relative;
   overflow: hidden;
@@ -180,52 +76,16 @@
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(20px);
-  border-radius: var(--radius-2xl, 1rem);
-  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.06),
-              inset 0 0 1px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.06);
 }
 
 [data-theme='dark'] .docViewer {
   background: linear-gradient(135deg,
     rgba(15, 15, 15, 0.98) 0%,
     rgba(15, 15, 15, 1) 100%);
-  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.2),
-              inset 0 0 1px rgba(255, 255, 255, 0.05);
-}
-
-/* Premium loading state with shimmer */
-.docViewer::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.03) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.docViewer:has(.iframeLoading)::after {
-  opacity: 1;
-  animation: shimmerEntrance 1.5s ease-in-out infinite;
-}
-
-/* Iframe for documentation */
-.iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  transition: opacity 0.3s ease-out;
-  flex: 1;
-}
-
-.iframeLoading {
-  opacity: 0.6;
+  border-right-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 10px 0 40px rgba(0, 0, 0, 0.2);
 }
 
 /* Close button for docs panel */
@@ -246,7 +106,6 @@
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(10px);
-  font-size: var(--text-lg, 1.125rem);
 }
 
 .closeDocsButton:hover {
@@ -286,7 +145,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-2, 0.5rem);
-  padding: var(--space-4, 1rem) var(--space-4, 1rem);
+  padding: var(--space-4, 1rem);
   background: linear-gradient(90deg,
     rgba(255, 255, 255, 0.95) 0%,
     rgba(255, 255, 255, 0.98) 100%);
@@ -312,7 +171,7 @@
 .chapterButton {
   flex-shrink: 0;
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-  font-size: var(--text-base, 1rem);
+  font-size: var(--text-sm, 0.875rem);
   font-weight: 500;
   font-family: var(--font-primary, 'Inter', sans-serif);
   color: var(--gray-600, #525252);
@@ -325,25 +184,6 @@
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   white-space: nowrap;
   backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.chapterButton::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg,
-    transparent,
-    rgba(255, 255, 255, 0.6),
-    transparent
-  );
-  transition: left 0.6s;
-  z-index: -1;
 }
 
 .chapterButton:hover {
@@ -353,10 +193,6 @@
   color: var(--color-black, #000000);
   border-color: rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
-}
-
-.chapterButton:hover::before {
-  left: 100%;
 }
 
 .chapterButtonActive {
@@ -370,7 +206,6 @@
 .chapterButtonActive:hover {
   background: var(--gray-800, #262626);
   color: var(--color-white, #ffffff);
-  transform: translateY(-2px);
 }
 
 [data-theme='dark'] .chapterButton {
@@ -401,7 +236,23 @@
   color: var(--color-black, #000000);
 }
 
-/* Chat panel (right side) */
+/* Iframe for documentation */
+.iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  transition: opacity 0.3s ease-out;
+  flex: 1;
+}
+
+.iframeLoading {
+  opacity: 0.6;
+}
+
+/* ==========================================
+   Chat Panel
+   ========================================== */
+
 .chatPanel {
   display: flex;
   flex-direction: column;
@@ -410,15 +261,12 @@
     rgba(255, 255, 255, 0.9) 0%,
     rgba(249, 250, 251, 0.95) 100%);
   overflow: hidden;
-  border-radius: var(--radius-2xl, 1rem);
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.03);
 }
 
 [data-theme='dark'] .chatPanel {
   background: linear-gradient(135deg,
     rgba(15, 15, 15, 0.9) 0%,
     rgba(23, 23, 23, 0.95) 100%);
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
 }
 
 /* Chat header */
@@ -434,7 +282,6 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
 }
 
 [data-theme='dark'] .chatHeader {
@@ -448,19 +295,17 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-black, #000000) 0%, var(--gray-800, #262626) 100%);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   flex-shrink: 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 [data-theme='dark'] .chatAvatar {
-  background: linear-gradient(135deg, var(--color-white, #ffffff) 0%, var(--gray-200, #e5e5e5) 100%);
+  background: #ffffff;
   border-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -470,7 +315,7 @@
 }
 
 .chatTitle {
-  font-size: var(--text-base, 1rem);
+  font-size: var(--text-lg, 1.125rem);
   font-weight: 600;
   color: var(--color-black, #000000);
   font-family: var(--font-primary, 'Inter', sans-serif);
@@ -487,7 +332,57 @@
   margin: 0;
 }
 
-/* Messages container */
+/* Show docs button */
+.showDocsButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2, 0.5rem);
+  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
+  background: linear-gradient(135deg, var(--color-black, #000000) 0%, var(--gray-800, #262626) 100%);
+  color: var(--color-white, #ffffff);
+  border: 1px solid var(--color-black, #000000);
+  border-radius: var(--radius-xl, 1rem);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: 500;
+  font-family: var(--font-primary, 'Inter', sans-serif);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.showDocsButton:hover {
+  background: linear-gradient(135deg, var(--gray-800, #262626) 0%, var(--color-black, #000000) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.showDocsButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.showDocsButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+[data-theme='dark'] .showDocsButton {
+  background: linear-gradient(135deg, var(--color-white, #ffffff) 0%, var(--gray-200, #e5e5e5) 100%);
+  color: var(--color-black, #000000);
+  border-color: var(--color-white, #ffffff);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .showDocsButton:hover {
+  background: linear-gradient(135deg, var(--gray-200, #e5e5e5) 0%, var(--color-white, #ffffff) 100%);
+}
+
+/* ==========================================
+   Messages
+   ========================================== */
+
 .messagesContainer {
   flex: 1;
   overflow-y: auto;
@@ -498,7 +393,6 @@
   scroll-behavior: smooth;
 }
 
-/* Message styles */
 .message {
   display: flex;
   flex-direction: column;
@@ -642,7 +536,10 @@
   }
 }
 
-/* Input container */
+/* ==========================================
+   Input Area
+   ========================================== */
+
 .inputContainer {
   padding: var(--space-5, 1.25rem);
   background: linear-gradient(135deg,
@@ -651,7 +548,6 @@
   border-top: 1px solid rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
   backdrop-filter: blur(15px);
-  border-radius: var(--radius-2xl, 1rem) var(--radius-2xl, 1rem) 0 0;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.03);
 }
 
@@ -775,54 +671,10 @@
   height: 20px;
 }
 
-/* Show docs button */
-.showDocsButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2, 0.5rem);
-  padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
-  background: linear-gradient(135deg, var(--color-black, #000000) 0%, var(--gray-800, #262626) 100%);
-  color: var(--color-white, #ffffff);
-  border: 1px solid var(--color-black, #000000);
-  border-radius: var(--radius-xl, 1rem);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  font-size: var(--text-sm, 0.875rem);
-  font-weight: 500;
-  font-family: var(--font-primary, 'Inter', sans-serif);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-}
+/* ==========================================
+   Welcome Message
+   ========================================== */
 
-.showDocsButton:hover {
-  background: linear-gradient(135deg, var(--gray-800, #262626) 0%, var(--color-black, #000000) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.showDocsButton:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.showDocsButton svg {
-  width: 16px;
-  height: 16px;
-}
-
-[data-theme='dark'] .showDocsButton {
-  background: linear-gradient(135deg, var(--color-white, #ffffff) 0%, var(--gray-200, #e5e5e5) 100%);
-  color: var(--color-black, #000000);
-  border-color: var(--color-white, #ffffff);
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-}
-
-[data-theme='dark'] .showDocsButton:hover {
-  background: linear-gradient(135deg, var(--gray-200, #e5e5e5) 0%, var(--color-white, #ffffff) 100%);
-}
-
-/* Welcome message */
 .welcomeMessage {
   display: flex;
   flex-direction: column;
@@ -856,7 +708,10 @@
   line-height: 1.5;
 }
 
-/* Error message */
+/* ==========================================
+   Error Message
+   ========================================== */
+
 .errorMessage {
   display: flex;
   align-items: center;
@@ -867,7 +722,7 @@
   border-radius: var(--radius-lg, 0.75rem);
   color: #dc2626;
   font-size: var(--text-sm, 0.875rem);
-  margin: var(--space-2, 0.5rem) 0;
+  margin: var(--space-2, 0.5rem) var(--space-4, 1rem);
 }
 
 [data-theme='dark'] .errorMessage {
@@ -876,33 +731,37 @@
   color: #f87171;
 }
 
-/* Responsive design */
+/* ==========================================
+   Responsive Design
+   ========================================== */
+
 @media (max-width: 1024px) {
-  .horizontalSplit {
+  .withDocs {
     grid-template-columns: 55% 45%;
   }
 }
 
 @media (max-width: 768px) {
-  /* On mobile, switch to vertical stack for all stages when docs are visible */
-  .verticalSplit,
-  .horizontalSplit {
+  /* On mobile, stack vertically when docs are visible */
+  .withDocs {
     grid-template-columns: 1fr;
     grid-template-rows: 50vh 50vh;
   }
 
-  .horizontalSplit .docViewer {
-    order: 1;
+  .chatOnly .docViewer {
+    width: 100%;
+    height: 50vh;
+    transform: translateY(-100%);
+  }
+
+  .withDocs .docViewer {
     border-right: none;
-    border-bottom: 1px solid var(--gray-200, #e5e5e5);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
   }
 
-  .horizontalSplit .chatPanel {
-    order: 2;
-  }
-
-  [data-theme='dark'] .horizontalSplit .docViewer {
-    border-bottom-color: var(--gray-800, #262626);
+  [data-theme='dark'] .withDocs .docViewer {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
   }
 
   .chapterNav {
@@ -911,7 +770,7 @@
 
   .chapterButton {
     font-size: var(--text-xs, 0.75rem);
-    padding: var(--space-1, 0.25rem) var(--space-2, 0.5rem);
+    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
   }
 
   .chatHeader {
@@ -919,13 +778,13 @@
   }
 
   .chatAvatar {
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
   }
 
   .chatTitle {
-    font-size: var(--text-sm, 0.875rem);
+    font-size: var(--text-base, 1rem);
   }
 
   .messagesContainer {
@@ -947,14 +806,14 @@
   }
 
   .chatInput {
-    min-height: 40px;
-    padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
+    min-height: 44px;
+    padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
     font-size: var(--text-sm, 0.875rem);
   }
 
   .sendButton {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 
   .sendIcon {
@@ -964,8 +823,7 @@
 }
 
 @media (max-width: 480px) {
-  .verticalSplit,
-  .horizontalSplit {
+  .withDocs {
     grid-template-rows: 45vh 55vh;
   }
 
@@ -978,7 +836,7 @@
   }
 
   .welcomeTitle {
-    font-size: var(--text-base, 1rem);
+    font-size: var(--text-lg, 1.125rem);
   }
 
   .welcomeText {
@@ -986,8 +844,13 @@
   }
 }
 
-/* Accessibility */
+/* ==========================================
+   Accessibility
+   ========================================== */
+
 @media (prefers-reduced-motion: reduce) {
+  .container,
+  .docViewer,
   .message,
   .iframe,
   .typingDot {
@@ -996,43 +859,20 @@
   }
 }
 
-/* Keyframe animations */
-@keyframes scaleFadeIn {
-  from {
-    transform: scale(0.8) translateY(20%);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes flip {
-  from {
-    transform: rotateY(0deg);
-  }
-  to {
-    transform: rotateY(360deg);
-  }
-}
-
-.flip {
-  animation: flip 0.8s ease-in-out;
-  display: inline-block;
-  transform-style: preserve-3d;
-}
-
 /* Focus styles */
 .chatInput:focus-visible,
 .sendButton:focus-visible,
-.chapterButton:focus-visible {
+.chapterButton:focus-visible,
+.closeDocsButton:focus-visible,
+.showDocsButton:focus-visible {
   outline: 2px solid var(--color-black, #000000);
   outline-offset: 2px;
 }
 
 [data-theme='dark'] .chatInput:focus-visible,
 [data-theme='dark'] .sendButton:focus-visible,
-[data-theme='dark'] .chapterButton:focus-visible {
+[data-theme='dark'] .chapterButton:focus-visible,
+[data-theme='dark'] .closeDocsButton:focus-visible,
+[data-theme='dark'] .showDocsButton:focus-visible {
   outline-color: var(--color-white, #ffffff);
 }
