@@ -1,0 +1,449 @@
+import React, { useState, useRef, useEffect, useCallback, FormEvent } from 'react';
+import Layout from '@theme/Layout';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import {
+  DOC_CHAPTERS,
+  CHAPTER_TITLES,
+  DEFAULT_CHAPTER,
+} from '../constants/chapters';
+import styles from './chat.module.css';
+
+/**
+ * Message type for chat interface
+ */
+interface Message {
+  id: string;
+  sender: 'user' | 'fubuni';
+  content: string;
+  timestamp: Date;
+  navigatedTo?: string;
+}
+
+/**
+ * Backend response structure
+ */
+interface BackendResponse {
+  response: string;
+  chapter?: string;
+  section?: string;
+  should_navigate?: boolean;
+}
+
+/**
+ * Generate unique message ID
+ */
+function generateId(): string {
+  return `msg-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+}
+
+/**
+ * Get the API base URL based on environment
+ */
+function getApiBaseUrl(): string {
+  if (typeof window === 'undefined') {
+    return 'https://maryanrar-fubuni-chat-api.hf.space';
+  }
+  return window.location.hostname === 'localhost'
+    ? 'http://localhost:8000'
+    : 'https://maryanrar-fubuni-chat-api.hf.space';
+}
+
+/**
+ * Send icon SVG component
+ */
+function SendIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="22" y1="2" x2="11" y2="13" />
+      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
+  );
+}
+
+/**
+ * Typing indicator component
+ */
+function TypingIndicator() {
+  return (
+    <div className={styles.typingIndicator} aria-label="Fubuni is typing">
+      <span className={styles.typingDot} />
+      <span className={styles.typingDot} />
+      <span className={styles.typingDot} />
+    </div>
+  );
+}
+
+/**
+ * Welcome message component shown when chat is empty
+ */
+function WelcomeMessage() {
+  return (
+    <div className={styles.welcomeMessage}>
+      <div className={styles.welcomeIcon} role="img" aria-label="Robot">
+        🤖
+      </div>
+      <h2 className={styles.welcomeTitle}>Chat with Fubuni</h2>
+      <p className={styles.welcomeText}>
+        Ask me anything about humanoid robotics! I can help explain concepts and
+        navigate you to relevant documentation.
+      </p>
+    </div>
+  );
+}
+
+/**
+ * Format time for display
+ */
+function formatTime(date: Date): string {
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+/**
+ * Main chat content component (client-side only)
+ */
+function ChatContent() {
+  const baseUrl = useBaseUrl('/');
+  const [currentChapter, setCurrentChapter] = useState<string>(DEFAULT_CHAPTER);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+  const [iframeLoading, setIframeLoading] = useState<boolean>(true);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Scroll to bottom when new messages arrive
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isLoading, scrollToBottom]);
+
+  // Focus input on mount
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  /**
+   * Get full documentation URL for a chapter
+   */
+  const getDocUrl = useCallback(
+    (chapter: string): string => {
+      const path = DOC_CHAPTERS[chapter] || DOC_CHAPTERS[DEFAULT_CHAPTER];
+      // Build the full URL with baseUrl
+      return `${baseUrl.replace(/\/$/, '')}${path}`;
+    },
+    [baseUrl]
+  );
+
+  /**
+   * Handle chapter navigation from chapter buttons
+   */
+  const handleChapterClick = useCallback((chapter: string) => {
+    setCurrentChapter(chapter);
+    setIframeLoading(true);
+  }, []);
+
+  /**
+   * Handle agent response and auto-navigate if needed
+   */
+  const handleAgentResponse = useCallback(
+    (response: BackendResponse, messageId: string) => {
+      if (response.should_navigate && response.chapter) {
+        const targetChapter = response.chapter;
+
+        // Validate the chapter exists
+        if (DOC_CHAPTERS[targetChapter]) {
+          setCurrentChapter(targetChapter);
+          setIframeLoading(true);
+
+          // Update the message to show navigation indicator
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === messageId
+                ? { ...msg, navigatedTo: targetChapter }
+                : msg
+            )
+          );
+        }
+      }
+    },
+    []
+  );
+
+  /**
+   * Send message to backend
+   */
+  const sendMessage = useCallback(
+    async (messageText: string) => {
+      if (!messageText.trim() || isLoading) return;
+
+      // Clear any previous error
+      setError(null);
+
+      // Add user message
+      const userMessage: Message = {
+        id: generateId(),
+        sender: 'user',
+        content: messageText.trim(),
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, userMessage]);
+      setInputValue('');
+      setIsLoading(true);
+
+      try {
+        const apiUrl = getApiBaseUrl();
+        const response = await fetch(`${apiUrl}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: messageText.trim(),
+            stream: false,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: BackendResponse = await response.json();
+
+        // Add bot response
+        const botMessageId = generateId();
+        const botMessage: Message = {
+          id: botMessageId,
+          sender: 'fubuni',
+          content: data.response,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, botMessage]);
+
+        // Handle navigation if needed
+        handleAgentResponse(data, botMessageId);
+      } catch (err) {
+        console.error('Chat error:', err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Failed to send message. Please try again.'
+        );
+      } finally {
+        setIsLoading(false);
+        // Refocus input after response
+        inputRef.current?.focus();
+      }
+    },
+    [isLoading, handleAgentResponse]
+  );
+
+  /**
+   * Handle form submission
+   */
+  const handleSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      sendMessage(inputValue);
+    },
+    [inputValue, sendMessage]
+  );
+
+  /**
+   * Handle input key press (Enter to send, Shift+Enter for newline)
+   */
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage(inputValue);
+      }
+    },
+    [inputValue, sendMessage]
+  );
+
+  /**
+   * Handle iframe load complete
+   */
+  const handleIframeLoad = useCallback(() => {
+    setIframeLoading(false);
+  }, []);
+
+  /**
+   * Auto-resize textarea based on content
+   */
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setInputValue(e.target.value);
+      // Reset height to auto to get the correct scrollHeight
+      e.target.style.height = 'auto';
+      // Set height to scrollHeight, but max out at 120px
+      e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
+    },
+    []
+  );
+
+  return (
+    <div className={styles.container}>
+      {/* Documentation viewer panel */}
+      <div className={styles.docViewer}>
+        {/* Chapter navigation */}
+        <nav className={styles.chapterNav} aria-label="Chapter navigation">
+          {Object.entries(CHAPTER_TITLES).map(([chapterId, title]) => (
+            <button
+              key={chapterId}
+              type="button"
+              className={`${styles.chapterButton} ${
+                currentChapter === chapterId ? styles.chapterButtonActive : ''
+              }`}
+              onClick={() => handleChapterClick(chapterId)}
+              aria-pressed={currentChapter === chapterId}
+            >
+              {title}
+            </button>
+          ))}
+        </nav>
+
+        {/* Documentation iframe */}
+        <iframe
+          src={getDocUrl(currentChapter)}
+          className={`${styles.iframe} ${iframeLoading ? styles.iframeLoading : ''}`}
+          title={`Documentation: ${CHAPTER_TITLES[currentChapter] || 'Robotics Course'}`}
+          onLoad={handleIframeLoad}
+        />
+      </div>
+
+      {/* Chat panel */}
+      <div className={styles.chatPanel}>
+        {/* Chat header */}
+        <header className={styles.chatHeader}>
+          <div className={styles.chatAvatar} role="img" aria-label="Fubuni">
+            🤖
+          </div>
+          <div className={styles.chatHeaderInfo}>
+            <h1 className={styles.chatTitle}>Fubuni</h1>
+            <p className={styles.chatSubtitle}>Robotics Learning Assistant</p>
+          </div>
+        </header>
+
+        {/* Messages container */}
+        <div
+          className={styles.messagesContainer}
+          role="log"
+          aria-label="Chat messages"
+          aria-live="polite"
+        >
+          {messages.length === 0 && !isLoading ? (
+            <WelcomeMessage />
+          ) : (
+            <>
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`${styles.message} ${
+                    message.sender === 'user'
+                      ? styles.userMessage
+                      : styles.botMessage
+                  }`}
+                >
+                  <div className={styles.messageBubble}>{message.content}</div>
+                  {message.navigatedTo && (
+                    <div className={styles.navigationIndicator}>
+                      <span
+                        className={styles.navigationIcon}
+                        role="img"
+                        aria-label="Navigation"
+                      >
+                        📍
+                      </span>
+                      <span>
+                        Navigated to:{' '}
+                        {CHAPTER_TITLES[message.navigatedTo] ||
+                          message.navigatedTo}
+                      </span>
+                    </div>
+                  )}
+                  <span className={styles.messageTime}>
+                    {formatTime(message.timestamp)}
+                  </span>
+                </div>
+              ))}
+              {isLoading && (
+                <div className={`${styles.message} ${styles.botMessage}`}>
+                  <TypingIndicator />
+                </div>
+              )}
+            </>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Error message */}
+        {error && (
+          <div className={styles.errorMessage} role="alert">
+            <span role="img" aria-label="Error">
+              ⚠️
+            </span>
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Input container */}
+        <div className={styles.inputContainer}>
+          <form className={styles.inputForm} onSubmit={handleSubmit}>
+            <textarea
+              ref={inputRef}
+              className={styles.chatInput}
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask about robotics..."
+              disabled={isLoading}
+              rows={1}
+              aria-label="Message input"
+            />
+            <button
+              type="submit"
+              className={styles.sendButton}
+              disabled={isLoading || !inputValue.trim()}
+              aria-label="Send message"
+            >
+              <SendIcon className={styles.sendIcon} />
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Chat page component with SSR protection
+ */
+export default function ChatPage(): React.ReactNode {
+  return (
+    <Layout
+      title="Chat with Fubuni"
+      description="Interactive chat assistant for learning humanoid robotics"
+      noFooter
+    >
+      <BrowserOnly fallback={<div>Loading chat interface...</div>}>
+        {() => <ChatContent />}
+      </BrowserOnly>
+    </Layout>
+  );
+}

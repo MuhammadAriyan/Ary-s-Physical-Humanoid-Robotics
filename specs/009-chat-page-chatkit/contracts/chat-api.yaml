@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  title: Fubuni Chat API - Extended
+  description: Chat API with structured responses for documentation navigation
+  version: 2.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Local development
+  - url: https://maryanrar-fubuni-chat-api.hf.space
+    description: Production (Hugging Face Spaces)
+
+paths:
+  /api/chat:
+    post:
+      summary: Send chat message and receive structured response
+      description: |
+        Send a message to Fubuni agent and receive a structured response
+        that may include documentation chapter navigation hints.
+      operationId: sendChatMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Successful response with optional chapter navigation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '401':
+          description: Unauthorized - missing or invalid session
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: User's message to the agent
+          example: "What sensors do humanoid robots use?"
+        stream:
+          type: boolean
+          default: false
+          description: Whether to stream the response
+        session_id:
+          type: string
+          description: Optional session ID for conversation continuity
+
+    ChatResponse:
+      type: object
+      required:
+        - response
+        - session_id
+        - timestamp
+      properties:
+        response:
+          type: string
+          description: Agent's text response
+          example: "Humanoid robots typically use various sensors including..."
+        session_id:
+          type: string
+          description: Session identifier for conversation tracking
+          example: "sess_abc123"
+        timestamp:
+          type: string
+          format: date-time
+          description: Response timestamp
+          example: "2025-12-20T10:30:00Z"
+        chapter:
+          type: string
+          nullable: true
+          description: Documentation chapter to navigate to
+          enum:
+            - introduction-to-humanoid-robotics
+            - sensors-and-perception
+            - actuators-and-movement
+            - control-systems
+            - path-planning-and-navigation
+          example: "sensors-and-perception"
+        section:
+          type: string
+          nullable: true
+          description: Section anchor within the chapter
+          example: "types-of-sensors"
+        should_navigate:
+          type: boolean
+          default: false
+          description: Whether the UI should auto-navigate to the chapter
+          example: true
+        error:
+          type: string
+          nullable: true
+          description: Error message if request failed
+          example: null
+
+    AgentResponse:
+      type: object
+      description: Internal structured response from the agent (backend only)
+      required:
+        - response
+      properties:
+        response:
+          type: string
+          description: Agent's text response
+        chapter:
+          type: string
+          nullable: true
+          description: Chapter identifier
+        section:
+          type: string
+          nullable: true
+          description: Section anchor
+        should_navigate:
+          type: boolean
+          default: false
+          description: Navigation flag

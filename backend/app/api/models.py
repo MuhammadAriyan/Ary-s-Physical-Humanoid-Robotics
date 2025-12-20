@@ -10,9 +10,13 @@ class ChatRequest(BaseModel):
 
 
 class ChatResponse(BaseModel):
+    """T008: Updated with chapter navigation fields"""
     response: str
     session_id: str
     timestamp: datetime
+    chapter: Optional[str] = None  # Chapter to navigate to
+    section: Optional[str] = None  # Section anchor within chapter
+    should_navigate: bool = False  # Whether UI should auto-navigate
     error: Optional[str] = None
 
 

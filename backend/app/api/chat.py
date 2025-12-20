@@ -10,10 +10,13 @@ from ..agents.fubuni_agent import get_fubuni_agent
 from ..config.database import get_session
 from ..utils.streaming import create_sse_stream
 from ..config.settings import settings
-from ..middleware.auth import AuthUser, require_auth
+from ..middleware.auth import AuthUser, require_auth, get_current_user
 
 
 router = APIRouter()
+
+# Anonymous user ID for unauthenticated chat sessions
+ANONYMOUS_USER_ID = "anonymous"
 
 
 @router.get("/chat/sessions")
@@ -79,12 +82,15 @@ async def get_chat_history(
 async def chat_endpoint(
     chat_request: ChatRequest,
     session: Session = Depends(get_session),
-    current_user: AuthUser = Depends(require_auth),
+    current_user: Optional[AuthUser] = Depends(get_current_user),
 ):
     """
     Chat endpoint that processes user messages and returns Fubuni's response.
-    Requires authentication.
+    Allows anonymous users (no authentication required).
     """
+    # Determine user ID (authenticated or anonymous)
+    user_id = current_user.id if current_user else ANONYMOUS_USER_ID
+
     # Get or create a chat session
     chat_session: Optional[ChatSession] = None
     if chat_request.session_id:
@@ -92,14 +98,14 @@ async def chat_endpoint(
         chat_session = session.exec(
             select(ChatSession).where(
                 ChatSession.id == chat_request.session_id,
-                ChatSession.user_id == current_user.id,
+                ChatSession.user_id == user_id,
             )
         ).first()
 
     # If no session provided or found, create a new one
     if not chat_session:
         chat_session = ChatSession(
-            user_id=current_user.id,  # Use authenticated user ID
+            user_id=user_id,
             title=chat_request.message[:50]
             if len(chat_request.message) > 50
             else chat_request.message,
@@ -118,17 +124,20 @@ async def chat_endpoint(
     session.add(user_message)
     session.commit()
 
-    # Process the message with the Fubuni agent
+    # Process the message with the Fubuni agent (T009: Structured output)
     try:
         fubuni_agent = get_fubuni_agent()
         agent_response = await fubuni_agent.process_message(
             chat_request.message, chat_session.id
         )
 
+        # Extract response text from AgentResponse
+        response_text = agent_response.response if hasattr(agent_response, 'response') else str(agent_response)
+
         # Save Fubuni's response
         fubuni_message = ChatMessage(
             sender="fubuni",
-            content=agent_response,
+            content=response_text,
             chat_session_id=chat_session.id,
             sequence_number=2,  # Will need to implement proper sequencing in a full implementation
         )
@@ -140,10 +149,14 @@ async def chat_endpoint(
         session.add(chat_session)
         session.commit()
 
+        # Return structured response with chapter navigation fields
         return ChatResponse(
-            response=agent_response,
+            response=response_text,
             session_id=chat_session.id,
             timestamp=datetime.utcnow(),
+            chapter=agent_response.chapter if hasattr(agent_response, 'chapter') else None,
+            section=agent_response.section if hasattr(agent_response, 'section') else None,
+            should_navigate=agent_response.should_navigate if hasattr(agent_response, 'should_navigate') else False,
         )
     except Exception as e:
         raise HTTPException(

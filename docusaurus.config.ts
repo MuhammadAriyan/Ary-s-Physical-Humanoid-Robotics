@@ -75,6 +75,11 @@ const config: Config = {
       },
       items: [
         {
+          to: '/chat',
+          label: 'Chat',
+          position: 'left',
+        },
+        {
           href: 'https://github.com/MuhammadAriyan/Ary-s-Physical-Humanoid-Robotics',
           label: 'GitHub',
           position: 'right',

@@ -215,6 +215,8 @@ See `.specify/memory/constitution.md` for code quality, testing, performance, se
 - Neon Serverless Postgres database for storing chat sessions and messages (007-fubuni-chat-bubble)
 - Node.js 20 (auth-service), Python 3.11 (FastAPI), TypeScript 5.6 (React) + Better Auth, Express, FastAPI, React 19, Docusaurus 3 (008-better-auth)
 - Neon PostgreSQL (shared, `ba_` prefix for auth tables) (008-better-auth)
+- Python 3.11 (backend), TypeScript 5.6 (frontend) (009-chat-page-chatkit)
+- N/A (session-based state, existing chat session DB) (009-chat-page-chatkit)
 
 ## Recent Changes
 - 007-fubuni-chat-bubble: Added Python 3.11, TypeScript/JavaScript, React 18 + FastAPI, OpenAI Agents SDK (agents package), Docusaurus 3, React, TypeScript
