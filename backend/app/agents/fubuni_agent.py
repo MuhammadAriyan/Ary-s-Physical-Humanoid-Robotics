@@ -57,7 +57,7 @@ def _initialize_agent():
         # Use OpenRouter API key
         api_key = OPENROUTER_API_KEY
         base_url = OPENAI_BASE_URL
-        model_name = "amazon/nova-2-lite-v1:free"
+        model_name = "nvidia/nemotron-nano-9b-v2:free"
         use_mock = False
     else:
         # No API key - error out
@@ -79,51 +79,48 @@ def _initialize_agent():
     )
 
 
-@function_tool
-async def get_robotics_info(topic: str) -> str:
-    """Fetch information about robotics topics. Useful for answering questions about humanoid robots, actuators, sensors, etc."""
-    return f"Here's some information about {topic}: This is a robotics documentation platform. You can find detailed information about various robotics topics in the documentation."
-
-
-# RAG tool for searching the knowledge base
+# RAG tool for searching the knowledge base - THIS IS THE PRIMARY TOOL
 @function_tool
 async def search_knowledge_base(query: str) -> str:
-    """Search private documents for factual information. Use only when user asks about specific topics likely covered in docs."""
-    # Call the RAG function from rag_retriever module
+    """
+    ALWAYS use this tool FIRST for ANY question about robotics, humanoids, sensors, actuators,
+    control systems, or ANY technical topic. This searches the documentation knowledge base.
+
+    Call this tool with different query variations if the first search doesn't return good results.
+    For example:
+    - First try: "humanoid robot balance"
+    - If not enough: "balance control system"
+    - If still not enough: "stability locomotion"
+
+    NEVER skip this tool for technical questions. ALWAYS search before answering.
+    """
     result = rag_search_knowledge_base(query)
     return result
 
-# Tool to determine if a query should use RAG
+
 @function_tool
-async def should_use_rag(query: str) -> str:
-    """Determine if the user's query is likely to require factual/technical information from the knowledge base."""
-    # Simple heuristic: check if query contains keywords suggesting factual/technical nature
-    query_lower = query.lower()
-    technical_keywords = [
-        'what is', 'how does', 'explain', 'describe', 'define', 'specification',
-        'procedure', 'process', 'method', 'technique', 'component', 'system',
-        'architecture', 'design', 'principle', 'mechanism', 'algorithm', 'formula',
-        'data', 'statistics', 'research', 'study', 'findings', 'results'
-    ]
+async def search_knowledge_base_detailed(query: str, context: str) -> str:
+    """
+    Use this for a MORE DETAILED search when the first search_knowledge_base call
+    didn't return enough information. Provide additional context to refine the search.
 
-    # Check if query contains technical keywords
-    for keyword in technical_keywords:
-        if keyword in query_lower:
-            return "yes"
+    Args:
+        query: The main search query
+        context: Additional context or related terms to expand the search
+    """
+    # Combine query with context for broader search
+    combined_query = f"{query} {context}"
+    result = rag_search_knowledge_base(combined_query)
+    return result
 
-    # Check if query asks about specific documented topics
-    documented_topics = [
-        'robot', 'humanoid', 'actuator', 'sensor', 'balance', 'locomotion',
-        'control system', 'programming', 'calibration', 'safety', 'protocol',
-        'spec', 'documentation', 'manual', 'guide', 'handbook', 'tutorial'
-    ]
 
-    for topic in documented_topics:
-        if topic in query_lower:
-            return "yes"
-
-    # If no strong indicators, default to not using RAG
-    return "no"
+@function_tool
+async def get_robotics_info(topic: str) -> str:
+    """
+    ONLY use this as a LAST RESORT after search_knowledge_base returns no results.
+    This provides general robotics information not from the documentation.
+    """
+    return f"[General Knowledge - Not from docs] Information about {topic}: This is general robotics knowledge. For specific documentation, the knowledge base search didn't find relevant results."
 
 
 class FubuniAgent:
@@ -131,14 +128,35 @@ class FubuniAgent:
         _initialize_agent()
         self.agent = Agent(
             name="Fubuni",
-            instructions="You are Fubuni, an AI assistant for Physical Humanoid Robotics documentation platform. Always respond helpfully and accurately. If you don't know something, respond with 'I'm not sure yet, teach me!'. Be concise but informative in your responses.\n\n"
-                         "When a user asks a question, first consider if it's likely to require factual or technical information from the documentation. "
-                         "Use the should_use_rag tool to help determine this. If the answer is 'yes', use the search_knowledge_base tool to retrieve "
-                         "relevant information from the documentation. Always prioritize information from the knowledge base for factual topics. "
-                         "If no relevant documents are found, fall back to your general knowledge but clearly indicate that you're not referencing the documentation. "
-                         "Use the get_robotics_info tool when users ask about general robotics topics that might not be in the specific documentation.\n\n"
-                         "Always cite sources when using information from the knowledge base.",
-            tools=[get_robotics_info, search_knowledge_base, should_use_rag],
+            instructions="""You are Fubuni, an AI assistant for Physical Humanoid Robotics documentation platform.
+
+## CRITICAL RULES - YOU MUST FOLLOW THESE:
+
+1. **ALWAYS SEARCH FIRST**: For ANY question about robotics, humanoids, sensors, actuators, motors, control systems, balance, locomotion, or ANY technical topic - you MUST call `search_knowledge_base` BEFORE answering. NO EXCEPTIONS.
+
+2. **MULTIPLE SEARCHES**: If the first search doesn't return good results, try AGAIN with different keywords:
+   - Rephrase the query
+   - Use synonyms
+   - Break down complex questions into simpler searches
+   - Use `search_knowledge_base_detailed` with additional context
+
+3. **SEARCH STRATEGY**:
+   - Question: "How do humanoid robots maintain balance?"
+   - Search 1: "humanoid robot balance"
+   - Search 2: "balance control system stability"
+   - Search 3: "locomotion equilibrium"
+   - THEN synthesize the results
+
+4. **CITE SOURCES**: When you find information, ALWAYS mention it came from the documentation.
+
+5. **LAST RESORT ONLY**: Only use `get_robotics_info` or your general knowledge if ALL searches return no relevant results. In this case, clearly state: "I couldn't find this in the documentation, but based on general knowledge..."
+
+6. **BE THOROUGH**: Don't be lazy. Make 2-3 search calls minimum for technical questions.
+
+7. **NEVER SKIP RAG**: Even if you think you know the answer, SEARCH FIRST. The documentation may have specific details.
+
+Remember: You are an assistant for THIS documentation platform. Users expect answers FROM the docs, not generic AI responses.""",
+            tools=[search_knowledge_base, search_knowledge_base_detailed, get_robotics_info],
         )
 
     async def process_message(self, message: str, session_id: str = None) -> str:
