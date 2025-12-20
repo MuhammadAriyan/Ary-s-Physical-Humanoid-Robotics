@@ -119,6 +119,8 @@ function ChatContent() {
   const [inputValue, setInputValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [iframeLoading, setIframeLoading] = useState<boolean>(true);
+  // New state for docs panel visibility
+  const [docsVisible, setDocsVisible] = useState<boolean>(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -158,6 +160,21 @@ function ChatContent() {
   }, []);
 
   /**
+   * Handle closing/minimizing the docs panel
+   */
+  const handleCloseDocs = useCallback(() => {
+    setDocsVisible(false);
+  }, []);
+
+  /**
+   * Handle opening the docs panel manually
+   */
+  const handleOpenDocs = useCallback(() => {
+    setDocsVisible(true);
+    setIframeLoading(true);
+  }, []);
+
+  /**
    * Handle agent response and auto-navigate if needed
    */
   const handleAgentResponse = useCallback(
@@ -169,6 +186,8 @@ function ChatContent() {
         if (DOC_CHAPTERS[targetChapter]) {
           setCurrentChapter(targetChapter);
           setIframeLoading(true);
+          // Show docs panel when agent navigates
+          setDocsVisible(true);
 
           // Update the message to show navigation indicator
           setMessages((prev) =>
@@ -298,9 +317,22 @@ function ChatContent() {
   );
 
   return (
-    <div className={styles.container}>
-      {/* Documentation viewer panel */}
+    <div className={`${styles.container} ${docsVisible ? styles.withDocs : styles.chatOnly}`}>
+      {/* Documentation viewer panel - slides in from left */}
       <div className={styles.docViewer}>
+        {/* Close button */}
+        <button
+          type="button"
+          className={styles.closeDocsButton}
+          onClick={handleCloseDocs}
+          aria-label="Close documentation panel"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
         {/* Chapter navigation */}
         <nav className={styles.chapterNav} aria-label="Chapter navigation">
           {Object.entries(CHAPTER_TITLES).map(([chapterId, title]) => (
@@ -338,6 +370,21 @@ function ChatContent() {
             <h1 className={styles.chatTitle}>Fubuni</h1>
             <p className={styles.chatSubtitle}>Robotics Learning Assistant</p>
           </div>
+          {/* Show docs button when docs are hidden */}
+          {!docsVisible && (
+            <button
+              type="button"
+              className={styles.showDocsButton}
+              onClick={handleOpenDocs}
+              aria-label="Show documentation"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+              <span>Docs</span>
+            </button>
+          )}
         </header>
 
         {/* Messages container */}
@@ -439,6 +486,7 @@ export default function ChatPage(): React.ReactNode {
     <Layout
       title="Chat with Fubuni"
       description="Interactive chat assistant for learning humanoid robotics"
+      className="chat-page"
       noFooter
     >
       <BrowserOnly fallback={<div>Loading chat interface...</div>}>
