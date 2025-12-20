@@ -28,6 +28,7 @@ interface WebSearchResult {
   title: string;
   url: string;
   snippet: string;
+  favicon?: string;
 }
 
 /**
@@ -161,7 +162,19 @@ function WebSourcesPanel({
             rel="noopener noreferrer"
             className={styles.sourceItem}
           >
-            <h4 className={styles.sourceTitle}>{source.title}</h4>
+            <div className={styles.sourceTitleRow}>
+              {source.favicon && (
+                <img
+                  src={source.favicon}
+                  alt=""
+                  className={styles.sourceFavicon}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              )}
+              <h4 className={styles.sourceTitle}>{source.title}</h4>
+            </div>
             <p className={styles.sourceSnippet}>{source.snippet}</p>
             <span className={styles.sourceUrl}>{source.url}</span>
           </a>

@@ -9,6 +9,7 @@ from agents.run import RunConfig
 from agents.exceptions import MaxTurnsExceeded
 from pydantic import BaseModel, field_validator
 from typing import Optional, List
+from urllib.parse import urlparse
 import os
 import sys
 import logging
@@ -33,6 +34,7 @@ class WebSearchResult(BaseModel):
     title: str
     url: str
     snippet: str
+    favicon: Optional[str] = None  # Google favicon service URL
 
 
 # Global to store last web search results (cleared after each response)
@@ -173,21 +175,29 @@ async def search_web(query: str) -> str:
     global _last_web_search_results
     try:
         with DDGS() as ddgs:
-            results = list(ddgs.text(query, max_results=5))
+            results = list(ddgs.text(query, max_results=10))
 
         if not results:
             _last_web_search_results = []
             return "No web search results found for this query. Try using get_robotics_info for general knowledge."
 
         # Store structured results in global variable for injection into response
-        _last_web_search_results = [
-            WebSearchResult(
+        _last_web_search_results = []
+        for r in results:
+            url = r.get('href', '')
+            # Generate favicon URL using Google's favicon service
+            try:
+                domain = urlparse(url).netloc
+                favicon_url = f"https://www.google.com/s2/favicons?domain={domain}&sz=32" if domain else None
+            except Exception:
+                favicon_url = None
+
+            _last_web_search_results.append(WebSearchResult(
                 title=r.get('title', 'No title')[:200],
-                url=r.get('href', ''),
-                snippet=r.get('body', '')[:500]
-            )
-            for r in results
-        ]
+                url=url,
+                snippet=r.get('body', '')[:500],
+                favicon=favicon_url
+            ))
 
         # Format results for the agent to read
         formatted_results = [

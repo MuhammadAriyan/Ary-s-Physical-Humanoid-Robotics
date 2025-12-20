@@ -920,12 +920,23 @@
   transition: grid-template-columns 0.4s ease-out;
 }
 
+/* Explicit grid positioning for withSources - chat left, sources right */
+.withSources .chatPanel {
+  grid-column: 1;
+}
+
 .withSources .webSourcesPanel {
+  grid-column: 2;
   position: relative;
   transform: translateX(0);
   opacity: 1;
   pointer-events: auto;
   transition: transform 0.4s ease-out, opacity 0.3s ease-out;
+}
+
+/* Hide docViewer completely when only sources visible */
+.withSources .docViewer {
+  display: none;
 }
 
 /* All three panels - 40% docs, 30% chat, 30% sources */
@@ -934,14 +945,21 @@
   transition: grid-template-columns 0.4s ease-out;
 }
 
-.withAll .webSourcesPanel {
+/* Explicit grid positioning for withAll - docs left, chat middle, sources right */
+.withAll .docViewer {
+  grid-column: 1;
   position: relative;
   transform: translateX(0);
   opacity: 1;
   pointer-events: auto;
 }
 
-.withAll .docViewer {
+.withAll .chatPanel {
+  grid-column: 2;
+}
+
+.withAll .webSourcesPanel {
+  grid-column: 3;
   position: relative;
   transform: translateX(0);
   opacity: 1;
@@ -1071,11 +1089,26 @@
   border-color: rgba(255, 255, 255, 0.15);
 }
 
+/* Source title row with favicon */
+.sourceTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  margin-bottom: var(--space-2, 0.5rem);
+}
+
+.sourceFavicon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
 .sourceTitle {
   font-size: var(--text-sm, 0.875rem);
   font-weight: 600;
   color: var(--color-black, #000000);
-  margin: 0 0 var(--space-2, 0.5rem) 0;
+  margin: 0;
   line-height: 1.4;
 }
 
