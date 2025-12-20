@@ -486,8 +486,8 @@ export default function ChatPage(): React.ReactNode {
     <Layout
       title="Chat with Fubuni"
       description="Interactive chat assistant for learning humanoid robotics"
-      className="chat-page"
       noFooter
+      wrapperClassName="chat-page"
     >
       <BrowserOnly fallback={<div>Loading chat interface...</div>}>
         {() => <ChatContent />}
