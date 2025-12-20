@@ -312,11 +312,10 @@
 
 .chatTitle {
   font-size: var(--text-xl, 1.25rem);
-  font-weight: 600;
+  font-weight: 400;
   color: var(--color-black, #000000);
-  font-family: 'Playfair Display', Georgia, serif;
-  font-style: italic;
-  letter-spacing: 0.05em;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.08em;
   margin: 0;
   padding: 1.5px;
 }
