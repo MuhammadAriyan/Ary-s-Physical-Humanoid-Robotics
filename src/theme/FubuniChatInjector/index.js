@@ -1,12 +1,15 @@
-import React from 'react';
-import FubuniChat from '../../components/FubuniChat/FubuniChat';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from '@docusaurus/router';
+import Link from '@docusaurus/Link';
+import styles from './styles.module.css';
 
+/**
+ * Premium floating chat navigation button with smooth animations
+ * This component is now disabled as requested - no floating chat button
+ */
 const FubuniChatInjector = () => {
-  const backendUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-    ? 'http://localhost:8000'
-    : 'https://maryanrar-fubuni-chat-api.hf.space';  // Hugging Face Spaces
-  
-  return <FubuniChat backendUrl={backendUrl} />;
+  // This component no longer renders the floating button
+  return null;
 };
 
 export default FubuniChatInjector;

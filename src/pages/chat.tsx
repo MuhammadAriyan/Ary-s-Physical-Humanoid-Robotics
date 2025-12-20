@@ -119,6 +119,12 @@ function ChatContent() {
   const [inputValue, setInputValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [iframeLoading, setIframeLoading] = useState<boolean>(true);
+  // New state for docs panel visibility
+  const [docsVisible, setDocsVisible] = useState<boolean>(false);
+  // Enhanced state for multi-stage layout
+  const [layoutStage, setLayoutStage] = useState<'chatOnly' | 'verticalSplit' | 'horizontalSplit'>('chatOnly');
+  const [isFlipping, setIsFlipping] = useState<boolean>(false);
+  const [firstNavigation, setFirstNavigation] = useState<boolean>(true);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -158,6 +164,29 @@ function ChatContent() {
   }, []);
 
   /**
+   * Handle closing/minimizing the docs panel
+   */
+  const handleCloseDocs = useCallback(() => {
+    setLayoutStage('chatOnly');
+    setFirstNavigation(true);
+  }, []);
+
+  /**
+   * Handle opening the docs panel manually
+   */
+  const handleOpenDocs = useCallback(() => {
+    if (firstNavigation) {
+      setLayoutStage('verticalSplit');
+      setTimeout(() => {
+        setLayoutStage('horizontalSplit');
+      }, 100);
+    } else {
+      setLayoutStage('horizontalSplit');
+    }
+    setIframeLoading(true);
+  }, [firstNavigation]);
+
+  /**
    * Handle agent response and auto-navigate if needed
    */
   const handleAgentResponse = useCallback(
@@ -170,6 +199,25 @@ function ChatContent() {
           setCurrentChapter(targetChapter);
           setIframeLoading(true);
 
+          // If this is the first navigation, trigger the multi-stage transition
+          if (firstNavigation) {
+            setFirstNavigation(false);
+            setLayoutStage('verticalSplit'); // Trigger Stage 1
+
+            // Auto-transition to Stage 2 after delay
+            setTimeout(() => {
+              setIsFlipping(true); // Trigger Fubuni flip
+              setLayoutStage('horizontalSplit');
+              // Reset the flip state after animation completes
+              setTimeout(() => {
+                setIsFlipping(false);
+              }, 800); // Match the animation duration
+            }, 1500); // Delay for user to notice split-screen
+          } else {
+            // For subsequent navigations, stay in horizontal split
+            setLayoutStage('horizontalSplit');
+          }
+
           // Update the message to show navigation indicator
           setMessages((prev) =>
             prev.map((msg) =>
@@ -181,7 +229,7 @@ function ChatContent() {
         }
       }
     },
-    []
+    [firstNavigation]
   );
 
   /**
@@ -298,9 +346,22 @@ function ChatContent() {
   );
 
   return (
-    <div className={styles.container}>
-      {/* Documentation viewer panel */}
+    <div className={`${styles.container} ${styles[layoutStage]}`}>
+      {/* Documentation viewer panel - slides in from left */}
       <div className={styles.docViewer}>
+        {/* Close button */}
+        <button
+          type="button"
+          className={styles.closeDocsButton}
+          onClick={handleCloseDocs}
+          aria-label="Close documentation panel"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
         {/* Chapter navigation */}
         <nav className={styles.chapterNav} aria-label="Chapter navigation">
           {Object.entries(CHAPTER_TITLES).map(([chapterId, title]) => (
@@ -335,9 +396,24 @@ function ChatContent() {
             🤖
           </div>
           <div className={styles.chatHeaderInfo}>
-            <h1 className={styles.chatTitle}>Fubuni</h1>
+            <h1 className={`${styles.chatTitle} ${isFlipping ? styles.flip : ''}`}>Fubuni</h1>
             <p className={styles.chatSubtitle}>Robotics Learning Assistant</p>
           </div>
+          {/* Show docs button when docs are hidden */}
+          {layoutStage === 'chatOnly' && (
+            <button
+              type="button"
+              className={styles.showDocsButton}
+              onClick={handleOpenDocs}
+              aria-label="Show documentation"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+              <span>Docs</span>
+            </button>
+          )}
         </header>
 
         {/* Messages container */}
@@ -440,6 +516,7 @@ export default function ChatPage(): React.ReactNode {
       title="Chat with Fubuni"
       description="Interactive chat assistant for learning humanoid robotics"
       noFooter
+      wrapperClassName="chat-page"
     >
       <BrowserOnly fallback={<div>Loading chat interface...</div>}>
         {() => <ChatContent />}
