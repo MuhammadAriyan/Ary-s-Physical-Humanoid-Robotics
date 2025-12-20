@@ -35,6 +35,10 @@ class WebSearchResult(BaseModel):
     snippet: str
 
 
+# Global to store last web search results (cleared after each response)
+_last_web_search_results: List[WebSearchResult] = []
+
+
 # T004: Structured response model for documentation navigation
 class AgentResponse(BaseModel):
     """Structured agent response with documentation navigation and web search hints"""
@@ -166,24 +170,35 @@ async def search_web(query: str) -> str:
     Returns web search results with source URLs for verification.
     The user will see these sources in a dedicated panel.
     """
+    global _last_web_search_results
     try:
         with DDGS() as ddgs:
             results = list(ddgs.text(query, max_results=5))
 
         if not results:
+            _last_web_search_results = []
             return "No web search results found for this query. Try using get_robotics_info for general knowledge."
 
-        # Format results with title, snippet, and URL
-        formatted_results = []
-        for r in results:
-            title = r.get('title', 'No title')[:200]
-            snippet = r.get('body', '')[:500]
-            url = r.get('href', '')
-            formatted_results.append(f"**{title}**\n{snippet}\nSource: {url}")
+        # Store structured results in global variable for injection into response
+        _last_web_search_results = [
+            WebSearchResult(
+                title=r.get('title', 'No title')[:200],
+                url=r.get('href', ''),
+                snippet=r.get('body', '')[:500]
+            )
+            for r in results
+        ]
+
+        # Format results for the agent to read
+        formatted_results = [
+            f"**{r.title}**\n{r.snippet}\nSource: {r.url}"
+            for r in _last_web_search_results
+        ]
 
         return "🌐 **Web Search Results:**\n\n" + "\n\n---\n\n".join(formatted_results)
     except Exception as e:
         logging.warning(f"Web search failed: {e}")
+        _last_web_search_results = []
         return "Web search is temporarily unavailable. Please try the documentation search or general knowledge."
 
 
@@ -241,8 +256,8 @@ This tells users where the information comes from.
 
 7. **SIMPLE QUESTIONS**: For greetings or simple questions, respond directly without searching.
 
-## DOCUMENTATION NAVIGATION:
-When your response relates to a specific documentation topic, set the chapter field:
+## DOCUMENTATION NAVIGATION (ONLY for documentation results):
+When your response is based on DOCUMENTATION (not web search), set the chapter field:
 
 CHAPTER MAPPINGS:
 - "introduction-to-humanoid-robotics" → basics, overview, what is humanoid robot, getting started
@@ -251,19 +266,42 @@ CHAPTER MAPPINGS:
 - "control-systems" → control, PID, feedback, stability, loops, controllers
 - "path-planning-and-navigation" → navigation, path planning, SLAM, trajectory, waypoints
 
-Set should_navigate=true when the user should definitely read that chapter for more details.
-Set chapter=null for general greetings or questions not related to a specific chapter.
+**IMPORTANT NAVIGATION RULES:**
+- Set should_navigate=true ONLY when citing DOCUMENTATION results
+- Set chapter=null for general greetings or questions not related to a specific chapter
+- **NEVER set should_navigate=true or chapter when using web search** - web sources go to a separate panel
+- When using web search, ALWAYS set: should_navigate=false, chapter=null
 
 Remember: Documentation is your PRIMARY source. Web search is a FALLBACK for topics not in docs.""",
             tools=[search_knowledge_base, search_knowledge_base_detailed, search_web, get_robotics_info],
             output_type=AgentResponse,  # T006: Structured output
         )
 
+    def _inject_web_sources(self, response: AgentResponse) -> AgentResponse:
+        """
+        Inject web search results from the global variable into the response.
+        Clears the global variable after use.
+        """
+        global _last_web_search_results
+        if _last_web_search_results:
+            response.web_sources = _last_web_search_results.copy()
+            response.used_web_search = True
+            # When using web search, don't navigate to docs
+            if response.used_web_search:
+                response.should_navigate = False
+                response.chapter = None
+            _last_web_search_results = []  # Clear after use
+        return response
+
     async def process_message(self, message: str, session_id: str = None) -> AgentResponse:
         """
         Process a user message and return the agent's structured response
         Returns AgentResponse with response text and optional chapter navigation
         """
+        global _last_web_search_results
+        # Clear any stale results from previous requests
+        _last_web_search_results = []
+
         try:
             result = await Runner.run(
                 starting_agent=self.agent,
@@ -273,16 +311,17 @@ Remember: Documentation is your PRIMARY source. Web search is a FALLBACK for top
             )
             # With output_type=AgentResponse, final_output is already an AgentResponse
             if isinstance(result.final_output, AgentResponse):
-                return result.final_output
+                return self._inject_web_sources(result.final_output)
             # Fallback: wrap string response in AgentResponse
-            return AgentResponse(response=str(result.final_output))
+            return self._inject_web_sources(AgentResponse(response=str(result.final_output)))
         except MaxTurnsExceeded as e:
             # Gracefully handle turn limit - extract partial results from the run
             partial_response = self._extract_partial_response(e)
             if partial_response:
-                return AgentResponse(
+                response = AgentResponse(
                     response=f"📚 **Source: Documentation Knowledge Base**\n\n{partial_response}\n\n---\n*Note: Response was synthesized from available search results due to processing limits.*"
                 )
+                return self._inject_web_sources(response)
             return AgentResponse(
                 response="I found some information but couldn't complete the full analysis. Please try asking a more specific question or break it down into smaller parts."
             )
