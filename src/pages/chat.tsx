@@ -121,6 +121,10 @@ function ChatContent() {
   const [iframeLoading, setIframeLoading] = useState<boolean>(true);
   // New state for docs panel visibility
   const [docsVisible, setDocsVisible] = useState<boolean>(false);
+  // Enhanced state for multi-stage layout
+  const [layoutStage, setLayoutStage] = useState<'chatOnly' | 'verticalSplit' | 'horizontalSplit'>('chatOnly');
+  const [isFlipping, setIsFlipping] = useState<boolean>(false);
+  const [firstNavigation, setFirstNavigation] = useState<boolean>(true);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -163,16 +167,24 @@ function ChatContent() {
    * Handle closing/minimizing the docs panel
    */
   const handleCloseDocs = useCallback(() => {
-    setDocsVisible(false);
+    setLayoutStage('chatOnly');
+    setFirstNavigation(true);
   }, []);
 
   /**
    * Handle opening the docs panel manually
    */
   const handleOpenDocs = useCallback(() => {
-    setDocsVisible(true);
+    if (firstNavigation) {
+      setLayoutStage('verticalSplit');
+      setTimeout(() => {
+        setLayoutStage('horizontalSplit');
+      }, 100);
+    } else {
+      setLayoutStage('horizontalSplit');
+    }
     setIframeLoading(true);
-  }, []);
+  }, [firstNavigation]);
 
   /**
    * Handle agent response and auto-navigate if needed
@@ -186,8 +198,22 @@ function ChatContent() {
         if (DOC_CHAPTERS[targetChapter]) {
           setCurrentChapter(targetChapter);
           setIframeLoading(true);
-          // Show docs panel when agent navigates
-          setDocsVisible(true);
+
+          // If this is the first navigation, trigger the multi-stage transition
+          if (firstNavigation) {
+            setFirstNavigation(false);
+            setLayoutStage('verticalSplit'); // Trigger Stage 1
+
+            // Auto-transition to Stage 2 after delay
+            setTimeout(() => {
+              setIsFlipping(true); // Trigger Fubuni flip
+              setLayoutStage('horizontalSplit');
+              setTimeout(() => setIsFlipping(false), 800); // Flip duration
+            }, 1500); // Delay for user to notice split-screen
+          } else {
+            // For subsequent navigations, stay in horizontal split
+            setLayoutStage('horizontalSplit');
+          }
 
           // Update the message to show navigation indicator
           setMessages((prev) =>
@@ -200,7 +226,7 @@ function ChatContent() {
         }
       }
     },
-    []
+    [firstNavigation]
   );
 
   /**
@@ -317,7 +343,7 @@ function ChatContent() {
   );
 
   return (
-    <div className={`${styles.container} ${docsVisible ? styles.withDocs : styles.chatOnly}`}>
+    <div className={`${styles.container} ${styles[layoutStage]}`}>
       {/* Documentation viewer panel - slides in from left */}
       <div className={styles.docViewer}>
         {/* Close button */}
@@ -367,11 +393,11 @@ function ChatContent() {
             🤖
           </div>
           <div className={styles.chatHeaderInfo}>
-            <h1 className={styles.chatTitle}>Fubuni</h1>
+            <h1 className={`${styles.chatTitle} ${isFlipping ? styles.flip : ''}`}>Fubuni</h1>
             <p className={styles.chatSubtitle}>Robotics Learning Assistant</p>
           </div>
           {/* Show docs button when docs are hidden */}
-          {!docsVisible && (
+          {layoutStage === 'chatOnly' && (
             <button
               type="button"
               className={styles.showDocsButton}

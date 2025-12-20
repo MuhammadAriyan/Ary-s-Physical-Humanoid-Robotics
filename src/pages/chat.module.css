@@ -1,32 +1,93 @@
 /**
- * Chat Page Styles - Split-screen layout
+ * Chat Page Styles - Multi-stage documentation panel
  * Premium black & white design matching the site aesthetic
  */
 
-/* Main container - split-screen grid layout */
+/* Main container - multi-stage layout */
 .container {
   display: grid;
-  grid-template-columns: 1fr 400px;
   height: 100vh;
   width: 100%;
   overflow: hidden;
   background: var(--color-white, #ffffff);
+  transition: all 0.6s ease-in-out;
+  position: relative;
 }
 
 [data-theme='dark'] .container {
   background: var(--color-black, #000000);
 }
 
-/* Documentation viewer panel (left side) */
+/* Stage: chatOnly */
+.chatOnly {
+  grid-template-rows: 1fr;
+}
+
+.chatOnly .chatPanel {
+  height: 100%;
+  width: 100%;
+}
+
+.chatOnly .docViewer {
+  display: none;
+}
+
+/* Stage: verticalSplit */
+.verticalSplit {
+  grid-template-rows: 50% 50%;
+}
+
+.verticalSplit .chatPanel {
+  width: 100%;
+  height: 100%;
+  order: 1; /* Chat on top */
+}
+
+.verticalSplit .docViewer {
+  width: 100%;
+  height: 100%;
+  order: 2; /* Docs on bottom */
+  animation: scaleFadeIn 0.6s ease-out forwards;
+  transform-origin: center;
+  border-top: 1px solid var(--gray-200, #e5e5e5);
+}
+
+[data-theme='dark'] .verticalSplit .docViewer {
+  border-top-color: var(--gray-800, #262626);
+}
+
+/* Stage: horizontalSplit */
+.horizontalSplit {
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 1fr;
+}
+
+.horizontalSplit .docViewer {
+  animation: slideFromCenterToLeft 0.8s ease-out forwards;
+  border-right: 1px solid var(--gray-200, #e5e5e5);
+  order: 1;
+}
+
+[data-theme='dark'] .horizontalSplit .docViewer {
+  border-right-color: var(--gray-800, #262626);
+}
+
+.horizontalSplit .chatPanel {
+  width: 100%;
+  height: 100%;
+  order: 2;
+}
+
+/* Documentation viewer panel */
 .docViewer {
   position: relative;
   overflow: hidden;
-  border-right: 1px solid var(--gray-200, #e5e5e5);
   background: var(--color-white, #ffffff);
+  display: flex;
+  flex-direction: column;
 }
 
 [data-theme='dark'] .docViewer {
-  border-right-color: var(--gray-800, #262626);
   background: var(--color-black, #000000);
 }
 
@@ -36,18 +97,57 @@
   height: 100%;
   border: none;
   transition: opacity 0.3s ease-out;
+  flex: 1;
 }
 
 .iframeLoading {
   opacity: 0.6;
 }
 
+/* Close button for docs panel */
+.closeDocsButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--color-white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e5e5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.closeDocsButton:hover {
+  background: var(--gray-100, #f5f5f5);
+  transform: scale(1.05);
+}
+
+.closeDocsButton svg {
+  color: var(--gray-600, #525252);
+}
+
+[data-theme='dark'] .closeDocsButton {
+  background: var(--gray-800, #262626);
+  border-color: var(--gray-700, #404040);
+}
+
+[data-theme='dark'] .closeDocsButton:hover {
+  background: var(--gray-700, #404040);
+}
+
+[data-theme='dark'] .closeDocsButton svg {
+  color: var(--gray-300, #d4d4d4);
+}
+
 /* Chapter navigation bar */
 .chapterNav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 10;
   display: flex;
   align-items: center;
@@ -58,6 +158,7 @@
   border-bottom: 1px solid var(--gray-200, #e5e5e5);
   overflow-x: auto;
   scrollbar-width: none;
+  flex-shrink: 0;
 }
 
 .chapterNav::-webkit-scrollbar {
@@ -505,23 +606,30 @@
 
 /* Responsive design */
 @media (max-width: 1024px) {
-  .container {
-    grid-template-columns: 1fr 350px;
+  .horizontalSplit {
+    grid-template-columns: 45% 55%;
   }
 }
 
 @media (max-width: 768px) {
-  .container {
+  /* On mobile, switch to vertical stack for all stages when docs are visible */
+  .verticalSplit,
+  .horizontalSplit {
     grid-template-columns: 1fr;
     grid-template-rows: 50vh 50vh;
   }
 
-  .docViewer {
+  .horizontalSplit .docViewer {
+    order: 1;
     border-right: none;
     border-bottom: 1px solid var(--gray-200, #e5e5e5);
   }
 
-  [data-theme='dark'] .docViewer {
+  .horizontalSplit .chatPanel {
+    order: 2;
+  }
+
+  [data-theme='dark'] .horizontalSplit .docViewer {
     border-bottom-color: var(--gray-800, #262626);
   }
 
@@ -584,7 +692,8 @@
 }
 
 @media (max-width: 480px) {
-  .container {
+  .verticalSplit,
+  .horizontalSplit {
     grid-template-rows: 45vh 55vh;
   }
 
@@ -613,6 +722,44 @@
     animation: none;
     transition: none;
   }
+}
+
+/* Keyframe animations */
+@keyframes scaleFadeIn {
+  from {
+    transform: scale(0.8) translateY(20%);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideFromCenterToLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes flip {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.flip {
+  animation: flip 0.8s ease-in-out;
+  display: inline-block;
+  transform-style: preserve-3d;
 }
 
 /* Focus styles */
