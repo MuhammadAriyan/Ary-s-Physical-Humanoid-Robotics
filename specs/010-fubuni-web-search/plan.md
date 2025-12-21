@@ -186,12 +186,14 @@ interface WebSearchResult {
 - Chat still usable at 30% for follow-up questions
 - Rare state - user typically views one or the other
 
-### D4: DuckDuckGo Library
+### D4: Tavily API
 
-**Decision**: Use `duckduckgo-search` Python library (no API key required).
+**Decision**: Use Tavily API for web search (free tier: 1000 requests/month).
 
 **Rationale**:
-- Free, no API key needed
-- Maintained library with good search quality
-- Returns structured results (title, url, body)
-- 5 results limit per search (configurable)
+- Built specifically for AI/LLM applications - returns clean, structured data
+- Includes AI-synthesized answer in response
+- Supports image results
+- Reliable - no rate limiting issues like DuckDuckGo
+- 1000 free requests/month is sufficient for demo/testing
+- Requires TAVILY_API_KEY environment variable

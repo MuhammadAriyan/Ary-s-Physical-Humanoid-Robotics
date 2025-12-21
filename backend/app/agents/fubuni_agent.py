@@ -14,7 +14,7 @@ import os
 import sys
 import logging
 from dotenv import load_dotenv
-from duckduckgo_search import DDGS
+from tavily import TavilyClient
 from openai.types.responses import ResponseTextDeltaEvent
 from ..config.settings import settings
 import asyncio
@@ -30,7 +30,7 @@ VALID_CHAPTERS = [
 
 # WebSearchResult for storing web search results
 class WebSearchResult(BaseModel):
-    """Single web search result from DuckDuckGo"""
+    """Single web search result from Tavily API"""
     title: str
     url: str
     snippet: str
@@ -163,7 +163,7 @@ async def search_knowledge_base_detailed(query: str, context: str) -> str:
 @function_tool
 async def search_web(query: str) -> str:
     """
-    Search the web using DuckDuckGo for robotics information NOT found in documentation.
+    Search the web using Tavily API for robotics information NOT found in documentation.
 
     ONLY use this tool if:
     1. search_knowledge_base returned no relevant results or insufficient information
@@ -171,46 +171,73 @@ async def search_web(query: str) -> str:
 
     Returns web search results with source URLs for verification.
     The user will see these sources in a dedicated panel.
+
+    IMPORTANT: After receiving search results, you MUST read and synthesize the information
+    to provide a helpful, comprehensive answer. Do NOT just list the results.
     """
     global _last_web_search_results
-    try:
-        # Note: Don't use context manager - it returns 0 results in some environments
-        ddgs = DDGS()
-        results = list(ddgs.text(query, max_results=10))
 
+    tavily_key = os.getenv("TAVILY_API_KEY")
+    if not tavily_key:
+        _last_web_search_results = []
+        return "Web search unavailable - TAVILY_API_KEY not configured. Falling back to general knowledge."
+
+    try:
+        client = TavilyClient(api_key=tavily_key)
+        # Search with include_images for related images
+        response = client.search(
+            query=query,
+            max_results=10,
+            include_images=True,
+            include_answer=True,  # Get AI-synthesized answer
+        )
+
+        results = response.get("results", [])
         if not results:
             _last_web_search_results = []
             return "No web search results found for this query. Try using get_robotics_info for general knowledge."
 
-        # Store structured results in global variable for injection into response
+        # Store structured results for the frontend panel
         _last_web_search_results = []
         for r in results:
-            url = r.get('href', '')
-            # Generate favicon URL using Google's favicon service
+            url = r.get("url", "")
             try:
-                domain = urlparse(url).netloc
+                domain = urlparse(url).netloc if url else ""
                 favicon_url = f"https://www.google.com/s2/favicons?domain={domain}&sz=32" if domain else None
             except Exception:
                 favicon_url = None
 
             _last_web_search_results.append(WebSearchResult(
-                title=r.get('title', 'No title')[:200],
+                title=r.get("title", "No title")[:200],
                 url=url,
-                snippet=r.get('body', '')[:500],
+                snippet=r.get("content", "")[:500],
                 favicon=favicon_url
             ))
 
-        # Format results for the agent to read
-        formatted_results = [
-            f"**{r.title}**\n{r.snippet}\nSource: {r.url}"
-            for r in _last_web_search_results
-        ]
+        # Build comprehensive response for the agent to synthesize
+        output_parts = ["🌐 **Web Search Results:**\n"]
 
-        return "🌐 **Web Search Results:**\n\n" + "\n\n---\n\n".join(formatted_results)
+        # Include Tavily's AI-generated answer if available
+        if response.get("answer"):
+            output_parts.append(f"**Summary:** {response['answer']}\n")
+
+        # Include search results
+        output_parts.append("\n**Sources:**\n")
+        for i, r in enumerate(_last_web_search_results[:5], 1):
+            output_parts.append(f"{i}. **{r.title}**\n   {r.snippet}\n   Source: {r.url}\n")
+
+        # Include images if available (as markdown)
+        images = response.get("images", [])
+        if images:
+            output_parts.append("\n**Related Images:**\n")
+            for img_url in images[:3]:  # Limit to 3 images
+                output_parts.append(f"![Related Image]({img_url})\n")
+
+        return "\n".join(output_parts)
     except Exception as e:
-        logging.warning(f"Web search failed: {e}")
+        logging.warning(f"Tavily search failed: {e}")
         _last_web_search_results = []
-        return "Web search is temporarily unavailable. Please try the documentation search or general knowledge."
+        return f"Web search temporarily unavailable ({str(e)[:50]}). Please try the documentation search or general knowledge."
 
 
 @function_tool
@@ -248,22 +275,27 @@ This tells users where the information comes from.
    - ONLY use `search_web` if documentation search returns NO useful results
    - NEVER use `search_web` if the user's message contains "use rag" (case-insensitive)
    - **FORCE WEB SEARCH**: If the user explicitly asks to "websearch", "search the web", "search online", "search browser", "look it up online", "google it", or similar phrases - SKIP documentation and use `search_web` DIRECTLY
+   - **YOU MUST CALL THE TOOL** - NEVER generate fake URLs or example.com links. ALWAYS call the actual search_web tool.
    - When using web search, set `used_web_search=true` in your response
-   - Include source URLs when citing web results
 
-3. **BE EFFICIENT**: Make only 1-2 documentation searches. If still no results, try ONE web search.
+3. **SYNTHESIZE SEARCH RESULTS (CRITICAL)**:
+   - After calling `search_web`, READ the returned content carefully
+   - SYNTHESIZE the information into a helpful, comprehensive answer
+   - DO NOT just list URLs or say "I found results" - actually explain what you found
+   - Include relevant images in your response using markdown: ![description](url)
+   - Cite sources naturally in your response
 
-4. **RESPOND QUICKLY**: After getting results (from docs OR web), synthesize and respond.
+4. **BE EFFICIENT**: Make only 1-2 documentation searches. If still no results, try ONE web search.
 
 5. **SEARCH STRATEGY**:
    - Search 1: Documentation with main keywords
    - Search 2 (if needed): Documentation with alternative terms
    - Search 3 (only if docs failed): Web search
-   - THEN respond
+   - THEN synthesize and respond with actual information
 
 6. **CITE PROPERLY**:
    - Documentation: "According to the documentation..."
-   - Web search: "According to web sources..." with URLs
+   - Web search: Include actual facts from sources, cite URLs
 
 7. **SIMPLE QUESTIONS**: For greetings or simple questions, respond directly without searching.
 

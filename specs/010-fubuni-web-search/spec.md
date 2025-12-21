@@ -66,15 +66,17 @@ As a user, when web search fails or returns no results, I want Fubuni to gracefu
 ### Functional Requirements
 
 - **FR-001**: System MUST add a `search_web` tool using the existing `@function_tool` decorator pattern
-- **FR-002**: System MUST use the `duckduckgo-search` Python library for web searches
-- **FR-003**: System MUST NOT require any API keys or paid services for web search functionality
+- **FR-002**: System MUST use the Tavily API for web searches (reliable, AI-optimized results)
+- **FR-003**: System MUST use free Tavily API key (1000 requests/month free tier)
 - **FR-004**: System MUST position the web search tool in the tool priority: knowledge base → web search → general knowledge
 - **FR-005**: System MUST include source URLs in web search results returned to the user
 - **FR-006**: System MUST limit web search results to a reasonable number (5 results) to avoid overwhelming responses
 - **FR-007**: System MUST handle web search exceptions gracefully without crashing or exposing errors to users
 - **FR-008**: System MUST clearly indicate in responses when information comes from web sources vs. documentation
 - **FR-009**: System MUST update agent instructions to guide appropriate web search usage
-- **FR-010**: System MUST add `duckduckgo-search` to backend dependencies
+- **FR-010**: System MUST add `tavily-python` to backend dependencies
+- **FR-011**: System MUST include relevant images from search results when available
+- **FR-012**: System MUST show "Searching..." status indicator while web search is in progress
 
 ### Key Entities
 
@@ -93,8 +95,8 @@ As a user, when web search fails or returns no results, I want Fubuni to gracefu
 
 ## Assumptions
 
-- DuckDuckGo's free search API will remain available and free
-- The `duckduckgo-search` library is compatible with the Python version used (3.11)
+- Tavily's free tier (1000 requests/month) is sufficient for demo/testing usage
+- The `tavily-python` library is compatible with the Python version used (3.12)
 - Web search latency is acceptable (typically 1-3 seconds)
 - Users understand that web-sourced information may be less authoritative than curated documentation
 - The existing agent framework supports adding new function tools without architectural changes

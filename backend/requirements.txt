@@ -19,5 +19,5 @@ langchain-qdrant>=0.1.0
 langchain-huggingface>=0.0.1
 sentence-transformers>=2.2.0
 qdrant-client>=1.7.0
-# Web search for Fubuni agent
-duckduckgo-search>=6.0.0
+# Web search for Fubuni agent (Tavily - built for AI, 1000 free requests/month)
+tavily-python>=0.5.0

@@ -491,13 +491,24 @@
 .typingIndicator {
   display: flex;
   align-items: center;
-  gap: var(--space-1, 0.25rem);
+  gap: var(--space-2, 0.5rem);
   padding: var(--space-3, 0.75rem) var(--space-4, 1rem);
   background: var(--color-white, #ffffff);
   border: 1px solid var(--gray-200, #e5e5e5);
   border-radius: var(--radius-xl, 1rem);
   border-bottom-left-radius: var(--radius-sm, 0.25rem);
-  max-width: 80px;
+  max-width: fit-content;
+}
+
+.typingStatus {
+  font-size: var(--text-sm, 0.875rem);
+  color: var(--gray-600, #525252);
+  font-weight: 500;
+  margin-right: var(--space-1, 0.25rem);
+}
+
+[data-theme='dark'] .typingStatus {
+  color: var(--gray-400, #a3a3a3);
 }
 
 [data-theme='dark'] .typingIndicator {
@@ -513,15 +524,15 @@
   animation: typingBounce 1.4s ease-in-out infinite;
 }
 
-.typingDot:nth-child(1) {
+.typingDot:nth-of-type(1) {
   animation-delay: 0s;
 }
 
-.typingDot:nth-child(2) {
+.typingDot:nth-of-type(2) {
   animation-delay: 0.2s;
 }
 
-.typingDot:nth-child(3) {
+.typingDot:nth-of-type(3) {
   animation-delay: 0.4s;
 }
 

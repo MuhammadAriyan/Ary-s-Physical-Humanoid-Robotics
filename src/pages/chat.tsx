@@ -84,11 +84,12 @@ function SendIcon({ className }: { className?: string }) {
 }
 
 /**
- * Typing indicator component
+ * Typing indicator component with optional status text
  */
-function TypingIndicator() {
+function TypingIndicator({ status }: { status?: string }) {
   return (
-    <div className={styles.typingIndicator} aria-label="Fubuni is typing">
+    <div className={styles.typingIndicator} aria-label={status || "Fubuni is typing"}>
+      {status && <span className={styles.typingStatus}>{status}</span>}
       <span className={styles.typingDot} />
       <span className={styles.typingDot} />
       <span className={styles.typingDot} />
@@ -543,7 +544,7 @@ function ChatContent() {
               ))}
               {isLoading && (
                 <div className={`${styles.message} ${styles.botMessage}`}>
-                  <TypingIndicator />
+                  <TypingIndicator status="Searching..." />
                 </div>
               )}
             </>
