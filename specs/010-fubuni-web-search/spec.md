@@ -3,7 +3,7 @@
 **Feature Branch**: `010-fubuni-web-search`
 **Created**: 2025-12-20
 **Status**: Draft
-**Input**: User description: "Add DuckDuckGo web search capability to Fubuni chat agent. When the documentation knowledge base doesn't have relevant information, Fubuni should be able to search the web using the free duckduckgo-search Python library. The search_web tool should be integrated as a function_tool in the existing OpenAI Agents SDK pattern, positioned between the knowledge base search and the general knowledge fallback. No API key required - uses free DuckDuckGo API."
+**Input**: User description: "Add web search capability to Fubuni chat agent using Tavily API (free tier: 1000 requests/month). When the documentation knowledge base doesn't have relevant information, Fubuni should search the web and provide relevant results with source URLs. The search_web tool is integrated as a function_tool in the existing OpenAI Agents SDK pattern, positioned between the knowledge base search and the general knowledge fallback. Requires TAVILY_API_KEY environment variable."
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -57,9 +57,9 @@ As a user, when web search fails or returns no results, I want Fubuni to gracefu
 
 - What happens when web search times out? → Falls back to general knowledge with graceful message
 - What happens when web search returns results but they're irrelevant? → Fubuni should assess relevance and may still use general knowledge
-- What happens when web search is rate-limited by DuckDuckGo? → Falls back to general knowledge, logs warning
+- What happens when web search API key is missing or invalid? → Falls back to general knowledge, logs warning
 - What happens when the user asks a non-robotics question? → Fubuni should still search knowledge base first, then web, then general knowledge
-- What happens with queries in non-English languages? → DuckDuckGo handles multilingual queries; results depend on search engine
+- What happens with queries in non-English languages? → Tavily handles multilingual queries; results depend on search engine
 
 ## Requirements *(mandatory)*
 
@@ -70,18 +70,18 @@ As a user, when web search fails or returns no results, I want Fubuni to gracefu
 - **FR-003**: System MUST use free Tavily API key (1000 requests/month free tier)
 - **FR-004**: System MUST position the web search tool in the tool priority: knowledge base → web search → general knowledge
 - **FR-005**: System MUST include source URLs in web search results returned to the user
-- **FR-006**: System MUST limit web search results to a reasonable number (5 results) to avoid overwhelming responses
+- **FR-006**: System MUST limit web search results to a reasonable number (10 results) to avoid overwhelming responses
 - **FR-007**: System MUST handle web search exceptions gracefully without crashing or exposing errors to users
 - **FR-008**: System MUST clearly indicate in responses when information comes from web sources vs. documentation
 - **FR-009**: System MUST update agent instructions to guide appropriate web search usage
 - **FR-010**: System MUST add `tavily-python` to backend dependencies
 - **FR-011**: System MUST include relevant images from search results when available
-- **FR-012**: System MUST show "Searching..." status indicator while web search is in progress
+- **FR-012**: System MUST show typing indicator while web search is in progress
 
 ### Key Entities
 
 - **WebSearchResult**: Represents a single web search result with title, body/snippet, and source URL
-- **SearchTool**: The function tool that wraps DuckDuckGo search functionality and formats results for agent consumption
+- **SearchTool**: The function tool that wraps Tavily API search functionality and formats results for agent consumption
 
 ## Success Criteria *(mandatory)*
 
@@ -106,5 +106,5 @@ As a user, when web search fails or returns no results, I want Fubuni to gracefu
 - Caching web search results
 - User preferences for enabling/disabling web search
 - Advanced search filtering (date, region, etc.)
-- Image or video search results
+- Video search results
 - Paid/premium search APIs

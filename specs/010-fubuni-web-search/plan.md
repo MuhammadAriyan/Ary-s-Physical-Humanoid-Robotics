@@ -5,7 +5,7 @@
 
 ## Summary
 
-Add DuckDuckGo web search capability to Fubuni chat agent as a **lowest priority fallback** tool (after RAG knowledge base). When web search is used, results display in a **slide-in panel from the right** with the same close button UX as the docs panel. A special "use rag" flag in user input disables web search entirely.
+Add Tavily API web search capability to Fubuni chat agent as a **lowest priority fallback** tool (after RAG knowledge base). When web search is used, results display in a **slide-in panel from the right** with the same close button UX as the docs panel. A special "use rag" flag in user input disables web search entirely. Requires TAVILY_API_KEY environment variable (free tier: 1000 requests/month).
 
 ## User Clarifications (from `/sp.plan` input)
 
@@ -18,13 +18,13 @@ Add DuckDuckGo web search capability to Fubuni chat agent as a **lowest priority
 ## Technical Context
 
 **Language/Version**: Python 3.12 (backend), TypeScript 5.x (frontend)
-**Primary Dependencies**: FastAPI, OpenAI Agents SDK, duckduckgo-search, React, Docusaurus 3
+**Primary Dependencies**: FastAPI, OpenAI Agents SDK, tavily-python, React, Docusaurus 3
 **Storage**: Neon PostgreSQL (existing chat sessions)
 **Testing**: pytest (backend), manual testing (frontend)
 **Target Platform**: Linux server (backend on HuggingFace Spaces), Static web (Vercel)
 **Project Type**: Web application (backend + frontend)
 **Performance Goals**: Web search response < 10 seconds
-**Constraints**: No API keys required, graceful fallback on failure
+**Constraints**: Requires TAVILY_API_KEY (free tier available), graceful fallback on failure
 **Scale/Scope**: Single user concurrent requests
 
 ## Constitution Check
@@ -34,7 +34,7 @@ Add DuckDuckGo web search capability to Fubuni chat agent as a **lowest priority
 Verify compliance with Fubuni Docs Agent Constitution:
 - [x] Agent MUST be named "Fubuni" and never hallucinate → ✅ Fubuni agent maintains identity, web search provides attributed sources
 - [x] Implementation MUST use only OpenAI-compatible providers via OPENAI_BASE_URL → ✅ No change to LLM provider
-- [x] Backend MUST be in Python 3.11+ using official OpenAI Agents SDK → ✅ Adding `duckduckgo-search` as new dependency
+- [x] Backend MUST be in Python 3.11+ using official OpenAI Agents SDK → ✅ Adding `tavily-python` as new dependency
 - [x] Frontend MUST perfectly match Docusaurus theme and use React + TypeScript → ✅ Web sources panel uses same design language as docs panel
 - [x] Implementation MUST be fully static deployable with no Node server at runtime → ✅ No runtime Node.js changes
 - [x] Initial implementation MUST NOT include vector DB, crawling, or embeddings → ⚠️ Web search is external API call, not local RAG (acceptable)
@@ -66,7 +66,7 @@ backend/
 │   └── api/
 │       ├── chat.py            # ADD: web_sources field in response
 │       └── models.py          # ADD: WebSearchResult, update ChatResponse
-├── requirements.txt           # ADD: duckduckgo-search
+├── requirements.txt           # ADD: tavily-python
 └── rag_retriever.py           # No changes
 
 src/
@@ -99,7 +99,7 @@ User Question
             │ No results?
             ▼
 ┌─────────────────────────┐
-│ 2. search_web           │  (SECONDARY - DuckDuckGo)
+│ 2. search_web           │  (SECONDARY - Tavily API)
 └───────────┬─────────────┘
             │ No results or error?
             ▼

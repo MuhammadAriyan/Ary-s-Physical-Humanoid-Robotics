@@ -14,10 +14,18 @@ import os
 import sys
 import logging
 from dotenv import load_dotenv
-from tavily import TavilyClient
 from openai.types.responses import ResponseTextDeltaEvent
 from ..config.settings import settings
 import asyncio
+
+# Import Tavily with graceful fallback
+try:
+    from tavily import TavilyClient
+    TAVILY_AVAILABLE = True
+except ImportError:
+    TavilyClient = None
+    TAVILY_AVAILABLE = False
+    logging.warning("tavily-python not installed. Web search will be unavailable.")
 
 # T005: Valid chapters for documentation navigation
 VALID_CHAPTERS = [
@@ -176,6 +184,11 @@ async def search_web(query: str) -> str:
     to provide a helpful, comprehensive answer. Do NOT just list the results.
     """
     global _last_web_search_results
+
+    # Check if Tavily is available
+    if not TAVILY_AVAILABLE:
+        _last_web_search_results = []
+        return "Web search unavailable - tavily-python not installed. Falling back to general knowledge."
 
     tavily_key = os.getenv("TAVILY_API_KEY")
     if not tavily_key:

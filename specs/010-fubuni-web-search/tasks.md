@@ -22,11 +22,11 @@
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Add duckduckgo-search dependency and project preparation
+**Purpose**: Add tavily-python dependency and configure API key
 
-- [x] T001 Add `duckduckgo-search>=6.0.0` to backend/requirements.txt
-- [x] T002 Install dependency with `pip install duckduckgo-search` in backend venv
-- [x] T003 Verify installation with test import `from duckduckgo_search import DDGS`
+- [x] T001 Add `tavily-python>=0.5.0` to backend/requirements.txt
+- [x] T002 Install dependency with `pip install tavily-python` in backend venv
+- [x] T003 Verify installation with test import `from tavily import TavilyClient`
 
 ---
 
@@ -53,7 +53,7 @@
 
 ### Implementation for User Story 1
 
-- [x] T008 [US1] Import DDGS from duckduckgo_search in backend/app/agents/fubuni_agent.py
+- [x] T008 [US1] Import TavilyClient from tavily in backend/app/agents/fubuni_agent.py
 - [x] T009 [US1] Create search_web function tool with @function_tool decorator in backend/app/agents/fubuni_agent.py
 - [x] T010 [US1] Implement error handling with try/catch and graceful fallback message in search_web tool
 - [x] T011 [US1] Format web search results with title, snippet, and source URL in search_web tool
@@ -147,7 +147,7 @@
 - [x] T040 Test triple-panel layout proportions (40-30-30)
 - [x] T041 Test panel close button dismisses sources panel
 - [x] T042 Run quickstart.md validation scenarios
-- [ ] T043 Deploy backend to HuggingFace Spaces and test production
+- [x] T043 Deploy backend to HuggingFace Spaces and test production
 
 ---
 
