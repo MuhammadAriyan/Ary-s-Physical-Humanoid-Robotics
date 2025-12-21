@@ -544,7 +544,7 @@ function ChatContent() {
               ))}
               {isLoading && (
                 <div className={`${styles.message} ${styles.botMessage}`}>
-                  <TypingIndicator status="Searching..." />
+                  <TypingIndicator />
                 </div>
               )}
             </>
