@@ -9,14 +9,23 @@ from agents.run import RunConfig
 from agents.exceptions import MaxTurnsExceeded
 from pydantic import BaseModel, field_validator
 from typing import Optional, List
+from urllib.parse import urlparse
 import os
 import sys
 import logging
 from dotenv import load_dotenv
-from duckduckgo_search import DDGS
 from openai.types.responses import ResponseTextDeltaEvent
 from ..config.settings import settings
 import asyncio
+
+# Import Tavily with graceful fallback
+try:
+    from tavily import TavilyClient
+    TAVILY_AVAILABLE = True
+except ImportError:
+    TavilyClient = None
+    TAVILY_AVAILABLE = False
+    logging.warning("tavily-python not installed. Web search will be unavailable.")
 
 # T005: Valid chapters for documentation navigation
 VALID_CHAPTERS = [
@@ -29,10 +38,15 @@ VALID_CHAPTERS = [
 
 # WebSearchResult for storing web search results
 class WebSearchResult(BaseModel):
-    """Single web search result from DuckDuckGo"""
+    """Single web search result from Tavily API"""
     title: str
     url: str
     snippet: str
+    favicon: Optional[str] = None  # Google favicon service URL
+
+
+# Global to store last web search results (cleared after each response)
+_last_web_search_results: List[WebSearchResult] = []
 
 
 # T004: Structured response model for documentation navigation
@@ -157,7 +171,7 @@ async def search_knowledge_base_detailed(query: str, context: str) -> str:
 @function_tool
 async def search_web(query: str) -> str:
     """
-    Search the web using DuckDuckGo for robotics information NOT found in documentation.
+    Search the web using Tavily API for robotics information NOT found in documentation.
 
     ONLY use this tool if:
     1. search_knowledge_base returned no relevant results or insufficient information
@@ -165,26 +179,78 @@ async def search_web(query: str) -> str:
 
     Returns web search results with source URLs for verification.
     The user will see these sources in a dedicated panel.
-    """
-    try:
-        with DDGS() as ddgs:
-            results = list(ddgs.text(query, max_results=5))
 
+    IMPORTANT: After receiving search results, you MUST read and synthesize the information
+    to provide a helpful, comprehensive answer. Do NOT just list the results.
+    """
+    global _last_web_search_results
+
+    # Check if Tavily is available
+    if not TAVILY_AVAILABLE:
+        _last_web_search_results = []
+        return "Web search unavailable - tavily-python not installed. Falling back to general knowledge."
+
+    tavily_key = os.getenv("TAVILY_API_KEY")
+    if not tavily_key:
+        _last_web_search_results = []
+        return "Web search unavailable - TAVILY_API_KEY not configured. Falling back to general knowledge."
+
+    try:
+        client = TavilyClient(api_key=tavily_key)
+        # Search with include_images for related images
+        response = client.search(
+            query=query,
+            max_results=10,
+            include_images=True,
+            include_answer=True,  # Get AI-synthesized answer
+        )
+
+        results = response.get("results", [])
         if not results:
+            _last_web_search_results = []
             return "No web search results found for this query. Try using get_robotics_info for general knowledge."
 
-        # Format results with title, snippet, and URL
-        formatted_results = []
+        # Store structured results for the frontend panel
+        _last_web_search_results = []
         for r in results:
-            title = r.get('title', 'No title')[:200]
-            snippet = r.get('body', '')[:500]
-            url = r.get('href', '')
-            formatted_results.append(f"**{title}**\n{snippet}\nSource: {url}")
+            url = r.get("url", "")
+            try:
+                domain = urlparse(url).netloc if url else ""
+                favicon_url = f"https://www.google.com/s2/favicons?domain={domain}&sz=32" if domain else None
+            except Exception:
+                favicon_url = None
 
-        return "🌐 **Web Search Results:**\n\n" + "\n\n---\n\n".join(formatted_results)
+            _last_web_search_results.append(WebSearchResult(
+                title=r.get("title", "No title")[:200],
+                url=url,
+                snippet=r.get("content", "")[:500],
+                favicon=favicon_url
+            ))
+
+        # Build comprehensive response for the agent to synthesize
+        output_parts = ["🌐 **Web Search Results:**\n"]
+
+        # Include Tavily's AI-generated answer if available
+        if response.get("answer"):
+            output_parts.append(f"**Summary:** {response['answer']}\n")
+
+        # Include search results
+        output_parts.append("\n**Sources:**\n")
+        for i, r in enumerate(_last_web_search_results[:5], 1):
+            output_parts.append(f"{i}. **{r.title}**\n   {r.snippet}\n   Source: {r.url}\n")
+
+        # Include images if available (as markdown)
+        images = response.get("images", [])
+        if images:
+            output_parts.append("\n**Related Images:**\n")
+            for img_url in images[:3]:  # Limit to 3 images
+                output_parts.append(f"![Related Image]({img_url})\n")
+
+        return "\n".join(output_parts)
     except Exception as e:
-        logging.warning(f"Web search failed: {e}")
-        return "Web search is temporarily unavailable. Please try the documentation search or general knowledge."
+        logging.warning(f"Tavily search failed: {e}")
+        _last_web_search_results = []
+        return f"Web search temporarily unavailable ({str(e)[:50]}). Please try the documentation search or general knowledge."
 
 
 @function_tool
@@ -222,27 +288,32 @@ This tells users where the information comes from.
    - ONLY use `search_web` if documentation search returns NO useful results
    - NEVER use `search_web` if the user's message contains "use rag" (case-insensitive)
    - **FORCE WEB SEARCH**: If the user explicitly asks to "websearch", "search the web", "search online", "search browser", "look it up online", "google it", or similar phrases - SKIP documentation and use `search_web` DIRECTLY
+   - **YOU MUST CALL THE TOOL** - NEVER generate fake URLs or example.com links. ALWAYS call the actual search_web tool.
    - When using web search, set `used_web_search=true` in your response
-   - Include source URLs when citing web results
 
-3. **BE EFFICIENT**: Make only 1-2 documentation searches. If still no results, try ONE web search.
+3. **SYNTHESIZE SEARCH RESULTS (CRITICAL)**:
+   - After calling `search_web`, READ the returned content carefully
+   - SYNTHESIZE the information into a helpful, comprehensive answer
+   - DO NOT just list URLs or say "I found results" - actually explain what you found
+   - Include relevant images in your response using markdown: ![description](url)
+   - Cite sources naturally in your response
 
-4. **RESPOND QUICKLY**: After getting results (from docs OR web), synthesize and respond.
+4. **BE EFFICIENT**: Make only 1-2 documentation searches. If still no results, try ONE web search.
 
 5. **SEARCH STRATEGY**:
    - Search 1: Documentation with main keywords
    - Search 2 (if needed): Documentation with alternative terms
    - Search 3 (only if docs failed): Web search
-   - THEN respond
+   - THEN synthesize and respond with actual information
 
 6. **CITE PROPERLY**:
    - Documentation: "According to the documentation..."
-   - Web search: "According to web sources..." with URLs
+   - Web search: Include actual facts from sources, cite URLs
 
 7. **SIMPLE QUESTIONS**: For greetings or simple questions, respond directly without searching.
 
-## DOCUMENTATION NAVIGATION:
-When your response relates to a specific documentation topic, set the chapter field:
+## DOCUMENTATION NAVIGATION (ONLY for documentation results):
+When your response is based on DOCUMENTATION (not web search), set the chapter field:
 
 CHAPTER MAPPINGS:
 - "introduction-to-humanoid-robotics" → basics, overview, what is humanoid robot, getting started
@@ -251,19 +322,42 @@ CHAPTER MAPPINGS:
 - "control-systems" → control, PID, feedback, stability, loops, controllers
 - "path-planning-and-navigation" → navigation, path planning, SLAM, trajectory, waypoints
 
-Set should_navigate=true when the user should definitely read that chapter for more details.
-Set chapter=null for general greetings or questions not related to a specific chapter.
+**IMPORTANT NAVIGATION RULES:**
+- Set should_navigate=true ONLY when citing DOCUMENTATION results
+- Set chapter=null for general greetings or questions not related to a specific chapter
+- **NEVER set should_navigate=true or chapter when using web search** - web sources go to a separate panel
+- When using web search, ALWAYS set: should_navigate=false, chapter=null
 
 Remember: Documentation is your PRIMARY source. Web search is a FALLBACK for topics not in docs.""",
             tools=[search_knowledge_base, search_knowledge_base_detailed, search_web, get_robotics_info],
             output_type=AgentResponse,  # T006: Structured output
         )
 
+    def _inject_web_sources(self, response: AgentResponse) -> AgentResponse:
+        """
+        Inject web search results from the global variable into the response.
+        Clears the global variable after use.
+        """
+        global _last_web_search_results
+        if _last_web_search_results:
+            response.web_sources = _last_web_search_results.copy()
+            response.used_web_search = True
+            # When using web search, don't navigate to docs
+            if response.used_web_search:
+                response.should_navigate = False
+                response.chapter = None
+            _last_web_search_results = []  # Clear after use
+        return response
+
     async def process_message(self, message: str, session_id: str = None) -> AgentResponse:
         """
         Process a user message and return the agent's structured response
         Returns AgentResponse with response text and optional chapter navigation
         """
+        global _last_web_search_results
+        # Clear any stale results from previous requests
+        _last_web_search_results = []
+
         try:
             result = await Runner.run(
                 starting_agent=self.agent,
@@ -273,16 +367,17 @@ Remember: Documentation is your PRIMARY source. Web search is a FALLBACK for top
             )
             # With output_type=AgentResponse, final_output is already an AgentResponse
             if isinstance(result.final_output, AgentResponse):
-                return result.final_output
+                return self._inject_web_sources(result.final_output)
             # Fallback: wrap string response in AgentResponse
-            return AgentResponse(response=str(result.final_output))
+            return self._inject_web_sources(AgentResponse(response=str(result.final_output)))
         except MaxTurnsExceeded as e:
             # Gracefully handle turn limit - extract partial results from the run
             partial_response = self._extract_partial_response(e)
             if partial_response:
-                return AgentResponse(
+                response = AgentResponse(
                     response=f"📚 **Source: Documentation Knowledge Base**\n\n{partial_response}\n\n---\n*Note: Response was synthesized from available search results due to processing limits.*"
                 )
+                return self._inject_web_sources(response)
             return AgentResponse(
                 response="I found some information but couldn't complete the full analysis. Please try asking a more specific question or break it down into smaller parts."
             )

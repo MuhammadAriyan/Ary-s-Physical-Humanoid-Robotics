@@ -28,6 +28,7 @@ interface WebSearchResult {
   title: string;
   url: string;
   snippet: string;
+  favicon?: string;
 }
 
 /**
@@ -83,11 +84,12 @@ function SendIcon({ className }: { className?: string }) {
 }
 
 /**
- * Typing indicator component
+ * Typing indicator component with optional status text
  */
-function TypingIndicator() {
+function TypingIndicator({ status }: { status?: string }) {
   return (
-    <div className={styles.typingIndicator} aria-label="Fubuni is typing">
+    <div className={styles.typingIndicator} aria-label={status || "Fubuni is typing"}>
+      {status && <span className={styles.typingStatus}>{status}</span>}
       <span className={styles.typingDot} />
       <span className={styles.typingDot} />
       <span className={styles.typingDot} />
@@ -161,7 +163,19 @@ function WebSourcesPanel({
             rel="noopener noreferrer"
             className={styles.sourceItem}
           >
-            <h4 className={styles.sourceTitle}>{source.title}</h4>
+            <div className={styles.sourceTitleRow}>
+              {source.favicon && (
+                <img
+                  src={source.favicon}
+                  alt=""
+                  className={styles.sourceFavicon}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              )}
+              <h4 className={styles.sourceTitle}>{source.title}</h4>
+            </div>
             <p className={styles.sourceSnippet}>{source.snippet}</p>
             <span className={styles.sourceUrl}>{source.url}</span>
           </a>
