@@ -1,0 +1,349 @@
+openapi: 3.0.3
+info:
+  title: Fubuni Chat Sessions API
+  description: Chat session management endpoints
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://maryanrar-fubuni-chat-api.hf.space
+    description: Production server
+
+paths:
+  /api/chat/sessions:
+    get:
+      summary: List chat sessions
+      description: Get all chat sessions for authenticated user, ordered by last activity
+      operationId: listSessions
+      tags:
+        - Chat Sessions
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of sessions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionListResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Create new session
+      description: Create a new empty chat session
+      operationId: createSession
+      tags:
+        - Chat Sessions
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSessionRequest'
+      responses:
+        '201':
+          description: Session created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/chat/sessions/{session_id}:
+    get:
+      summary: Get session with messages
+      description: Get a chat session with full message history
+      operationId: getSession
+      tags:
+        - Chat Sessions
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Session with messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionWithMessagesResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Session belongs to another user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete session
+      description: Delete a chat session and all its messages
+      operationId: deleteSession
+      tags:
+        - Chat Sessions
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Session deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Session belongs to another user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/chat:
+    post:
+      summary: Send chat message
+      description: Send a message and get AI response. Creates session if none provided.
+      operationId: sendMessage
+      tags:
+        - Chat
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Chat response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/chat/stream:
+    post:
+      summary: Send chat message (streaming)
+      description: Send a message and receive streaming AI response
+      operationId: sendMessageStream
+      tags:
+        - Chat
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Streaming response
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '401':
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CreateSessionRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Optional title (auto-generated from first message if not provided)
+          maxLength: 50
+          example: Robotics basics
+
+    SessionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        title:
+          type: string
+          nullable: true
+          example: How do servo motors work?
+        created_at:
+          type: string
+          format: date-time
+          example: 2025-12-21T10:30:00Z
+        last_interaction:
+          type: string
+          format: date-time
+          example: 2025-12-21T11:45:00Z
+        message_count:
+          type: integer
+          example: 12
+
+    SessionListResponse:
+      type: object
+      properties:
+        sessions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionResponse'
+        total:
+          type: integer
+          example: 5
+
+    MessageResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sender:
+          type: string
+          enum: [user, fubuni]
+        content:
+          type: string
+        sequence_number:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+
+    SessionWithMessagesResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        last_interaction:
+          type: string
+          format: date-time
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageResponse'
+
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: User message content
+          example: How do servo motors work?
+        session_id:
+          type: string
+          format: uuid
+          description: Optional session ID (creates new if not provided)
+        stream:
+          type: boolean
+          default: false
+          description: Whether to stream response
+
+    ChatResponse:
+      type: object
+      properties:
+        response:
+          type: string
+          description: AI response content
+        session_id:
+          type: string
+          format: uuid
+          description: Session ID (new or existing)
+        timestamp:
+          type: string
+          format: date-time
+        chapter:
+          type: string
+          nullable: true
+          description: Documentation chapter to navigate to
+        section:
+          type: string
+          nullable: true
+          description: Section anchor within chapter
+        should_navigate:
+          type: boolean
+          description: Whether frontend should navigate to docs
+
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          example: Session not found
+        code:
+          type: string
+          example: NOT_FOUND

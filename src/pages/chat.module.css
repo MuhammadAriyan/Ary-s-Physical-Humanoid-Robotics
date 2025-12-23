@@ -21,7 +21,24 @@
    Layout States
    ========================================== */
 
-/* Chat only - full width chat, no docs */
+/* With sidebar - adds 240px sidebar on left */
+.withSidebar.chatOnly {
+  grid-template-columns: 240px 1fr;
+  transition: grid-template-columns 0.4s ease-out;
+}
+
+.withSidebar.withDocs {
+  grid-template-columns: 240px 60% 1fr;
+  transition: grid-template-columns 0.4s ease-out;
+}
+
+/* Chat only - full width chat, no docs (no sidebar) */
+.chatOnly:not(.withSidebar) {
+  grid-template-columns: 1fr;
+  transition: grid-template-columns 0.4s ease-out;
+}
+
+/* Legacy: Chat only - full width chat, no docs */
 .chatOnly {
   grid-template-columns: 1fr;
   transition: grid-template-columns 0.4s ease-out;
@@ -328,6 +345,55 @@
   font-size: var(--text-sm, 0.875rem);
   color: var(--gray-500, #737373);
   margin: 0;
+}
+
+/* Header buttons container */
+.headerButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+}
+
+/* Sign out button */
+.signOutButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  color: var(--gray-500, #737373);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-lg, 0.75rem);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.signOutButton:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+[data-theme='dark'] .signOutButton {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--gray-400, #a3a3a3);
+}
+
+[data-theme='dark'] .signOutButton:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--gray-500, #737373);
+  font-size: var(--text-base, 1rem);
 }
 
 /* Show docs button */

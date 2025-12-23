@@ -1,16 +1,18 @@
 import React from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import FubuniChatInjector from './FubuniChatInjector';
+import { AuthProvider } from '../components/Auth/AuthProvider';
 
 // Default wrapper for the whole Docusaurus site
-// AuthProvider removed temporarily to fix hydration issues
 export default function Root({children}: {children: React.ReactNode}): React.ReactElement {
   return (
-    <>
-      {children}
-      <BrowserOnly fallback={null}>
-        {() => <FubuniChatInjector />}
-      </BrowserOnly>
-    </>
+    <BrowserOnly fallback={<>{children}</>}>
+      {() => (
+        <AuthProvider>
+          {children}
+          <FubuniChatInjector />
+        </AuthProvider>
+      )}
+    </BrowserOnly>
   );
 }

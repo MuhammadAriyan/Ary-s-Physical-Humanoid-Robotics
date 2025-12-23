@@ -64,7 +64,7 @@ load_dotenv()
 
 # Use OpenRouter API with Nova model
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://openrouter.ai/api/v1")
+OPENAI_BASE_URL = "https://openrouter.ai/api/v1"  # Fixed - never change this
 
 # Global variables for lazy initialization
 external_client = None
@@ -84,7 +84,8 @@ def _initialize_agent():
         # Use OpenRouter API key
         api_key = OPENROUTER_API_KEY
         base_url = OPENAI_BASE_URL
-        model_name = "nvidia/nemotron-nano-9b-v2:free"
+        # Using NVIDIA Nemotron Nano 30B - free model with good tool calling support
+        model_name = "nvidia/nemotron-3-nano-30b-a3b:free"
         use_mock = False
     else:
         # No API key - error out
@@ -129,7 +130,7 @@ async def search_knowledge_base(query: str) -> str:
 async def search_knowledge_base_detailed(query: str, context: str) -> str:
     """
     Use this for a MORE DETAILED search when the first search_knowledge_base call
-    didn't return enough information. Provide additional context to refine the search.
+    didn't return enough information. Provide additional context to expand the search.
 
     Args:
         query: The main search query
@@ -150,6 +151,24 @@ async def get_robotics_info(topic: str) -> str:
     return f"[General Knowledge - Not from docs] Information about {topic}: This is general robotics knowledge. For specific documentation, the knowledge base search didn't find relevant results."
 
 
+def _detect_chapter_from_content(content: str) -> Optional[str]:
+    """Detect the appropriate chapter based on content keywords."""
+    content_lower = content.lower()
+
+    # Check for chapter-related keywords
+    if any(kw in content_lower for kw in ['introduction', 'basics', 'overview', 'what is', 'humanoid robot', 'getting started']):
+        return "introduction-to-humanoid-robotics"
+    elif any(kw in content_lower for kw in ['sensor', 'camera', 'lidar', 'perception', 'vision', 'detection', 'sensing']):
+        return "sensors-and-perception"
+    elif any(kw in content_lower for kw in ['actuator', 'motor', 'servo', 'movement', 'joint', 'dof', 'locomotion']):
+        return "actuators-and-movement"
+    elif any(kw in content_lower for kw in ['control', 'pid', 'feedback', 'stability', 'loop', 'controller']):
+        return "control-systems"
+    elif any(kw in content_lower for kw in ['navigation', 'path planning', 'slam', 'trajectory', 'waypoint']):
+        return "path-planning-and-navigation"
+    return None
+
+
 class FubuniAgent:
     def __init__(self):
         _initialize_agent()
@@ -157,45 +176,25 @@ class FubuniAgent:
             name="Fubuni",
             instructions="""You are Fubuni, an AI assistant for Physical Humanoid Robotics documentation platform.
 
-## RESPONSE FORMAT - ALWAYS START WITH SOURCE:
-Start EVERY response with: "📚 **Source: Documentation Knowledge Base**\n\n"
-This tells users where the information comes from.
+## WORKFLOW - FOLLOW THIS EXACTLY:
+1. User asks a question
+2. IMMEDIATELY call `search_knowledge_base` tool - DO NOT describe what you will do, just call the tool
+3. Wait for tool results
+4. Respond based on the results
 
-## CRITICAL RULES:
+## RULES:
 
-1. **SEARCH FIRST**: For ANY technical question - call `search_knowledge_base` ONCE with a good query BEFORE answering.
+1. **ALWAYS CALL THE TOOL FIRST**: For ANY question (except "hi", "hello", "thanks"), you MUST call `search_knowledge_base` before responding. Do not say "I'll search" - just call the tool.
 
-2. **BE EFFICIENT**: Make only 1-2 searches maximum. Don't over-search. If the first search returns good results, USE THEM and respond immediately.
+2. **BE EFFICIENT**: Make only 1-2 tool calls maximum. After getting results, respond immediately.
 
-3. **RESPOND QUICKLY**: After getting search results, synthesize and respond. Don't keep searching endlessly.
+3. **USE THE RESULTS**: Base your answer on the tool results. If results are relevant, cite them. If not found, answer from general knowledge.
 
-4. **SEARCH STRATEGY** (max 2 searches):
-   - Search 1: Main topic keywords (e.g., "humanoid robot balance")
-   - Search 2 (only if needed): Alternative terms (e.g., "stability control")
-   - THEN respond with what you found
+4. **SIMPLE GREETINGS ONLY**: Only skip tool calls for simple greetings like "hi", "hello", "thanks".
 
-5. **CITE IN RESPONSE**: Include "According to the documentation..." when presenting findings.
-
-6. **IF NO RESULTS**: After 1-2 searches with no results, say: "I couldn't find this in the documentation, but based on general knowledge..." and provide a helpful answer.
-
-7. **SIMPLE QUESTIONS**: For greetings or simple questions, respond directly without searching.
-
-## DOCUMENTATION NAVIGATION (T007):
-When your response relates to a specific documentation topic, set the chapter field to help users navigate:
-
-CHAPTER MAPPINGS:
-- "introduction-to-humanoid-robotics" → basics, overview, what is humanoid robot, getting started
-- "sensors-and-perception" → sensors, cameras, lidar, perception, vision, detection, sensing
-- "actuators-and-movement" → actuators, motors, servos, movement, joints, DOF, locomotion
-- "control-systems" → control, PID, feedback, stability, loops, controllers
-- "path-planning-and-navigation" → navigation, path planning, SLAM, trajectory, waypoints
-
-Set should_navigate=true when the user should definitely read that chapter for more details.
-Set chapter=null for general greetings or questions not related to a specific chapter.
-
-Remember: Be helpful and efficient. Users want answers, not endless searching.""",
+Keep responses concise and helpful.""",
             tools=[search_knowledge_base, search_knowledge_base_detailed, get_robotics_info],
-            output_type=AgentResponse,  # T006: Structured output
+            # Note: Removed output_type to allow proper tool calling - we handle structured output manually
         )
 
     async def process_message(self, message: str, session_id: str = None) -> AgentResponse:
@@ -210,17 +209,31 @@ Remember: Be helpful and efficient. Users want answers, not endless searching.""
                 run_config=config,
                 max_turns=15  # Increased from default 10
             )
-            # With output_type=AgentResponse, final_output is already an AgentResponse
-            if isinstance(result.final_output, AgentResponse):
-                return result.final_output
-            # Fallback: wrap string response in AgentResponse
-            return AgentResponse(response=str(result.final_output))
+            # Get the response text
+            response_text = str(result.final_output) if result.final_output else ""
+
+            # Detect chapter from the response content
+            chapter = _detect_chapter_from_content(response_text)
+
+            # Also check the original message for chapter hints
+            if not chapter:
+                chapter = _detect_chapter_from_content(message)
+
+            return AgentResponse(
+                response=response_text,
+                chapter=chapter,
+                section=None,
+                should_navigate=chapter is not None
+            )
         except MaxTurnsExceeded as e:
             # Gracefully handle turn limit - extract partial results from the run
             partial_response = self._extract_partial_response(e)
             if partial_response:
+                chapter = _detect_chapter_from_content(partial_response)
                 return AgentResponse(
-                    response=f"📚 **Source: Documentation Knowledge Base**\n\n{partial_response}\n\n---\n*Note: Response was synthesized from available search results due to processing limits.*"
+                    response=f"{partial_response}\n\n---\n*Note: Response was synthesized from available search results due to processing limits.*",
+                    chapter=chapter,
+                    should_navigate=chapter is not None
                 )
             return AgentResponse(
                 response="I found some information but couldn't complete the full analysis. Please try asking a more specific question or break it down into smaller parts."

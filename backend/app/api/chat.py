@@ -15,9 +15,6 @@ from ..middleware.auth import AuthUser, require_auth, get_current_user
 
 router = APIRouter()
 
-# Anonymous user ID for unauthenticated chat sessions
-ANONYMOUS_USER_ID = "anonymous"
-
 
 @router.get("/chat/sessions")
 async def get_chat_sessions(
@@ -26,17 +23,112 @@ async def get_chat_sessions(
 ):
     """
     Get all chat sessions for the authenticated user.
-    Requires authentication.
+    Requires authentication. Returns sessions ordered by last_interaction DESC.
     """
     try:
-        # Filter sessions by authenticated user
+        # Filter sessions by authenticated user, order by most recent first
         chat_sessions = session.exec(
-            select(ChatSession).where(ChatSession.user_id == current_user.id)
+            select(ChatSession)
+            .where(ChatSession.user_id == current_user.id)
+            .order_by(ChatSession.last_interaction.desc())
         ).all()
-        return chat_sessions
+
+        # Add message count for each session
+        sessions_with_count = []
+        for chat_session in chat_sessions:
+            message_count = len(session.exec(
+                select(ChatMessage).where(ChatMessage.chat_session_id == chat_session.id)
+            ).all())
+            sessions_with_count.append({
+                "id": chat_session.id,
+                "title": chat_session.title,
+                "created_at": chat_session.created_at,
+                "last_interaction": chat_session.last_interaction,
+                "is_active": chat_session.is_active,
+                "message_count": message_count,
+            })
+
+        return {"sessions": sessions_with_count, "total": len(sessions_with_count)}
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Error retrieving chat sessions: {str(e)}"
+        )
+
+
+@router.post("/chat/sessions")
+async def create_chat_session(
+    session: Session = Depends(get_session),
+    current_user: AuthUser = Depends(require_auth),
+):
+    """
+    Create a new empty chat session for the authenticated user.
+    Requires authentication.
+    """
+    try:
+        chat_session = ChatSession(
+            user_id=current_user.id,
+            title=None,  # Will be auto-generated from first message
+        )
+        session.add(chat_session)
+        session.commit()
+        session.refresh(chat_session)
+
+        return {
+            "id": chat_session.id,
+            "title": chat_session.title,
+            "created_at": chat_session.created_at,
+            "last_interaction": chat_session.last_interaction,
+            "is_active": chat_session.is_active,
+            "message_count": 0,
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error creating chat session: {str(e)}"
+        )
+
+
+@router.delete("/chat/sessions/{session_id}")
+async def delete_chat_session(
+    session_id: str,
+    session: Session = Depends(get_session),
+    current_user: AuthUser = Depends(require_auth),
+):
+    """
+    Delete a chat session and all its messages.
+    Requires authentication and verifies ownership.
+    """
+    try:
+        # Check if session exists and belongs to the authenticated user
+        chat_session = session.exec(
+            select(ChatSession).where(
+                ChatSession.id == session_id,
+                ChatSession.user_id == current_user.id,
+            )
+        ).first()
+
+        if not chat_session:
+            raise HTTPException(
+                status_code=404,
+                detail="Chat session not found or you don't have permission to delete it"
+            )
+
+        # Delete all messages in the session first
+        messages = session.exec(
+            select(ChatMessage).where(ChatMessage.chat_session_id == session_id)
+        ).all()
+        for message in messages:
+            session.delete(message)
+
+        # Delete the session
+        session.delete(chat_session)
+        session.commit()
+
+        return {"success": True, "deleted_session_id": session_id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error deleting chat session: {str(e)}"
         )
 
 
@@ -82,14 +174,14 @@ async def get_chat_history(
 async def chat_endpoint(
     chat_request: ChatRequest,
     session: Session = Depends(get_session),
-    current_user: Optional[AuthUser] = Depends(get_current_user),
+    current_user: AuthUser = Depends(require_auth),
 ):
     """
     Chat endpoint that processes user messages and returns Fubuni's response.
-    Allows anonymous users (no authentication required).
+    Requires authentication.
     """
-    # Determine user ID (authenticated or anonymous)
-    user_id = current_user.id if current_user else ANONYMOUS_USER_ID
+    # Use authenticated user ID
+    user_id = current_user.id
 
     # Get or create a chat session
     chat_session: Optional[ChatSession] = None

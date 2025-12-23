@@ -19,6 +19,7 @@ class Settings(BaseSettings):
 
     # Auth service settings
     auth_service_url: str = os.getenv("AUTH_SERVICE_URL", "http://localhost:4000")
+    jwt_secret: str = os.getenv("JWT_SECRET", "default-secret-change-in-production")
 
     model_config = {"extra": "ignore"}
 

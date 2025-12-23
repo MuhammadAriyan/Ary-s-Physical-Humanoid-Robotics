@@ -8,6 +8,11 @@ import {
   CHAPTER_TITLES,
   DEFAULT_CHAPTER,
 } from '../constants/chapters';
+import { useAuth } from '../components/Auth/AuthProvider';
+import { AuthModal } from '../components/Auth/AuthModal';
+import { SessionSidebar } from '../components/Chat/SessionSidebar';
+import { getSessionMessages, sendMessage as sendChatMessage, ChatMessage as ChatMessageType } from '../lib/chat-sessions';
+import { getSessionToken, signOut } from '../lib/auth-client';
 import styles from './chat.module.css';
 
 /**
@@ -114,6 +119,12 @@ function formatTime(date: Date): string {
  */
 function ChatContent() {
   const baseUrl = useBaseUrl('/');
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth();
+
+  // Auth modal state
+  const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
+
+  // Chat state
   const [currentChapter, setCurrentChapter] = useState<string>(DEFAULT_CHAPTER);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -121,12 +132,30 @@ function ChatContent() {
   const [error, setError] = useState<string | null>(null);
   const [iframeLoading, setIframeLoading] = useState<boolean>(true);
 
+  // Session state
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const [sidebarVisible, setSidebarVisible] = useState<boolean>(true);
+
   // Docs panel visibility - starts hidden, slides in on first navigation
   const [docsVisible, setDocsVisible] = useState<boolean>(false);
   const [hasNavigatedOnce, setHasNavigatedOnce] = useState<boolean>(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Show auth modal when not authenticated
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      setShowAuthModal(true);
+    }
+  }, [authLoading, isAuthenticated]);
+
+  // Auto-close modal when authentication succeeds
+  useEffect(() => {
+    if (!authLoading && isAuthenticated && showAuthModal) {
+      setShowAuthModal(false);
+    }
+  }, [authLoading, isAuthenticated, showAuthModal]);
 
   // Scroll to bottom when new messages arrive
   const scrollToBottom = useCallback(() => {
@@ -178,6 +207,57 @@ function ChatContent() {
   }, []);
 
   /**
+   * Load messages for a session
+   */
+  const loadSessionMessages = useCallback(async (sessionId: string) => {
+    try {
+      const data = await getSessionMessages(sessionId);
+      const loadedMessages: Message[] = data.messages.map((msg: ChatMessageType) => ({
+        id: msg.id,
+        sender: msg.sender as 'user' | 'fubuni',
+        content: msg.content,
+        timestamp: new Date(msg.timestamp),
+      }));
+      setMessages(loadedMessages);
+      setActiveSessionId(sessionId);
+    } catch (err) {
+      console.error('Failed to load session messages:', err);
+      setError('Failed to load chat history');
+    }
+  }, []);
+
+  /**
+   * Handle session selection from sidebar
+   */
+  const handleSessionSelect = useCallback((sessionId: string) => {
+    if (sessionId === activeSessionId) return;
+    loadSessionMessages(sessionId);
+  }, [activeSessionId, loadSessionMessages]);
+
+  /**
+   * Handle new session creation
+   */
+  const handleNewSession = useCallback((sessionId: string) => {
+    setMessages([]);
+    setActiveSessionId(sessionId || null);
+    setError(null);
+  }, []);
+
+  /**
+   * Handle sign out
+   */
+  const handleSignOut = useCallback(async () => {
+    try {
+      await signOut();
+      setMessages([]);
+      setActiveSessionId(null);
+      setShowAuthModal(true);
+    } catch (err) {
+      console.error('Sign out error:', err);
+    }
+  }, []);
+
+  /**
    * Handle agent response and auto-navigate if needed
    */
   const handleAgentResponse = useCallback(
@@ -212,6 +292,9 @@ function ChatContent() {
     [hasNavigatedOnce]
   );
 
+  // Store pending message for re-auth scenarios
+  const [pendingMessage, setPendingMessage] = useState<string | null>(null);
+
   /**
    * Send message to backend
    */
@@ -219,8 +302,16 @@ function ChatContent() {
     async (messageText: string) => {
       if (!messageText.trim() || isLoading) return;
 
-      // Clear any previous error
+      // Check authentication - preserve message if auth required
+      if (!isAuthenticated) {
+        setPendingMessage(messageText.trim());
+        setShowAuthModal(true);
+        return;
+      }
+
+      // Clear any previous error and pending message
       setError(null);
+      setPendingMessage(null);
 
       // Add user message
       const userMessage: Message = {
@@ -234,23 +325,17 @@ function ChatContent() {
       setIsLoading(true);
 
       try {
-        const apiUrl = getApiBaseUrl();
-        const response = await fetch(`${apiUrl}/api/chat`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: messageText.trim(),
-            stream: false,
-          }),
-        });
+        // Use the authenticated chat API
+        const data = await sendChatMessage(messageText.trim(), activeSessionId || undefined);
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        // Update session ID if a new one was created
+        if (data.session_id && data.session_id !== activeSessionId) {
+          setActiveSessionId(data.session_id);
+          // Refresh the sidebar to show the new session
+          if ((window as unknown as Record<string, unknown>).__refreshSessions) {
+            ((window as unknown as Record<string, unknown>).__refreshSessions as () => void)();
+          }
         }
-
-        const data: BackendResponse = await response.json();
 
         // Add bot response
         const botMessageId = generateId();
@@ -263,22 +348,36 @@ function ChatContent() {
         setMessages((prev) => [...prev, botMessage]);
 
         // Handle navigation if needed
-        handleAgentResponse(data, botMessageId);
+        handleAgentResponse(data as BackendResponse, botMessageId);
       } catch (err) {
         console.error('Chat error:', err);
-        setError(
-          err instanceof Error
-            ? err.message
-            : 'Failed to send message. Please try again.'
-        );
+        // Check if it's an auth error (401)
+        const errorMessage = err instanceof Error ? err.message : 'Failed to send message';
+        if (errorMessage.includes('401') || errorMessage.toLowerCase().includes('unauthorized') || errorMessage.toLowerCase().includes('not authenticated')) {
+          // Preserve message and prompt re-auth
+          setPendingMessage(messageText.trim());
+          setShowAuthModal(true);
+          setError('Session expired. Please sign in again.');
+        } else {
+          setError(errorMessage);
+        }
       } finally {
         setIsLoading(false);
         // Refocus input after response
         inputRef.current?.focus();
       }
     },
-    [isLoading, handleAgentResponse]
+    [isLoading, isAuthenticated, activeSessionId, handleAgentResponse]
   );
+
+  // Restore pending message to input after successful re-auth
+  useEffect(() => {
+    if (isAuthenticated && pendingMessage && !showAuthModal) {
+      setInputValue(pendingMessage);
+      setPendingMessage(null);
+      inputRef.current?.focus();
+    }
+  }, [isAuthenticated, pendingMessage, showAuthModal]);
 
   /**
    * Handle form submission
@@ -325,167 +424,224 @@ function ChatContent() {
     []
   );
 
-  return (
-    <div className={`${styles.container} ${docsVisible ? styles.withDocs : styles.chatOnly}`}>
-      {/* Documentation viewer panel - slides in from left */}
-      <div className={styles.docViewer}>
-        {/* Close button */}
-        <button
-          type="button"
-          className={styles.closeDocsButton}
-          onClick={handleCloseDocs}
-          aria-label="Close documentation panel"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-
-        {/* Chapter navigation */}
-        <nav className={styles.chapterNav} aria-label="Chapter navigation">
-          {Object.entries(CHAPTER_TITLES).map(([chapterId, title]) => (
-            <button
-              key={chapterId}
-              type="button"
-              className={`${styles.chapterButton} ${
-                currentChapter === chapterId ? styles.chapterButtonActive : ''
-              }`}
-              onClick={() => handleChapterClick(chapterId)}
-              aria-pressed={currentChapter === chapterId}
-            >
-              {title}
-            </button>
-          ))}
-        </nav>
-
-        {/* Documentation iframe */}
-        <iframe
-          src={getDocUrl(currentChapter)}
-          className={`${styles.iframe} ${iframeLoading ? styles.iframeLoading : ''}`}
-          title={`Documentation: ${CHAPTER_TITLES[currentChapter] || 'Robotics Course'}`}
-          onLoad={handleIframeLoad}
-        />
-      </div>
-
-      {/* Chat panel */}
-      <div className={styles.chatPanel}>
-        {/* Chat header */}
-        <header className={styles.chatHeader}>
-          <div className={styles.chatAvatar} role="img" aria-label="Fubuni">
-            𝄞⨾𓍢ִ໋
+  // Show loading state while checking auth
+  if (authLoading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.chatPanel}>
+          <div className={styles.messagesContainer}>
+            <div className={styles.loading}>Loading...</div>
           </div>
-          <div className={styles.chatHeaderInfo}>
-            <h1 className={styles.chatTitle}>.𖥔 ݁FUBUNI .˖</h1>
-            <p className={styles.chatSubtitle}>Robotics Learning Assistant</p>
-          </div>
-          {/* Show docs button when docs are hidden */}
-          {!docsVisible && (
-            <button
-              type="button"
-              className={styles.showDocsButton}
-              onClick={handleOpenDocs}
-              aria-label="Show documentation"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-              </svg>
-              <span>Docs</span>
-            </button>
-          )}
-        </header>
-
-        {/* Messages container */}
-        <div
-          className={styles.messagesContainer}
-          role="log"
-          aria-label="Chat messages"
-          aria-live="polite"
-        >
-          {messages.length === 0 && !isLoading ? (
-            <WelcomeMessage />
-          ) : (
-            <>
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`${styles.message} ${
-                    message.sender === 'user'
-                      ? styles.userMessage
-                      : styles.botMessage
-                  }`}
-                >
-                  <div className={styles.messageBubble}>
-                    <ReactMarkdown>{message.content}</ReactMarkdown>
-                  </div>
-                  {message.navigatedTo && (
-                    <div className={styles.navigationIndicator}>
-                      <span
-                        className={styles.navigationIcon}
-                        role="img"
-                        aria-label="Navigation"
-                      >
-                        📍
-                      </span>
-                      <span>
-                        Navigated to:{' '}
-                        {CHAPTER_TITLES[message.navigatedTo] ||
-                          message.navigatedTo}
-                      </span>
-                    </div>
-                  )}
-                  <span className={styles.messageTime}>
-                    {formatTime(message.timestamp)}
-                  </span>
-                </div>
-              ))}
-              {isLoading && (
-                <div className={`${styles.message} ${styles.botMessage}`}>
-                  <TypingIndicator />
-                </div>
-              )}
-            </>
-          )}
-          <div ref={messagesEndRef} />
         </div>
+      </div>
+    );
+  }
 
-        {/* Error message */}
-        {error && (
-          <div className={styles.errorMessage} role="alert">
-            <span role="img" aria-label="Error">
-              ⚠️
-            </span>
-            <span>{error}</span>
-          </div>
+  return (
+    <>
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => {
+          // Allow closing only if authenticated
+          if (isAuthenticated) {
+            setShowAuthModal(false);
+          }
+        }}
+      />
+
+      <div className={`${styles.container} ${isAuthenticated ? styles.withSidebar : ''} ${docsVisible ? styles.withDocs : styles.chatOnly}`}>
+        {/* Session Sidebar */}
+        {isAuthenticated && (
+          <SessionSidebar
+            activeSessionId={activeSessionId}
+            onSessionSelect={handleSessionSelect}
+            onNewSession={handleNewSession}
+            isAuthenticated={isAuthenticated}
+          />
         )}
 
-        {/* Input container */}
-        <div className={styles.inputContainer}>
-          <form className={styles.inputForm} onSubmit={handleSubmit}>
-            <textarea
-              ref={inputRef}
-              className={styles.chatInput}
-              value={inputValue}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask about robotics..."
-              disabled={isLoading}
-              rows={1}
-              aria-label="Message input"
-            />
-            <button
-              type="submit"
-              className={styles.sendButton}
-              disabled={isLoading || !inputValue.trim()}
-              aria-label="Send message"
-            >
-              <SendIcon className={styles.sendIcon} />
-            </button>
-          </form>
+        {/* Documentation viewer panel - slides in from left */}
+        <div className={styles.docViewer}>
+          {/* Close button */}
+          <button
+            type="button"
+            className={styles.closeDocsButton}
+            onClick={handleCloseDocs}
+            aria-label="Close documentation panel"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+
+          {/* Chapter navigation */}
+          <nav className={styles.chapterNav} aria-label="Chapter navigation">
+            {Object.entries(CHAPTER_TITLES).map(([chapterId, title]) => (
+              <button
+                key={chapterId}
+                type="button"
+                className={`${styles.chapterButton} ${
+                  currentChapter === chapterId ? styles.chapterButtonActive : ''
+                }`}
+                onClick={() => handleChapterClick(chapterId)}
+                aria-pressed={currentChapter === chapterId}
+              >
+                {title}
+              </button>
+            ))}
+          </nav>
+
+          {/* Documentation iframe */}
+          <iframe
+            src={getDocUrl(currentChapter)}
+            className={`${styles.iframe} ${iframeLoading ? styles.iframeLoading : ''}`}
+            title={`Documentation: ${CHAPTER_TITLES[currentChapter] || 'Robotics Course'}`}
+            onLoad={handleIframeLoad}
+          />
+        </div>
+
+        {/* Chat panel */}
+        <div className={styles.chatPanel}>
+          {/* Chat header */}
+          <header className={styles.chatHeader}>
+            <div className={styles.chatAvatar} role="img" aria-label="Fubuni">
+              𝄞⨾𓍢ִ໋
+            </div>
+            <div className={styles.chatHeaderInfo}>
+              <h1 className={styles.chatTitle}>.𖥔 ݁FUBUNI .˖</h1>
+              <p className={styles.chatSubtitle}>
+                {isAuthenticated && user?.name
+                  ? `Hi, ${user.name}!`
+                  : 'Robotics Learning Assistant'}
+              </p>
+            </div>
+            <div className={styles.headerButtons}>
+              {/* Show docs button when docs are hidden */}
+              {!docsVisible && (
+                <button
+                  type="button"
+                  className={styles.showDocsButton}
+                  onClick={handleOpenDocs}
+                  aria-label="Show documentation"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                  </svg>
+                  <span>Docs</span>
+                </button>
+              )}
+              {/* Sign out button */}
+              {isAuthenticated && (
+                <button
+                  type="button"
+                  className={styles.signOutButton}
+                  onClick={handleSignOut}
+                  aria-label="Sign out"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          </header>
+
+          {/* Messages container */}
+          <div
+            className={styles.messagesContainer}
+            role="log"
+            aria-label="Chat messages"
+            aria-live="polite"
+          >
+            {messages.length === 0 && !isLoading ? (
+              <WelcomeMessage />
+            ) : (
+              <>
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`${styles.message} ${
+                      message.sender === 'user'
+                        ? styles.userMessage
+                        : styles.botMessage
+                    }`}
+                  >
+                    <div className={styles.messageBubble}>
+                      <ReactMarkdown>{message.content}</ReactMarkdown>
+                    </div>
+                    {message.navigatedTo && (
+                      <div className={styles.navigationIndicator}>
+                        <span
+                          className={styles.navigationIcon}
+                          role="img"
+                          aria-label="Navigation"
+                        >
+                          📍
+                        </span>
+                        <span>
+                          Navigated to:{' '}
+                          {CHAPTER_TITLES[message.navigatedTo] ||
+                            message.navigatedTo}
+                        </span>
+                      </div>
+                    )}
+                    <span className={styles.messageTime}>
+                      {formatTime(message.timestamp)}
+                    </span>
+                  </div>
+                ))}
+                {isLoading && (
+                  <div className={`${styles.message} ${styles.botMessage}`}>
+                    <TypingIndicator />
+                  </div>
+                )}
+              </>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Error message */}
+          {error && (
+            <div className={styles.errorMessage} role="alert">
+              <span role="img" aria-label="Error">
+                ⚠️
+              </span>
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Input container */}
+          <div className={styles.inputContainer}>
+            <form className={styles.inputForm} onSubmit={handleSubmit}>
+              <textarea
+                ref={inputRef}
+                className={styles.chatInput}
+                value={inputValue}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder={isAuthenticated ? "Ask about robotics..." : "Sign in to chat..."}
+                disabled={isLoading || !isAuthenticated}
+                rows={1}
+                aria-label="Message input"
+              />
+              <button
+                type="submit"
+                className={styles.sendButton}
+                disabled={isLoading || !inputValue.trim() || !isAuthenticated}
+                aria-label="Send message"
+              >
+                <SendIcon className={styles.sendIcon} />
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
