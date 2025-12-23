@@ -65,16 +65,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     setError(null);
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = () => {
     setError(null);
     setIsGoogleLoading(true);
 
     try {
-      await signInWithGoogle();
-      // The redirect will happen automatically
-      // On successful return, onSuccess will be called
-      onSuccess?.();
+      signInWithGoogle();
+      // Browser will redirect to Google OAuth now
+      // Loading state will persist during redirect (correct behavior)
     } catch (err) {
+      // Only catches synchronous errors before redirect
       setError(err instanceof Error ? err.message : 'Google sign-in failed');
       setIsGoogleLoading(false);
     }
@@ -193,7 +193,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          {isGoogleLoading ? 'Signing in...' : 'Continue with Google'}
+          {isGoogleLoading ? 'Redirecting to Google...' : 'Continue with Google'}
         </button>
 
         <p className={styles.toggleText}>

@@ -56,15 +56,12 @@ export const auth = betterAuth({
   },
 
   // Social providers
-  socialProviders: {
-    // Google OAuth (only if credentials are configured)
-    ...(isGoogleConfigured && {
-      google: {
-        clientId: googleClientId!,
-        clientSecret: googleClientSecret!,
-      },
-    }),
-  },
+  socialProviders: isGoogleConfigured ? {
+    google: {
+      clientId: googleClientId!,
+      clientSecret: googleClientSecret!,
+    },
+  } : {},
 
   // Trusted origins for CORS
   trustedOrigins: corsOrigins,

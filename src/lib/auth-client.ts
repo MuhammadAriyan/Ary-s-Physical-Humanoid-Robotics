@@ -25,18 +25,44 @@ export const {
   getSession,
 } = authClient;
 
-// Google sign-in helper function
-export const signInWithGoogle = async () => {
+// Helper function to get the current session token for API calls
+// We call the auth service to generate a JWT token from the Better Auth session
+export async function getSessionToken(): Promise<string | null> {
   try {
-    const result = await signIn.social({
-      provider: "google",
-      callbackURL: window.location.origin,
+    // Check if user is authenticated first
+    const session = await getSession();
+    if (!session?.data?.user) {
+      return null;
+    }
+
+    // Get JWT token from auth service
+    const response = await fetch(`${getAuthUrl()}/api/auth/token`, {
+      credentials: 'include', // Include cookies for Better Auth session
     });
-    return result;
-  } catch (error) {
-    console.error("Google sign-in error:", error);
-    throw error;
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return data.token || null;
+  } catch {
+    return null;
   }
+}
+
+// Google sign-in helper function
+export const signInWithGoogle = () => {
+  // Don't await - this triggers a browser redirect to Google OAuth
+  // The loading state will persist during redirect (expected behavior)
+  signIn.social({
+    provider: "google",
+    // Use current page URL to redirect back to where user was
+    callbackURL: window.location.href,
+  });
+
+  // Note: Code after this may or may not execute before redirect
+  // Don't rely on any code here running to completion
 };
 
 // Types for auth state

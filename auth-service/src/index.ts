@@ -4,11 +4,13 @@ import dotenv from "dotenv";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth.js";
 import { testConnection, closePool } from "./db.js";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.AUTH_PORT || 4000;
+const JWT_SECRET = process.env.JWT_SECRET || "default-secret-change-in-production";
 
 // Parse CORS origins from environment
 const corsOrigins = process.env.CORS_ORIGINS?.split(",").map((o) => o.trim()) || [
@@ -36,6 +38,46 @@ app.get("/health", (_req, res) => {
     service: "fubuni-auth-service",
     timestamp: new Date().toISOString(),
   });
+});
+
+// Custom endpoint to generate JWT token for authenticated sessions
+// Frontend calls this to get a JWT that can be sent to FastAPI backend
+app.get("/api/auth/token", async (req, res) => {
+  try {
+    // Convert Express headers to plain object for Better Auth
+    const headers: Record<string, string> = {};
+    for (const [key, value] of Object.entries(req.headers)) {
+      if (typeof value === 'string') {
+        headers[key] = value;
+      }
+    }
+
+    // Get the session using Better Auth
+    const session = await auth.api.getSession({
+      headers: headers,
+    });
+
+    if (!session?.user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    // Create JWT token with user info
+    const token = jwt.sign(
+      {
+        userId: session.user.id,
+        email: session.user.email,
+        name: session.user.name,
+        emailVerified: session.user.emailVerified,
+      },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({ token });
+  } catch (error) {
+    console.error("Token generation error:", error);
+    res.status(500).json({ error: "Failed to generate token" });
+  }
 });
 
 // Mount Better Auth handler at /api/auth/*
