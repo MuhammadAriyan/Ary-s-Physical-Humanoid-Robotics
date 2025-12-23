@@ -5,8 +5,9 @@ const getAuthUrl = () => {
   if (typeof window !== "undefined") {
     // Client-side: check for production or use localhost
     if (window.location.hostname !== "localhost") {
-      // Production: use relative path or configured URL
-      return process.env.REACT_APP_AUTH_URL || "https://your-auth-service.hf.space";
+      // Production: use relative path (works on any hosting)
+      // For GitHub Pages and other static hosts, use same origin
+      return window.location.origin + "/auth-service";
     }
   }
   return "http://localhost:4000";

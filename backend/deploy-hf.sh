@@ -38,7 +38,13 @@ echo "📤 Uploading to Hugging Face..."
 # Check if huggingface-cli is installed
 if ! command -v huggingface-cli &> /dev/null; then
     echo "Installing huggingface_hub..."
-    pip install huggingface_hub -q
+    # Use virtual environment if available
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    if [ -d "$SCRIPT_DIR/myenv" ]; then
+        source "$SCRIPT_DIR/myenv/bin/activate" && pip install huggingface_hub -q
+    else
+        pip install huggingface_hub -q
+    fi
 fi
 
 # Upload using HF CLI
