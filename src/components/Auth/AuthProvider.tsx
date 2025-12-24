@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { useSession, AuthUser, AuthSession } from '../../lib/auth-client';
 
+const AUTH_STORAGE_KEY = 'fubuni_auth_user';
+
 interface AuthContextValue {
   user: AuthUser | null;
   session: AuthSession | null;
@@ -10,6 +12,7 @@ interface AuthContextValue {
   sessionExpired: boolean;
   refetch: () => void;
   clearSessionExpired: () => void;
+  clearPersistedAuth: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -22,6 +25,44 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { data: sessionData, isPending, error, refetch } = useSession();
   const [authError, setAuthError] = useState<string | null>(null);
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [persistedUser, setPersistedUser] = useState<AuthUser | null>(null);
+
+  // Load persisted user from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+        if (stored) {
+          const user = JSON.parse(stored);
+          setPersistedUser(user);
+        }
+      } catch (e) {
+        console.error('Failed to load persisted auth user:', e);
+      }
+    }
+  }, []);
+
+  // Save user to localStorage when session is valid
+  useEffect(() => {
+    if (sessionData?.user && typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionData.user));
+        setPersistedUser(sessionData.user);
+      } catch (e) {
+        console.error('Failed to persist auth user:', e);
+      }
+    }
+  }, [sessionData]);
+
+  // Clear persisted user on sign out
+  const handleSignOut = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+    }
+    setPersistedUser(null);
+    setSessionExpired(false);
+    setAuthError(null);
+  }, []);
 
   // Handle session expiry detection
   useEffect(() => {
@@ -53,14 +94,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const value: AuthContextValue = {
-    user: sessionData?.user || null,
+    user: sessionData?.user || persistedUser || null,
     session: sessionData || null,
     isLoading: isPending,
-    isAuthenticated: !!sessionData?.user,
+    isAuthenticated: !!sessionData?.user || !!persistedUser,
     error: authError,
     sessionExpired,
     refetch,
     clearSessionExpired,
+    clearPersistedAuth: handleSignOut,
   };
 
   return (

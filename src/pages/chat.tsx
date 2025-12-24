@@ -248,6 +248,10 @@ function ChatContent() {
    */
   const handleSignOut = useCallback(async () => {
     try {
+      // Clear persisted auth first (localStorage)
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('fubuni_auth_user');
+      }
       await signOut();
       setMessages([]);
       setActiveSessionId(null);
