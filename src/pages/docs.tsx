@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import styles from '../css/docs-landing.module.css';
 
 export default function DocsLanding(): React.ReactNode {
+  // Start with 'intro' - chapters will only appear after intro animation completes
   const [phase, setPhase] = useState<'intro' | 'title' | 'arrow' | 'exit' | 'chapters'>('intro');
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -17,7 +18,7 @@ export default function DocsLanding(): React.ReactNode {
       return;
     }
 
-    // Animation sequence controller
+    // Animation sequence: intro → title → arrow → exit → chapters
     const timers = [
       setTimeout(() => setPhase('title'), 800),
       setTimeout(() => setPhase('arrow'), 1600),
