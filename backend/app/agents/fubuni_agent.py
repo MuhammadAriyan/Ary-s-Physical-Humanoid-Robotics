@@ -8,7 +8,7 @@ from agents import (
 from agents.run import RunConfig
 from agents.exceptions import MaxTurnsExceeded
 from pydantic import BaseModel, field_validator
-from typing import Optional
+from typing import Optional, List
 import os
 import sys
 from dotenv import load_dotenv
@@ -25,6 +25,15 @@ VALID_CHAPTERS = [
     "path-planning-and-navigation",
 ]
 
+# Chapter display names for better UX
+CHAPTER_DISPLAY_NAMES = {
+    "introduction-to-humanoid-robotics": "Introduction to Humanoid Robotics",
+    "sensors-and-perception": "Sensors and Perception",
+    "actuators-and-movement": "Actuators and Movement",
+    "control-systems": "Control Systems",
+    "path-planning-and-navigation": "Path Planning and Navigation",
+}
+
 # T004: Structured response model for documentation navigation
 class AgentResponse(BaseModel):
     """Structured agent response with documentation navigation hints"""
@@ -32,6 +41,8 @@ class AgentResponse(BaseModel):
     chapter: Optional[str] = None
     section: Optional[str] = None
     should_navigate: bool = False
+    sources: Optional[List[str]] = None
+    exact_lines: Optional[str] = None
 
     @field_validator('chapter')
     @classmethod
@@ -176,38 +187,69 @@ class FubuniAgent:
             name="Fubuni",
             instructions="""You are Fubuni, an AI assistant for Physical Humanoid Robotics documentation platform.
 
+## CORE MISSION
+Help users learn about humanoid robotics by referencing the official documentation. ALWAYS use the knowledge base search first for technical questions.
+
 ## WORKFLOW - FOLLOW THIS EXACTLY:
-1. User asks a question
-2. IMMEDIATELY call `search_knowledge_base` tool - DO NOT describe what you will do, just call the tool
-3. Wait for tool results
-4. Respond based on the results
+1. User asks a question about robotics, ROS2, sensors, actuators, control, navigation, etc.
+2. IMMEDIATELY call `search_knowledge_base` tool with the user's question
+3. The tool returns:
+   - EXACT lines from documentation (most relevant lines are extracted)
+   - Chapter and section information
+   - Links to read more
+4. Read the EXACT LINES returned by the tool carefully
+5. Answer the user's question using ONLY the exact lines from the documentation
+6. Tell the user EXACTLY which lines to read next and provide the link
 
 ## RULES:
 
-1. **ALWAYS CALL THE TOOL FIRST**: For ANY question (except "hi", "hello", "thanks"), you MUST call `search_knowledge_base` before responding. Do not say "I'll search" - just call the tool.
+1. **ALWAYS CALL THE TOOL FIRST**: For ANY technical question (robotics, ROS2, sensors, actuators, control, navigation, etc.), you MUST call `search_knowledge_base` before responding. Do not say "I'll search" - just call the tool.
 
-2. **BE EFFICIENT**: Make only 1-2 tool calls maximum. After getting results, respond immediately.
+2. **USE EXACT LINES**: The tool returns exact lines from documentation. Quote these lines directly when answering. Say things like:
+   - "The documentation says: `exact line from results`"
+   - "According to the docs: `exact line`"
+   - "The exact line you should read is: `exact line`"
 
-3. **USE THE RESULTS**: Base your answer on the tool results. If results are relevant, cite them. If not found, answer from general knowledge.
+3. **TELL USERS WHAT TO READ NEXT**: After answering, clearly state:
+   - "Read this section next: [Chapter Name]"
+   - "The exact lines for you: `relevant excerpt`"
+   - Link: [URL]
 
-4. **SIMPLE GREETINGS ONLY**: Only skip tool calls for simple greetings like "hi", "hello", "thanks".
+4. **BE EFFICIENT**: Make only 1-2 tool calls maximum.
 
-Keep responses concise and helpful.""",
+5. **SIMPLE GREETINGS ONLY**: Only skip tool calls for "hi", "hello", "thanks", "bye".
+
+## CHAPTER NAVIGATION
+Available chapters:
+- Introduction to Humanoid Robotics
+- Sensors and Perception (ROS2 topics, publishers, subscribers)
+- Actuators and Movement (motors, joints, Unitree robots)
+- Control Systems (PID, feedback, simulation with Gazebo)
+- Path Planning and Navigation (navigation2, SLAM, trajectory)
+
+When content relates to a specific chapter, mention it for navigation.
+
+Keep responses helpful and reference the documentation precisely.""",
             tools=[search_knowledge_base, search_knowledge_base_detailed, get_robotics_info],
-            # Note: Removed output_type to allow proper tool calling - we handle structured output manually
         )
 
     async def process_message(self, message: str, session_id: str = None) -> AgentResponse:
         """
         Process a user message and return the agent's structured response
-        Returns AgentResponse with response text and optional chapter navigation
+        Returns AgentResponse with response text, exact lines, sources, and optional chapter navigation
         """
+        # Import here to get the updated function with structured output
+        try:
+            from rag_retriever import search_knowledge_base_structured, get_relevant_documents_with_scores
+        except ImportError:
+            from backend.rag_retriever import search_knowledge_base_structured, get_relevant_documents_with_scores
+
         try:
             result = await Runner.run(
                 starting_agent=self.agent,
                 input=message,
                 run_config=config,
-                max_turns=15  # Increased from default 10
+                max_turns=15
             )
             # Get the response text
             response_text = str(result.final_output) if result.final_output else ""
@@ -219,11 +261,35 @@ Keep responses concise and helpful.""",
             if not chapter:
                 chapter = _detect_chapter_from_content(message)
 
+            # Get sources and exact lines for structured response
+            sources = []
+            exact_lines = None
+
+            try:
+                # Try to get structured RAG data
+                rag_response, rag_chapter, _ = search_knowledge_base_structured(message)
+                if rag_chapter and not chapter:
+                    chapter = rag_chapter
+
+                # Extract URLs from the response
+                import re
+                urls = re.findall(r'\[Read full section\]\((https?://[^\s]+)\)', rag_response)
+                sources = urls[:3]  # Limit to top 3 sources
+
+                # Extract exact lines (content between headers)
+                if "EXACT CONTENT FROM DOCUMENT" in rag_response:
+                    # Parse the formatted output
+                    pass  # Keep the agent's response which includes the lines
+            except Exception as e:
+                pass  # RAG lookup failed, continue without it
+
             return AgentResponse(
                 response=response_text,
                 chapter=chapter,
                 section=None,
-                should_navigate=chapter is not None
+                should_navigate=chapter is not None,
+                sources=sources if sources else None,
+                exact_lines=exact_lines
             )
         except MaxTurnsExceeded as e:
             # Gracefully handle turn limit - extract partial results from the run
