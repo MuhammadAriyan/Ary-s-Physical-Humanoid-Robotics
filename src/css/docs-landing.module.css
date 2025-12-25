@@ -1,0 +1,405 @@
+/* Keyframe Animations */
+@keyframes textFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes textFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes chaptersFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Container */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Home Icon */
+.homeIcon {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  width: clamp(20px, 5vw, 28px);
+  height: clamp(20px, 5vw, 28px);
+  color: var(--color-black);
+  transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .homeIcon {
+  color: var(--color-white);
+}
+
+.homeIcon:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+/* Allow scrolling with hidden scrollbar */
+html,
+body {
+  overflow: auto;
+  max-height: 100vh;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Dark mode support */
+[data-theme='dark'] .container {
+  background: var(--color-black);
+}
+
+/* Intro Section */
+.intro {
+  text-align: center;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.5s ease;
+}
+
+.introVisible {
+  opacity: 1;
+}
+
+.introExit {
+  animation: textFadeOut 0.7s ease-in forwards;
+}
+
+.introHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Journey into text */
+.journeyText {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-black);
+  margin: 0;
+  opacity: 0;
+  animation: textFadeIn 0.8s ease-out forwards;
+}
+
+[data-theme='dark'] .journeyText {
+  color: var(--color-white);
+}
+
+/* Main title text */
+.titleText {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 6vw, 3rem);
+  font-weight: 700;
+  color: var(--color-black);
+  margin: 1rem 0 0;
+  opacity: 0;
+  animation: textFadeIn 0.8s ease-out 0.8s forwards;
+  line-height: 1.2;
+}
+
+[data-theme='dark'] .titleText {
+  color: var(--color-white);
+}
+
+/* Arrow Container */
+.arrowContainer {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  width: clamp(30px, 6vw, 40px);
+  height: clamp(30px, 6vw, 40px);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease;
+}
+
+.arrowVisible {
+  opacity: 1;
+}
+
+/* Arrow SVG - no animation, just appears */
+.arrow {
+  width: 100%;
+  height: 100%;
+  color: var(--color-black);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+[data-theme='dark'] .arrow {
+  color: var(--color-white);
+}
+
+.arrowVisible .arrow {
+  opacity: 1;
+}
+
+.arrowExit {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Chapters Section */
+.chapters {
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem;
+  opacity: 0;
+  display: none;
+}
+
+.chaptersVisible {
+  display: block;
+  animation: chaptersFadeIn 0.6s ease-out forwards;
+}
+
+.chaptersHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.chaptersTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  color: var(--color-black);
+  margin: 0 0 0.5rem;
+}
+
+[data-theme='dark'] .chaptersTitle {
+  color: var(--color-white);
+}
+
+.chaptersSubtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+[data-theme='dark'] .chaptersSubtitle {
+  color: #999;
+}
+
+/* Chapters Grid */
+.chaptersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+/* Chapter Card */
+.chapterCard {
+  display: block;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: rgba(128, 128, 128, 0.05);
+  border: 1px solid rgba(128, 128, 128, 0.1);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.chapterCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  border-color: rgba(128, 128, 128, 0.2);
+}
+
+[data-theme='dark'] .chapterCard {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .chapterCard:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.chapterIcon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.chapterTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin: 0 0 0.5rem;
+}
+
+[data-theme='dark'] .chapterTitle {
+  color: var(--color-white);
+}
+
+.chapterDesc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+[data-theme='dark'] .chapterDesc {
+  color: #999;
+}
+
+.chapterMeta {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.chapterTag {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+[data-theme='dark'] .chapterTag {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+.chapterDuration {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+/* Appendices Section */
+.appendicesSection {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.1);
+  text-align: center;
+}
+
+[data-theme='dark'] .appendicesSection {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.appendicesTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #888;
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.appendicesLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.appendixLink {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #666;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.appendixLink:hover {
+  color: var(--color-black);
+  background: rgba(128, 128, 128, 0.1);
+}
+
+[data-theme='dark'] .appendixLink:hover {
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .journeyText {
+    animation: none;
+    opacity: 1;
+  }
+
+  .titleText {
+    animation: none;
+    opacity: 1;
+  }
+
+  .arrow {
+    animation: none;
+    opacity: 1;
+  }
+
+  .introExit {
+    animation: none;
+    opacity: 0;
+  }
+
+  .chapters {
+    animation: none;
+    opacity: 1;
+    display: block;
+  }
+
+  .chaptersVisible {
+    animation: none;
+    opacity: 1;
+    display: block;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chaptersGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .appendicesLinks {
+    flex-direction: column;
+    align-items: center;
+  }
+}

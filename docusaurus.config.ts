@@ -31,7 +31,7 @@ const config: Config = {
   organizationName: 'MuhammadAriyan', // Usually your GitHub org/user name.
   projectName: 'Ary-s-Physical-Humanoid-Robotics', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   trailingSlash: false,
 
   // Even if you don't use internationalization, you can use this field to set

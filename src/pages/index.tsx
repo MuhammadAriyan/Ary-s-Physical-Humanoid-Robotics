@@ -21,7 +21,7 @@ function Navbar() {
           Ary's Robotics
         </Link>
         <div className="navbar-menu">
-        <Link to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics" className="navbar-link">
+        <Link to="/docs" className="navbar-link">
           Book
         </Link>
           <Link to="#features" className="navbar-link">
@@ -42,7 +42,7 @@ function ThemeToggle() {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-    
+
     document.documentElement.setAttribute('data-theme', theme);
     setIsDark(theme === 'dark');
   }, []);
@@ -55,8 +55,8 @@ function ThemeToggle() {
   };
 
   return (
-    <button 
-      className="theme-toggle" 
+    <button
+      className="theme-toggle"
       onClick={toggleTheme}
       aria-label="Toggle theme"
     >
@@ -77,12 +77,12 @@ function Hero() {
             Ary's Physical & Humanoid Robotics
           </h1>
           <p className="hero-subtitle">
-            A comprehensive guide to fascinating world of robotics, 
-            from fundamental concepts to advanced applications in humanoid systems.
+            A comprehensive guide to the fascinating world of Physical AI and humanoid robotics,
+            from fundamental concepts to advanced applications in embodied intelligence.
           </p>
           <div className="hero-actions">
             <Link
-              to="/docs/humanoid-robotics-course/introduction-to-humanoid-robotics"
+              to="/docs"
               className="btn btn-primary"
             >
               <span>Start Learning</span>
@@ -105,33 +105,33 @@ function Features() {
   const features = [
     {
       icon: '🧠',
-      title: 'AI-Driven Content',
-      description: 'Continuously updated with the latest advancements in robotics research and technology.'
+      title: 'Physical AI & Embodied Intelligence',
+      description: 'Learn how AI systems interact with the physical world through sensors, actuators, and real-time decision making.'
     },
     {
-      icon: '📚',
-      title: 'Comprehensive Coverage',
-      description: 'From basic principles to advanced humanoid systems, covering all essential topics.'
+      icon: '🤖',
+      title: 'ROS 2 Robot Operating System',
+      description: 'Master the industry-standard framework for building robot applications with modern tools and best practices.'
+    },
+    {
+      icon: '🎮',
+      title: 'Robot Simulation',
+      description: 'Develop and test algorithms in Gazebo and NVIDIA Isaac Sim before deploying to real hardware.'
+    },
+    {
+      icon: '🦿',
+      title: 'Humanoid Development',
+      description: 'Explore bipedal locomotion, manipulation, and human-robot interaction with Unitree and other platforms.'
+    },
+    {
+      icon: '🗣️',
+      title: 'Conversational AI',
+      description: 'Integrate GPT models and speech systems for natural human-robot communication.'
     },
     {
       icon: '🔧',
-      title: 'Practical Examples',
-      description: 'Real-world applications and hands-on examples to reinforce learning.'
-    },
-    {
-      icon: '✨',
-      title: 'Interactive Learning',
-      description: 'Engaging content with visualizations and interactive demonstrations.'
-    },
-    {
-      icon: '🎯',
-      title: 'Progressive Path',
-      description: 'Carefully structured curriculum from beginner to advanced topics.'
-    },
-    {
-      icon: '🌟',
-      title: 'Always Current',
-      description: 'Content evolves with the field of robotics and latest best practices.'
+      title: 'Hands-On Examples',
+      description: 'Practical code examples with ROS 2, Python, and real hardware integration patterns.'
     }
   ];
 
@@ -141,7 +141,7 @@ function Features() {
         <div className="features-header">
           <h2 className="features-title">Why Choose This Robotics Book?</h2>
           <p className="features-subtitle">
-            Experience a revolutionary approach to learning robotics with cutting-edge content
+            Experience a revolutionary approach to learning Physical AI and humanoid robotics
           </p>
         </div>
         <div className="features-grid">
@@ -162,52 +162,52 @@ function Features() {
 function Chapters() {
   const chapters = [
     {
-      icon: '🤖',
-      title: 'Introduction to Humanoid Robotics',
-      description: 'Begin your journey into the fascinating world of humanoid robots and their fundamental concepts.',
-      link: '/docs/humanoid-robotics-course/introduction-to-humanoid-robotics',
-      level: 'Beginner',
-      duration: '15 min'
+      icon: '🧠',
+      title: 'Physical AI Foundations',
+      description: 'Introduction to embodied intelligence, sensors, and the transition from digital AI to physical systems.',
+      link: '/docs/part-1-foundations/introduction-to-physical-ai',
+      level: 'Week 1-2',
+      duration: '20 hours'
     },
     {
-      icon: '👁️',
-      title: 'Sensors and Perception',
-      description: 'Explore how robots perceive and understand their environment through advanced sensing technologies.',
-      link: '/docs/humanoid-robotics-course/sensors-and-perception',
-      level: 'Beginner',
-      duration: '20 min'
-    },
-    {
-      icon: '⚙️',
-      title: 'Actuators and Movement',
-      description: 'Learn about mechanical systems that enable robots to move and interact with the physical world.',
-      link: '/docs/humanoid-robotics-course/actuators-and-movement',
-      level: 'Intermediate',
-      duration: '25 min'
+      icon: '🔧',
+      title: 'ROS 2 Fundamentals',
+      description: 'Master robot operating system concepts including nodes, topics, services, and actions.',
+      link: '/docs/part-2-ros2/ros2-fundamentals',
+      level: 'Week 3-5',
+      duration: '40 hours'
     },
     {
       icon: '🎮',
-      title: 'Control Systems',
-      description: 'Master algorithms and systems that govern robot behavior and decision-making processes.',
-      link: '/docs/humanoid-robotics-course/control-systems',
-      level: 'Intermediate',
-      duration: '30 min'
+      title: 'Robot Simulation',
+      description: 'Build and test robots in Gazebo and Unity with realistic physics and sensor simulation.',
+      link: '/docs/part-3-simulation/gazebo-unity-simulation',
+      level: 'Week 6-7',
+      duration: '35 hours'
     },
     {
-      icon: '🗺️',
-      title: 'Path Planning and Navigation',
-      description: 'Understand how robots navigate complex environments and plan optimal paths to their goals.',
-      link: '/docs/humanoid-robotics-course/path-planning-and-navigation',
-      level: 'Advanced',
-      duration: '35 min'
+      icon: '🎯',
+      title: 'NVIDIA Isaac Platform',
+      description: 'GPU-accelerated simulation, AI perception, and reinforcement learning for robots.',
+      link: '/docs/part-4-isaac/nvidia-isaac-platform',
+      level: 'Week 8-10',
+      duration: '45 hours'
     },
     {
-      icon: '🚀',
-      title: 'Advanced Topics',
-      description: 'Explore cutting-edge research in machine learning, computer vision, and human-robot interaction.',
-      link: '/docs/humanoid-robotics-course/introduction-to-humanoid-robotics',
-      level: 'Advanced',
-      duration: '40 min'
+      icon: '🦿',
+      title: 'Humanoid Development',
+      description: 'Kinematics, bipedal locomotion, manipulation, and natural human-robot interaction.',
+      link: '/docs/part-5-humanoid/humanoid-robot-development',
+      level: 'Week 11-12',
+      duration: '40 hours'
+    },
+    {
+      icon: '🗣️',
+      title: 'Conversational Robotics',
+      description: 'Integrate GPT models, speech recognition, and multi-modal interaction for natural dialogue.',
+      link: '/docs/part-6-conversational/conversational-robotics',
+      level: 'Week 13',
+      duration: '20 hours'
     }
   ];
 
@@ -215,9 +215,9 @@ function Chapters() {
     <section id="chapters" className="chapters">
       <div className="container">
         <div className="chapters-header">
-          <h2 className="chapters-title">Complete Course Curriculum</h2>
+          <h2 className="chapters-title">13-Week Complete Course</h2>
           <p className="chapters-subtitle">
-            Master humanoid robotics from fundamentals to advanced applications
+            Master Physical AI and humanoid robotics from foundations to advanced applications
           </p>
         </div>
         <div className="chapters-grid">
@@ -275,7 +275,7 @@ export default function Home(): React.ReactNode {
   return (
     <Layout
       title="Ary's Physical & Humanoid Robotics"
-      description="A comprehensive guide to Physical & Humanoid Robotics">
+      description="A comprehensive guide to Physical AI and Humanoid Robotics">
       <a href="#main-content" className="skip-to-main">
         Skip to main content
       </a>
