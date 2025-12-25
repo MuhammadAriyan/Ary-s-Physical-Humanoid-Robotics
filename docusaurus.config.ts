@@ -55,7 +55,7 @@ const config: Config = {
         },
 
         theme: {
-          customCss: ['./src/css/custom.css', './src/css/docs.css', './src/css/docs-landing.module.css'],
+          customCss: ['./src/css/custom.css', './src/css/docs.css'],
         },
       } satisfies Preset.Options,
     ],
