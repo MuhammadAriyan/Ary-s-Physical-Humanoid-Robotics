@@ -405,3 +405,217 @@ body::-webkit-scrollbar {
     align-items: center;
   }
 }
+
+/* ==========================================
+   Premium Chat Navigation Button - Black & White design
+   ========================================== */
+.chatNavButton {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: #000000;
+  color: #ffffff;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid #000000;
+  opacity: 0;
+  transform: translateY(100px) scale(0.8);
+  pointer-events: none;
+  transition:
+    opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+[data-theme='dark'] .chatNavButton {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+.chatNavButton.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.chatNavButton:hover {
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  background: #1a1a1a;
+}
+
+[data-theme='dark'] .chatNavButton:hover {
+  color: #000000;
+  background: #f0f0f0;
+}
+
+.chatNavButton.hovered {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.chatNavButton:active {
+  transform: translateY(0) scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.glowRing {
+  position: absolute;
+  inset: -2px;
+  border-radius: 100px;
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme='dark'] .glowRing {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.chatNavButton.hovered .glowRing {
+  opacity: 1;
+}
+
+.pulseRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  z-index: -2;
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+[data-theme='dark'] .pulseRing {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.chatNavButton.visible .pulseRing {
+  animation-delay: 1s;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+.chatNavButton.hovered .pulseRing {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 22px;
+  height: 22px;
+  font-size: 20px;
+}
+
+.labelWrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.chatLabel {
+  display: inline-block;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+[data-theme='dark'] .shine {
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+}
+
+.chatNavButton.hovered .shine {
+  animation: shine 0.6s ease-in-out;
+}
+
+@keyframes shine {
+  from { left: -100%; }
+  to { left: 200%; }
+}
+
+@media (max-width: 768px) {
+  .chatNavButton {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    font-size: 14px;
+    gap: 8px;
+  }
+  .iconWrapper {
+    width: 20px;
+    height: 20px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chatNavButton {
+    bottom: 16px;
+    right: 16px;
+    padding: 12px 18px;
+    font-size: 13px;
+  }
+  .iconWrapper {
+    width: 18px;
+    height: 18px;
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chatNavButton,
+  .glowRing,
+  .pulseRing,
+  .shine {
+    animation: none !important;
+    transition-duration: 0.1s !important;
+  }
+  .chatNavButton.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .chatNavButton.hovered {
+    transform: translateY(-2px) scale(1.01);
+  }
+}
+
+.chatNavButton:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 4px;
+}
+
+[data-theme='dark'] .chatNavButton:focus-visible {
+  outline-color: #ffffff;
+}

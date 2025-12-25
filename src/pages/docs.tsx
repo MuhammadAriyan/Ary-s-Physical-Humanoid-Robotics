@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import clsx from 'clsx';
-import styles from '../theme/FubuniChatInjector/style.module.css';
+import styles from '../theme/FubuniChatInjector/styles.module.css';
 
 export default function DocsLanding(): React.ReactNode {
   // Start with 'intro' - chapters will only appear after intro animation completes
