@@ -3,7 +3,7 @@ import Link from '@docusaurus/Link';
 import clsx from 'clsx';
 import styles from '../css/docs-landing.module.css';
 
-export default function DocsLanding(): JSX.Element {
+export default function DocsLanding(): React.ReactNode {
   const [phase, setPhase] = useState<'intro' | 'title' | 'arrow' | 'exit' | 'chapters'>('intro');
   const [reducedMotion, setReducedMotion] = useState(false);
 
