@@ -52,13 +52,13 @@ def get_embeddings():
     """Get or create HuggingFace embeddings (FREE, no API key needed)"""
     global _embeddings
     if _embeddings is None:
-        logger.info("Initializing HuggingFace Sentence Transformer embeddings...")
+        logger.info("Initializing HuggingFace BGE embeddings (BAAI/bge-large-en-v1.5)...")
         _embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2",
+            model_name="BAAI/bge-large-en-v1.5",
             model_kwargs={'device': 'cpu'},
             encode_kwargs={'normalize_embeddings': True}
         )
-        logger.info("HuggingFace embeddings initialized successfully")
+        logger.info("HuggingFace BGE embeddings initialized successfully (1024 dims)")
     return _embeddings
 
 def get_vector_store():
