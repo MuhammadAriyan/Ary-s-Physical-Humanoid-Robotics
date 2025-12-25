@@ -87,10 +87,20 @@ def delete_qdrant_collection():
             client.get_collection(QDRANT_COLLECTION_NAME)
             client.delete_collection(QDRANT_COLLECTION_NAME)
             print(f"   [OK] Collection '{QDRANT_COLLECTION_NAME}' deleted")
-        except Exception:
+        except Exception as e:
+            if "Forbidden" in str(e) or "403" in str(e):
+                print(f"   [ERROR] Permission denied! Your API key is READ-ONLY.")
+                print(f"   [ERROR] To run this script, you need a GLOBAL ACCESS key.")
+                print(f"   [ERROR] Get it from Qdrant Cloud dashboard -> API Keys -> Create with 'Manage' access")
+                sys.exit(1)
             print(f"   [OK] Collection '{QDRANT_COLLECTION_NAME}' does not exist (skipping)")
 
     except Exception as e:
+        if "Forbidden" in str(e) or "403" in str(e):
+            print(f"   [ERROR] Permission denied! Your API key is READ-ONLY.")
+            print(f"   [ERROR] To run this script, you need a GLOBAL ACCESS key.")
+            print(f"   [ERROR] Get it from Qdrant Cloud dashboard -> API Keys -> Create with 'Manage' access")
+            sys.exit(1)
         print(f"   [ERROR] Error deleting Qdrant collection: {e}")
         raise
 
@@ -175,13 +185,21 @@ def index_docs_folder():
     # Create collection
     print(f"   [OK] Creating collection: {QDRANT_COLLECTION_NAME}")
 
-    client.create_collection(
-        collection_name=QDRANT_COLLECTION_NAME,
-        vectors_config=VectorParams(
-            size=1024,  # BAAI/bge-large-en-v1.5 dimension
-            distance=Distance.COSINE
+    try:
+        client.create_collection(
+            collection_name=QDRANT_COLLECTION_NAME,
+            vectors_config=VectorParams(
+                size=1024,  # BAAI/bge-large-en-v1.5 dimension
+                distance=Distance.COSINE
+            )
         )
-    )
+    except Exception as e:
+        if "Forbidden" in str(e) or "403" in str(e):
+            print(f"\n   [ERROR] Permission denied! Your API key is READ-ONLY.")
+            print(f"   [ERROR] To run this script, you need a GLOBAL ACCESS key.")
+            print(f"   [ERROR] Get it from Qdrant Cloud dashboard -> API Keys -> Create with 'Manage' access")
+            sys.exit(1)
+        raise
 
     # Process and upload documents with enhanced metadata
     print(f"   [OK] Processing and uploading {len(splits)} document chunks...")

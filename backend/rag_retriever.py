@@ -5,13 +5,53 @@ Uses Sentence Transformers (HuggingFace) for FREE embeddings - no OpenAI needed!
 
 import os
 import logging
-from typing import List
+from typing import List, Dict, Any, Optional
+from dataclasses import dataclass
 import hashlib
 
 from qdrant_client import QdrantClient
 from langchain_qdrant import QdrantVectorStore
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
+
+
+# Chapter mapping - maps doc folder names to display names
+CHAPTER_MAP = {
+    "part-1-introduction": "introduction-to-humanoid-robotics",
+    "part-2-ros2": "sensors-and-perception",  # Will be overridden by section detection
+    "part-3-simulation": "control-systems",  # Will be overridden by section detection
+    "part-4-hardware": "actuators-and-movement",  # Will be overridden by section detection
+    "part-5-projects": "path-planning-and-navigation",  # Will be overridden by section detection
+}
+
+# T005: Valid chapters for documentation navigation
+VALID_CHAPTERS = [
+    "introduction-to-humanoid-robotics",
+    "sensors-and-perception",
+    "actuators-and-movement",
+    "control-systems",
+    "path-planning-and-navigation",
+]
+
+
+@dataclass
+class DocSection:
+    """Represents a documentation section with exact content"""
+    title: str
+    content: str
+    url: str
+    source_path: str
+
+
+@dataclass
+class DocReference:
+    """Complete reference to a documentation section for navigation"""
+    section: str
+    chapter: str
+    exact_lines: str
+    url: str
+    relevance_score: float
+
 
 # Import settings
 def get_settings():
@@ -145,27 +185,177 @@ def get_relevant_documents_with_scores(query: str, top_k: int = 5) -> List[tuple
         logger.error(f"Error retrieving documents with scores: {e}")
         return []
 
+def detect_chapter_from_content(content: str) -> Optional[str]:
+    """Detect the appropriate chapter based on content keywords."""
+    content_lower = content.lower()
+
+    # Check for chapter-related keywords
+    if any(kw in content_lower for kw in ['introduction', 'basics', 'overview', 'what is', 'humanoid robot', 'getting started', 'course outline', 'part 1']):
+        return "introduction-to-humanoid-robotics"
+    elif any(kw in content_lower for kw in ['sensor', 'camera', 'lidar', 'perception', 'vision', 'detection', 'sensing', 'ros2', 'topic', 'publisher', 'subscriber', 'node']):
+        return "sensors-and-perception"
+    elif any(kw in content_lower for kw in ['actuator', 'motor', 'servo', 'movement', 'joint', 'dof', 'locomotion', 'unitree', 'go1', 'go2', 'aliengo']):
+        return "actuators-and-movement"
+    elif any(kw in content_lower for kw in ['control', 'pid', 'feedback', 'stability', 'loop', 'controller', 'simulation', 'gazebo', 'rviz']):
+        return "control-systems"
+    elif any(kw in content_lower for kw in ['navigation', 'path planning', 'slam', 'trajectory', 'waypoint', 'nav2', 'cartographer', 'navigation2']):
+        return "path-planning-and-navigation"
+    return None
+
+
+def extract_exact_lines(content: str, query: str, max_lines: int = 10) -> str:
+    """Extract the most relevant lines from content based on query keywords."""
+    lines = content.split('\n')
+    query_words = set(query.lower().split())
+
+    # Score each line by query relevance
+    line_scores = []
+    for i, line in enumerate(lines):
+        line_lower = line.lower()
+        score = 0
+        for word in query_words:
+            if word in line_lower:
+                score += 1
+        # Bonus for lines with headings
+        if line.strip().startswith('#'):
+            score += 2
+        # Bonus for code blocks
+        if line.strip().startswith('```') or '```' in line:
+            score += 1
+        line_scores.append((i, score, line))
+
+    # Sort by score and get top lines
+    line_scores.sort(key=lambda x: -x[1])
+    top_lines = [line for _, _, line in line_scores[:max_lines] if line.strip()]
+
+    # Preserve order of top lines by original position
+    if top_lines:
+        top_line_indices = {line: i for i, line in enumerate(lines) if line in top_lines}
+        top_lines.sort(key=lambda x: top_line_indices.get(x, 999))
+
+    return '\n'.join(top_lines)
+
+
+def format_doc_reference(doc: Document, query: str, score: float = 0.0) -> str:
+    """Format a document as a detailed reference with exact lines."""
+    source = doc.metadata.get('source', 'Unknown')
+    url = doc.metadata.get('url', '')
+    title = doc.metadata.get('title', '')
+    section = doc.metadata.get('section', '')
+    chapter = doc.metadata.get('part', '')
+
+    # Detect chapter from content
+    detected_chapter = detect_chapter_from_content(doc.page_content)
+    if detected_chapter:
+        chapter = detected_chapter
+
+    # Format chapter name nicely
+    chapter_display = chapter.replace('-', ' ').title() if chapter else 'General'
+
+    # Extract exact relevant lines
+    exact_lines = extract_exact_lines(doc.page_content, query, max_lines=15)
+
+    # Build formatted reference
+    score_str = f"{score:.2%}" if score > 0 else "N/A"
+    ref = f"""
+╔══════════════════════════════════════════════════════════════╗
+║ DOCUMENT REFERENCE                                            ║
+╠══════════════════════════════════════════════════════════════╣
+║ Chapter: {chapter_display:<52} ║
+║ Section: {section[:52] if section else 'General':<52} ║
+║ File: {source[:52] if source else 'Unknown':<52} ║
+║ Relevance: {score_str:<52} ║
+╠══════════════════════════════════════════════════════════════╣
+║ EXACT CONTENT FROM DOCUMENT:                                  ║
+╠══════════════════════════════════════════════════════════════╣
+{exact_lines}
+╠══════════════════════════════════════════════════════════════╣
+║ READ MORE: {url[:52] if url else 'N/A':<52} ║
+╚══════════════════════════════════════════════════════════════╝"""
+    return ref
+
+
 def search_knowledge_base(query: str) -> str:
     """
     Search the knowledge base - main function used by the agent.
+    Returns detailed documentation references with exact lines and chapter info.
     Uses FREE Sentence Transformers embeddings!
     """
-    documents = get_relevant_documents(query)
+    results = get_relevant_documents_with_scores(query, top_k=5)
 
-    if not documents:
+    if not results:
         return "No relevant information found in knowledge base."
 
-    # Format results
-    sources = []
-    for doc in documents:
+    # Format results with detailed references
+    references = []
+    for doc, score in results:
+        ref = format_doc_reference(doc, query, score)
+        references.append(ref)
+
+    # Build summary
+    summary = f"""
+╔══════════════════════════════════════════════════════════════╗
+║  📚 KNOWLEDGE BASE SEARCH RESULTS                             ║
+║  Query: "{query}"                                             ║
+╠══════════════════════════════════════════════════════════════╣
+Found {len(references)} relevant documentation sections:
+
+{chr(10).join(references)}
+
+╔══════════════════════════════════════════════════════════════╗
+║  NAVIGATION HINTS                                             ║
+╠══════════════════════════════════════════════════════════════╣
+Based on your query, you may want to read:
+"""
+
+    # Add chapter-specific hints
+    for doc, score in results[:2]:  # Top 2 results
+        chapter = detect_chapter_from_content(doc.page_content)
+        if chapter:
+            chapter_display = chapter.replace('-', ' ').title()
+            url = doc.metadata.get('url', '')
+            summary += f"  • {chapter_display}: {url}\n"
+
+    summary += """
+The exact lines above are pulled directly from the documentation.
+Use the "READ MORE" link to see the full context.
+"""
+
+    return summary
+
+
+def search_knowledge_base_structured(query: str) -> tuple:
+    """
+    Search the knowledge base and return structured data.
+    Returns: (response_text, chapter, should_navigate)
+    """
+    results = get_relevant_documents_with_scores(query, top_k=3)
+
+    if not results:
+        return "No relevant information found in knowledge base.", None, False
+
+    # Detect primary chapter from top result
+    primary_chapter = None
+    for doc, score in results:
+        chapter = detect_chapter_from_content(doc.page_content)
+        if chapter:
+            primary_chapter = chapter
+            break
+
+    # Build response with exact lines
+    response_parts = ["**Relevant Documentation:**\n"]
+    for i, (doc, score) in enumerate(results):
         source = doc.metadata.get('source', 'Unknown')
-        title = doc.metadata.get('title', '')
+        url = doc.metadata.get('url', '')
+        section = doc.metadata.get('section', '')
+        exact_lines = extract_exact_lines(doc.page_content, query, max_lines=8)
 
-        source_info = f"Source: {source}"
-        if title:
-            source_info += f" - {title}"
+        response_parts.append(f"""
+**[{i+1}] {source}** (Relevance: {score:.1%})
+{section}
+{exact_lines}
+🔗 [Read full section]({url})
+""")
 
-        content = doc.page_content[:500] + "..." if len(doc.page_content) > 500 else doc.page_content
-        sources.append(f"{source_info}\nContent: {content}")
-
-    return "Relevant information found:\n\n" + "\n\n---\n\n".join(sources)
+    response_text = '\n'.join(response_parts)
+    return response_text, primary_chapter, primary_chapter is not None
