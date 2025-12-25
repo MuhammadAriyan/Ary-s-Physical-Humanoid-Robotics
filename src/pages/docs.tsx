@@ -1,34 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from '@docusaurus/Link';
-import clsx from 'clsx';
 import styles from '../theme/FubuniChatInjector/styles.module.css';
 
 export default function DocsLanding(): React.ReactNode {
-  // Start with 'intro' - chapters will only appear after intro animation completes
-  const [phase, setPhase] = useState<'intro' | 'title' | 'arrow' | 'exit' | 'chapters'>('intro');
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    setReducedMotion(prefersReducedMotion);
-
-    if (prefersReducedMotion) {
-      setPhase('chapters');
-      return;
-    }
-
-    // Animation sequence: intro → title → arrow → exit → chapters
-    const timers = [
-      setTimeout(() => setPhase('title'), 800),
-      setTimeout(() => setPhase('arrow'), 1600),
-      setTimeout(() => setPhase('exit'), 2500),
-      setTimeout(() => setPhase('chapters'), 3200),
-    ];
-
-    return () => timers.forEach(clearTimeout);
-  }, []);
-
   return (
     <div className={styles.container}>
       {/* Home Icon */}
@@ -38,25 +12,13 @@ export default function DocsLanding(): React.ReactNode {
         </svg>
       </Link>
 
-      {/* Intro Section */}
-      <div
-        className={clsx(
-          styles.intro,
-          phase !== 'chapters' && styles.introVisible,
-          phase === 'exit' && styles.introExit,
-          phase === 'chapters' && styles.introHidden
-        )}
-      >
+      {/* Intro Section - CSS animated */}
+      <div className={styles.intro}>
         <h1 className={styles.journeyText}>Journey into</h1>
         <h2 className={styles.titleText}>Ary's Humanoid Robots and Physical AI</h2>
-        <div
-          className={clsx(
-            styles.arrowContainer,
-            (phase === 'arrow' || phase === 'exit') && styles.arrowVisible
-          )}
-        >
+        <div className={styles.arrowContainer}>
           <svg
-            className={clsx(styles.arrow, phase === 'exit' && styles.arrowExit)}
+            className={styles.arrow}
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -69,13 +31,8 @@ export default function DocsLanding(): React.ReactNode {
         </div>
       </div>
 
-      {/* Chapters Navigation */}
-      <div
-        className={clsx(
-          styles.chapters,
-          phase === 'chapters' && styles.chaptersVisible
-        )}
-      >
+      {/* Chapters Navigation - CSS animated */}
+      <div className={styles.chapters}>
         <div className={styles.chaptersHeader}>
           <h2 className={styles.chaptersTitle}>13-Week Complete Course</h2>
           <p className={styles.chaptersSubtitle}>
