@@ -4,26 +4,35 @@ import clsx from 'clsx';
 import styles from '../theme/FubuniChatInjector/styles.module.css';
 
 export default function DocsLanding(): React.ReactNode {
-  // Start with 'intro' - chapters will only appear after intro animation completes
+  const [hasSeenIntro, setHasSeenIntro] = useState(false);
   const [phase, setPhase] = useState<'intro' | 'title' | 'arrow' | 'exit' | 'chapters'>('intro');
-  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    setReducedMotion(prefersReducedMotion);
-
-    if (prefersReducedMotion) {
+    // Check if user has already seen the intro animation
+    const seen = localStorage.getItem('docsIntroSeen');
+    if (seen) {
+      setHasSeenIntro(true);
       setPhase('chapters');
       return;
     }
 
-    // Animation sequence: intro → title → arrow → exit → chapters
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      localStorage.setItem('docsIntroSeen', 'true');
+      setPhase('chapters');
+      return;
+    }
+
+    // Animation sequence with longer duration
     const timers = [
-      setTimeout(() => setPhase('title'), 800),
-      setTimeout(() => setPhase('arrow'), 1600),
-      setTimeout(() => setPhase('exit'), 2500),
-      setTimeout(() => setPhase('chapters'), 3200),
+      setTimeout(() => setPhase('title'), 1200),
+      setTimeout(() => setPhase('arrow'), 2200),
+      setTimeout(() => setPhase('exit'), 3500),
+      setTimeout(() => {
+        setPhase('chapters');
+        localStorage.setItem('docsIntroSeen', 'true');
+      }, 4500),
     ];
 
     return () => timers.forEach(clearTimeout);
