@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-part-6-conversational/06a-week-13-overview" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Week 13 Overview: Conversational AI Integration | Ary&#x27;s Physical &amp; Humanoid Robotics</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/06a-week-13-overview"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Week 13 Overview: Conversational AI Integration | Ary&#x27;s Physical &amp; Humanoid Robotics"><meta data-rh="true" name="description" content="This one-week module provides a focused learning plan for integrating conversational AI capabilities into humanoid robot systems. The curriculum builds upon previous knowledge of AI integration and ROS 2 to implement voice interaction, natural language understanding, and multi-modal communication."><meta data-rh="true" property="og:description" content="This one-week module provides a focused learning plan for integrating conversational AI capabilities into humanoid robot systems. The curriculum builds upon previous knowledge of AI integration and ROS 2 to implement voice interaction, natural language understanding, and multi-modal communication."><link data-rh="true" rel="icon" href="/Ary-s-Physical-Humanoid-Robotics/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/06a-week-13-overview"><link data-rh="true" rel="alternate" href="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/06a-week-13-overview" hreflang="en"><link data-rh="true" rel="alternate" href="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/06a-week-13-overview" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Week 13 Overview: Conversational AI Integration","item":"https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/06a-week-13-overview"}]}</script><link rel="stylesheet" href="/Ary-s-Physical-Humanoid-Robotics/assets/css/styles.abb38a41.css">
+<script src="/Ary-s-Physical-Humanoid-Robotics/assets/js/runtime~main.7290ef3b.js" defer="defer"></script>
+<script src="/Ary-s-Physical-Humanoid-Robotics/assets/js/main.7f2c837c.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Ary-s-Physical-Humanoid-Robotics/img/logo.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Ary-s-Physical-Humanoid-Robotics/"><div class="navbar__logo"><img src="/Ary-s-Physical-Humanoid-Robotics/img/logo.svg" alt="Ary&#x27;s Physical Humanoid Robotics Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Ary-s-Physical-Humanoid-Robotics/img/logo.svg" alt="Ary&#x27;s Physical Humanoid Robotics Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Ary&#x27;s Physical Humanoid Robotics</b></a><a class="navbar__item navbar__link" href="/Ary-s-Physical-Humanoid-Robotics/chat">Chat</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/MuhammadAriyan/Ary-s-Physical-Humanoid-Robotics" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-1-foundations/introduction-to-physical-ai"><span title="Part 1: Foundations (Weeks 1-2)" class="categoryLinkLabel_W154">Part 1: Foundations (Weeks 1-2)</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-1-foundations/introduction-to-physical-ai"><span title="Introduction to Physical AI" class="linkLabel_WmDU">Introduction to Physical AI</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-1-foundations/01a-week-1-2-overview"><span title="Week 1-2 Overview: Physical AI Foundations" class="linkLabel_WmDU">Week 1-2 Overview: Physical AI Foundations</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-2-ros2/ros2-fundamentals"><span title="Part 2: ROS 2 Fundamentals (Weeks 3-5)" class="categoryLinkLabel_W154">Part 2: ROS 2 Fundamentals (Weeks 3-5)</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-3-simulation/gazebo-unity-simulation"><span title="Part 3: Simulation (Weeks 6-7)" class="categoryLinkLabel_W154">Part 3: Simulation (Weeks 6-7)</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-4-isaac/nvidia-isaac-platform"><span title="Part 4: NVIDIA Isaac (Weeks 8-10)" class="categoryLinkLabel_W154">Part 4: NVIDIA Isaac (Weeks 8-10)</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/humanoid-robot-development"><span title="Part 5: Humanoid Development (Weeks 11-12)" class="categoryLinkLabel_W154">Part 5: Humanoid Development (Weeks 11-12)</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/conversational-robotics"><span title="Part 6: Conversational Robotics (Week 13)" class="categoryLinkLabel_W154">Part 6: Conversational Robotics (Week 13)</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/conversational-robotics"><span title="Conversational Robotics" class="linkLabel_WmDU">Conversational Robotics</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/06a-week-13-overview"><span title="Week 13 Overview: Conversational AI Integration" class="linkLabel_WmDU">Week 13 Overview: Conversational AI Integration</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/appendix/hardware-specifications"><span title="Appendices" class="categoryLinkLabel_W154">Appendices</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/Ary-s-Physical-Humanoid-Robotics/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Part 6: Conversational Robotics (Week 13)</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Week 13 Overview: Conversational AI Integration</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Week 13 Overview: Conversational AI Integration</h1></header>
+<p>This one-week module provides a focused learning plan for integrating conversational AI capabilities into humanoid robot systems. The curriculum builds upon previous knowledge of AI integration and ROS 2 to implement voice interaction, natural language understanding, and multi-modal communication.</p>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>This overview is part of <strong>Part 6: Conversational Robotics</strong> of the Physical AI &amp; Humanoid Robotics textbook. The complete textbook structure is available in the sidebar navigation.</p></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-focus-conversational-ai-integration">Week Focus: Conversational AI Integration<a href="#week-focus-conversational-ai-integration" class="hash-link" aria-label="Direct link to Week Focus: Conversational AI Integration" title="Direct link to Week Focus: Conversational AI Integration" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="learning-objectives">Learning Objectives<a href="#learning-objectives" class="hash-link" aria-label="Direct link to Learning Objectives" title="Direct link to Learning Objectives" translate="no">​</a></h3>
+<p>By the end of Week 13, you will be able to:</p>
+<ol>
+<li class="">
+<p><strong>Understand the conversational AI pipeline</strong> for robotics, including speech recognition, natural language understanding, dialogue management, and speech synthesis</p>
+</li>
+<li class="">
+<p><strong>Implement speech recognition systems</strong> that convert spoken language to text with appropriate preprocessing for robot acoustic environments</p>
+</li>
+<li class="">
+<p><strong>Design natural language understanding</strong> components that extract intent and entities from transcribed user speech</p>
+</li>
+<li class="">
+<p><strong>Integrate large language models</strong> like GPT for natural dialogue generation while maintaining robot-specific context and constraints</p>
+</li>
+<li class="">
+<p><strong>Create multi-modal interaction systems</strong> that coordinate speech, gesture, facial expression, and eye gaze for coherent robot communication</p>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="prerequisites">Prerequisites<a href="#prerequisites" class="hash-link" aria-label="Direct link to Prerequisites" title="Direct link to Prerequisites" translate="no">​</a></h3>
+<p>Before beginning this week, ensure you have completed:</p>
+<ul>
+<li class=""><strong>Part 1</strong>: Physical AI Foundations (understanding robot systems)</li>
+<li class=""><strong>Part 2</strong>: ROS 2 Fundamentals (ROS 2 concepts and patterns)</li>
+<li class=""><strong>Part 3</strong>: Simulation (sensor and perception basics)</li>
+<li class=""><strong>Part 5</strong>: AI Integration with ROS 2 (AI model integration patterns)</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-concepts">Key Concepts<a href="#key-concepts" class="hash-link" aria-label="Direct link to Key Concepts" title="Direct link to Key Concepts" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-the-conversational-ai-pipeline">1.1 The Conversational AI Pipeline<a href="#11-the-conversational-ai-pipeline" class="hash-link" aria-label="Direct link to 1.1 The Conversational AI Pipeline" title="Direct link to 1.1 The Conversational AI Pipeline" translate="no">​</a></h3>
+<p>Conversational AI for robots involves a sophisticated pipeline of processing stages, each building upon the outputs of the previous stage:</p>
+<table><thead><tr><th>Stage</th><th>Input</th><th>Output</th><th>Key Technologies</th></tr></thead><tbody><tr><td><strong>Speech Recognition</strong></td><td>Audio waveform</td><td>Text transcript</td><td>Whisper, DeepSpeech, streaming ASR</td></tr><tr><td><strong>Natural Language Understanding</strong></td><td>Text</td><td>Intent + entities</td><td>Pattern matching, classifiers, NER</td></tr><tr><td><strong>Dialogue Management</strong></td><td>Intent + entities + context</td><td>System action</td><td>State machines, LLMs, context tracking</td></tr><tr><td><strong>Natural Language Generation</strong></td><td>System action + context</td><td>Response text</td><td>GPT, rule-based templates, T5</td></tr><tr><td><strong>Speech Synthesis</strong></td><td>Response text</td><td>Audio waveform</td><td>Tacotron, WaveNet, gTTS</td></tr></tbody></table>
+<p>The pipeline operates in real-time for interactive applications, with each stage adding latency. For natural conversation, total round-trip latency should remain under 500 milliseconds to avoid perceptible delays.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-speech-recognition-considerations">1.2 Speech Recognition Considerations<a href="#12-speech-recognition-considerations" class="hash-link" aria-label="Direct link to 1.2 Speech Recognition Considerations" title="Direct link to 1.2 Speech Recognition Considerations" translate="no">​</a></h3>
+<p>Robot applications introduce unique challenges for speech recognition:</p>
+<ul>
+<li class=""><strong>Background Noise</strong>: Ventilation systems, other people, and robot motors create acoustic interference</li>
+<li class=""><strong>Far-Field Audio</strong>: Room-scale audio capture introduces reverberation and distance-related degradation</li>
+<li class=""><strong>Multiple Speakers</strong>: Home and office environments often have multiple simultaneous speakers</li>
+<li class=""><strong>Acoustic Adaptation</strong>: The robot&#x27;s physical embodiment changes the acoustic characteristics of its environment</li>
+</ul>
+<p>Effective ASR pipelines for robots include:</p>
+<ul>
+<li class="">Multi-microphone array processing for source localization and noise reduction</li>
+<li class="">Voice activity detection to distinguish speech from background</li>
+<li class="">Adaptive echo cancellation for environments with speech playback</li>
+<li class="">Speaker diarization for multi-speaker scenarios</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="13-intent-classification-strategies">1.3 Intent Classification Strategies<a href="#13-intent-classification-strategies" class="hash-link" aria-label="Direct link to 1.3 Intent Classification Strategies" title="Direct link to 1.3 Intent Classification Strategies" translate="no">​</a></h3>
+<p>Intent classification assigns user utterances to predefined categories that map to robot actions:</p>
+<p><strong>Pattern-Based Classification</strong>:</p>
+<ul>
+<li class="">Keyword and regex matching for rapid prototyping</li>
+<li class="">High interpretability and easy modification</li>
+<li class="">Limited generalization to novel phrasing</li>
+</ul>
+<p><strong>Machine Learning Classification</strong>:</p>
+<ul>
+<li class="">Traditional classifiers (SVM, Random Forest) on handcrafted features</li>
+<li class="">Neural classifiers (CNN, LSTM, Transformer) on raw text</li>
+<li class="">Better generalization to varied input</li>
+</ul>
+<p><strong>LLM-Based Classification</strong>:</p>
+<ul>
+<li class="">Zero-shot classification using instruction-tuned models</li>
+<li class="">Few-shot learning with examples in prompts</li>
+<li class="">Most flexible but requires API access</li>
+</ul>
+<p>For production systems, hybrid approaches combining pattern matching for common cases with ML or LLM fallback for complex inputs often provide the best balance.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="14-entity-extraction-for-robot-commands">1.4 Entity Extraction for Robot Commands<a href="#14-entity-extraction-for-robot-commands" class="hash-link" aria-label="Direct link to 1.4 Entity Extraction for Robot Commands" title="Direct link to 1.4 Entity Extraction for Robot Commands" translate="no">​</a></h3>
+<p>Entity extraction identifies specific pieces of information in user utterances:</p>
+<table><thead><tr><th>Entity Type</th><th>Examples</th><th>Robot Relevance</th></tr></thead><tbody><tr><td><strong>Objects</strong></td><td>cup, book, keys</td><td>Manipulation targets</td></tr><tr><td><strong>Locations</strong></td><td>kitchen, table, shelf</td><td>Navigation destinations</td></tr><tr><td><strong>People</strong></td><td>me, you, mom</td><td>Interaction partners</td></tr><tr><td><strong>Quantities</strong></td><td>one, few, several</td><td>Amount specifications</td></tr><tr><td><strong>Times</strong></td><td>now, later, tomorrow</td><td>Temporal constraints</td></tr><tr><td><strong>Actions</strong></td><td>bring, get, find</td><td>Task type specification</td></tr></tbody></table>
+<p>Effective entity extraction handles:</p>
+<ul>
+<li class="">Multi-word entities (e.g., &quot;living room&quot;)</li>
+<li class="">Entity mentions with modifiers (e.g., &quot;red cup&quot;)</li>
+<li class="">Coreference resolution (e.g., &quot;it&quot; referring to previously mentioned object)</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="15-multi-modal-integration-principles">1.5 Multi-Modal Integration Principles<a href="#15-multi-modal-integration-principles" class="hash-link" aria-label="Direct link to 1.5 Multi-Modal Integration Principles" title="Direct link to 1.5 Multi-Modal Integration Principles" translate="no">​</a></h3>
+<p>Humanoid robot interaction naturally encompasses multiple communication channels:</p>
+<p><strong>Synchronization Requirements</strong>:</p>
+<ul>
+<li class="">Lip sync: Speech audio must synchronize with lip movements</li>
+<li class="">Gesture timing: Gestures should align with relevant speech content</li>
+<li class="">Gaze shifts: Eye movements should precede or accompany attention shifts</li>
+<li class="">Expression changes: Facial expressions should reflect emotional content</li>
+</ul>
+<p><strong>Channel Prioritization</strong>:</p>
+<ul>
+<li class="">Speech carries primary information content</li>
+<li class="">Gestures emphasize and disambiguate verbal content</li>
+<li class="">Facial expressions convey emotional state and engagement</li>
+<li class="">Gaze communicates attention and social signals</li>
+</ul>
+<p><strong>Multi-Modal Fusion</strong>:</p>
+<ul>
+<li class="">Early fusion: Combine raw inputs at feature level</li>
+<li class="">Late fusion: Process each modality independently, combine decisions</li>
+<li class="">Hybrid: Some modalities early-fused, others late-fused</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="practice-exercises">Practice Exercises<a href="#practice-exercises" class="hash-link" aria-label="Direct link to Practice Exercises" title="Direct link to Practice Exercises" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="exercise-1-speech-recognition-setup-3-hours">Exercise 1: Speech Recognition Setup (3 hours)<a href="#exercise-1-speech-recognition-setup-3-hours" class="hash-link" aria-label="Direct link to Exercise 1: Speech Recognition Setup (3 hours)" title="Direct link to Exercise 1: Speech Recognition Setup (3 hours)" translate="no">​</a></h3>
+<p><strong>Objective</strong>: Implement a ROS 2 speech recognition node that processes audio input and outputs transcribed text.</p>
+<p><strong>Tasks</strong>:</p>
+<ol>
+<li class="">
+<p>Set up audio capture from robot microphones using the <code>audio_common</code> package</p>
+</li>
+<li class="">
+<p>Implement an AudioPreprocessor class with:</p>
+<ul>
+<li class="">Voice activity detection using energy thresholding</li>
+<li class="">Audio normalization for consistent volume levels</li>
+<li class="">Noise reduction preprocessing</li>
+</ul>
+</li>
+<li class="">
+<p>Integrate a speech recognition provider (Whisper via API or local model)</p>
+</li>
+<li class="">
+<p>Create a ROS 2 node that:</p>
+<ul>
+<li class="">Subscribes to audio topics</li>
+<li class="">Processes audio through the pipeline</li>
+<li class="">Publishes recognition results</li>
+</ul>
+</li>
+</ol>
+<p><strong>Deliverable</strong>:</p>
+<ul>
+<li class="">Python package with working speech recognition node</li>
+<li class="">Documentation of configuration options</li>
+<li class="">Test recordings showing recognition accuracy</li>
+</ul>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># Example structure for the exercise</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">class</span><span class="token plain"> </span><span class="token class-name">AudioPreprocessor</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">__init__</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">self</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> sample_rate</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">16000</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> chunk_size</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1024</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">sample_rate </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> sample_rate</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">chunk_size </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> chunk_size</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">energy_threshold </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">500.0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">calculate_energy</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">self</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> audio_data</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">bytes</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">-</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> </span><span class="token builtin">float</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token triple-quoted-string string" style="color:#e3116c">&quot;&quot;&quot;Calculate RMS energy of audio chunk.&quot;&quot;&quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> audioop</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> audioop</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">rms</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">audio_data</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">is_speech</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">self</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> audio_data</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">bytes</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">-</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> </span><span class="token builtin">bool</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token triple-quoted-string string" style="color:#e3116c">&quot;&quot;&quot;Voice activity detection.&quot;&quot;&quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">calculate_energy</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">audio_data</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">energy_threshold</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">preprocess</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">self</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> audio_data</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">bytes</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">-</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> </span><span class="token builtin">bytes</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token triple-quoted-string string" style="color:#e3116c">&quot;&quot;&quot;Apply preprocessing to audio.&quot;&quot;&quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic"># Normalization and noise reduction</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> audio_data</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="exercise-2-intent-classification-system-3-hours">Exercise 2: Intent Classification System (3 hours)<a href="#exercise-2-intent-classification-system-3-hours" class="hash-link" aria-label="Direct link to Exercise 2: Intent Classification System (3 hours)" title="Direct link to Exercise 2: Intent Classification System (3 hours)" translate="no">​</a></h3>
+<p><strong>Objective</strong>: Build an intent classification system that correctly categorizes user commands.</p>
+<p><strong>Tasks</strong>:</p>
+<ol>
+<li class="">
+<p>Design an intent taxonomy for common robot commands (at least 8 intents)</p>
+</li>
+<li class="">
+<p>Implement an IntentClassifier with pattern-based matching:</p>
+<ul>
+<li class="">Define intent patterns with associated confidence weights</li>
+<li class="">Handle multi-label classification for complex utterances</li>
+<li class="">Return both intent and confidence score</li>
+</ul>
+</li>
+<li class="">
+<p>Test the classifier with 20+ example utterances</p>
+</li>
+<li class="">
+<p>Evaluate accuracy and identify edge cases</p>
+</li>
+</ol>
+<p><strong>Deliverable</strong>:</p>
+<ul>
+<li class="">Intent classifier implementation with test cases</li>
+<li class="">Confusion matrix showing classification performance</li>
+<li class="">Analysis of failure cases and improvements</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="exercise-3-entity-extraction-pipeline-2-hours">Exercise 3: Entity Extraction Pipeline (2 hours)<a href="#exercise-3-entity-extraction-pipeline-2-hours" class="hash-link" aria-label="Direct link to Exercise 3: Entity Extraction Pipeline (2 hours)" title="Direct link to Exercise 3: Entity Extraction Pipeline (2 hours)" translate="no">​</a></h3>
+<p><strong>Objective</strong>: Create an entity extraction system for robot-specific entity types.</p>
+<p><strong>Tasks</strong>:</p>
+<ol>
+<li class="">
+<p>Define entity types relevant to robot commands (object, location, person, etc.)</p>
+</li>
+<li class="">
+<p>Implement regex-based and keyword-based extraction</p>
+</li>
+<li class="">
+<p>Handle entity normalization and validation</p>
+</li>
+<li class="">
+<p>Add entity extraction to the NLU pipeline</p>
+</li>
+</ol>
+<p><strong>Deliverable</strong>:</p>
+<ul>
+<li class="">Entity extractor implementation</li>
+<li class="">Test cases showing extraction on varied input</li>
+<li class="">Documentation of entity types and patterns</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="exercise-4-dialogue-manager-with-gpt-4-hours">Exercise 4: Dialogue Manager with GPT (4 hours)<a href="#exercise-4-dialogue-manager-with-gpt-4-hours" class="hash-link" aria-label="Direct link to Exercise 4: Dialogue Manager with GPT (4 hours)" title="Direct link to Exercise 4: Dialogue Manager with GPT (4 hours)" translate="no">​</a></h3>
+<p><strong>Objective</strong>: Implement a dialogue manager that uses GPT for natural response generation.</p>
+<p><strong>Tasks</strong>:</p>
+<ol>
+<li class="">
+<p>Create a ConversationContext class to track dialogue state</p>
+</li>
+<li class="">
+<p>Implement a GPTClient for API integration:</p>
+<ul>
+<li class="">Build prompt templates with conversation history</li>
+<li class="">Handle API communication and response parsing</li>
+<li class="">Implement error handling and retries</li>
+</ul>
+</li>
+<li class="">
+<p>Build a DialogueManager that:</p>
+<ul>
+<li class="">Processes user input through NLU</li>
+<li class="">Generates responses using GPT</li>
+<li class="">Updates conversation context</li>
+</ul>
+</li>
+<li class="">
+<p>Add robot-specific constraints (safety, capabilities)</p>
+</li>
+</ol>
+<p><strong>Deliverable</strong>:</p>
+<ul>
+<li class="">Complete dialogue manager implementation</li>
+<li class="">Example conversations demonstrating the system</li>
+<li class="">Analysis of response quality and limitations</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="exercise-5-multi-modal-expression-system-3-hours">Exercise 5: Multi-Modal Expression System (3 hours)<a href="#exercise-5-multi-modal-expression-system-3-hours" class="hash-link" aria-label="Direct link to Exercise 5: Multi-Modal Expression System (3 hours)" title="Direct link to Exercise 5: Multi-Modal Expression System (3 hours)" translate="no">​</a></h3>
+<p><strong>Objective</strong>: Create a system for coordinated multi-modal robot expression.</p>
+<p><strong>Tasks</strong>:</p>
+<ol>
+<li class="">
+<p>Implement individual controllers for:</p>
+<ul>
+<li class="">Facial expression display</li>
+<li class="">Gesture execution</li>
+<li class="">Eye gaze direction</li>
+</ul>
+</li>
+<li class="">
+<p>Create a MultiModalIntegrator class that:</p>
+<ul>
+<li class="">Accepts multi-modal messages</li>
+<li class="">Coordinates timing across modalities</li>
+<li class="">Manages modality priority and interruption</li>
+</ul>
+</li>
+<li class="">
+<p>Design and execute multi-modal response scenarios</p>
+</li>
+</ol>
+<p><strong>Deliverable</strong>:</p>
+<ul>
+<li class="">Multi-modal integration system</li>
+<li class="">Demonstration of coordinated expressions</li>
+<li class="">Documentation of timing and synchronization</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="estimated-time-commitment">Estimated Time Commitment<a href="#estimated-time-commitment" class="hash-link" aria-label="Direct link to Estimated Time Commitment" title="Direct link to Estimated Time Commitment" translate="no">​</a></h2>
+<table><thead><tr><th>Activity</th><th>Hours</th></tr></thead><tbody><tr><td>Reading (Chapter 6 content)</td><td>4 hours</td></tr><tr><td>Exercise 1: Speech Recognition</td><td>3 hours</td></tr><tr><td>Exercise 2: Intent Classification</td><td>3 hours</td></tr><tr><td>Exercise 3: Entity Extraction</td><td>2 hours</td></tr><tr><td>Exercise 4: Dialogue Manager</td><td>4 hours</td></tr><tr><td>Exercise 5: Multi-Modal System</td><td>3 hours</td></tr><tr><td>Troubleshooting and review</td><td>2 hours</td></tr><tr><td><strong>Total</strong></td><td><strong>21 hours</strong></td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="hardware-and-software-requirements">Hardware and Software Requirements<a href="#hardware-and-software-requirements" class="hash-link" aria-label="Direct link to Hardware and Software Requirements" title="Direct link to Hardware and Software Requirements" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="software">Software<a href="#software" class="hash-link" aria-label="Direct link to Software" title="Direct link to Software" translate="no">​</a></h3>
+<table><thead><tr><th>Component</th><th>Version</th><th>Purpose</th></tr></thead><tbody><tr><td>ROS 2</td><td>Humble or Jazzy</td><td>Robot middleware</td></tr><tr><td>Python</td><td>3.10+</td><td>Implementation language</td></tr><tr><td>OpenAI API</td><td>Latest</td><td>GPT integration</td></tr><tr><td>Whisper</td><td>Latest</td><td>Speech recognition</td></tr><tr><td>audioop</td><td>Standard library</td><td>Audio processing</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="optional-hardware">Optional Hardware<a href="#optional-hardware" class="hash-link" aria-label="Direct link to Optional Hardware" title="Direct link to Optional Hardware" translate="no">​</a></h3>
+<table><thead><tr><th>Component</th><th>Purpose</th><th>Recommended</th></tr></thead><tbody><tr><td>Microphone array</td><td>Multi-channel audio capture</td><td>ReSpeaker 4-mic</td></tr><tr><td>Speakers</td><td>Speech output</td><td>Any standard</td></tr><tr><td>Face display</td><td>Expression capability</td><td>Robot-specific</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="api-keys-required">API Keys Required<a href="#api-keys-required" class="hash-link" aria-label="Direct link to API Keys Required" title="Direct link to API Keys Required" translate="no">​</a></h3>
+<ul>
+<li class="">OpenAI API key for GPT integration (or local LLM deployment)</li>
+<li class="">Optional: Cloud speech recognition services (Google, Azure, AWS)</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="discussion-questions">Discussion Questions<a href="#discussion-questions" class="hash-link" aria-label="Direct link to Discussion Questions" title="Direct link to Discussion Questions" translate="no">​</a></h2>
+<ol>
+<li class="">
+<p>How should conversational AI handle ambiguous commands where multiple interpretations are possible?</p>
+</li>
+<li class="">
+<p>What are the trade-offs between cloud-based LLMs and local language models for robot dialogue?</p>
+</li>
+<li class="">
+<p>How can multi-modal input (speech + gesture) improve reference resolution accuracy?</p>
+</li>
+<li class="">
+<p>What safety considerations apply to conversational AI systems that can execute robot actions?</p>
+</li>
+<li class="">
+<p>How should the system handle users who speak with accents or in non-native languages?</p>
+</li>
+<li class="">
+<p>What personality traits would you design into a humanoid robot&#x27;s conversational style?</p>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="code-examples-summary">Code Examples Summary<a href="#code-examples-summary" class="hash-link" aria-label="Direct link to Code Examples Summary" title="Direct link to Code Examples Summary" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="speech-recognition-pipeline">Speech Recognition Pipeline<a href="#speech-recognition-pipeline" class="hash-link" aria-label="Direct link to Speech Recognition Pipeline" title="Direct link to Speech Recognition Pipeline" translate="no">​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># Audio preprocessing and voice activity detection</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">class</span><span class="token plain"> </span><span class="token class-name">AudioPreprocessor</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">__init__</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">self</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> sample_rate</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">16000</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">sample_rate </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> sample_rate</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">energy_threshold </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">_initialize_threshold</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">is_speech</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">self</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> audio_data</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">bytes</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">-</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> </span><span class="token builtin">bool</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        energy </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> audioop</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">rms</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">audio_data</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> energy </span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">energy_threshold</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="intent-classification">Intent Classification<a href="#intent-classification" class="hash-link" aria-label="Direct link to Intent Classification" title="Direct link to Intent Classification" translate="no">​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># Pattern-based intent classification</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">class</span><span class="token plain"> </span><span class="token class-name">IntentClassifier</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    INTENT_PATTERNS </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        Intent</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">COMMAND</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">r&quot;\b(go|move|grab|pick)\b&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0.7</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        Intent</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">REQUEST</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">r&quot;\b(please|could you)\b&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0.85</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">classify</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">self</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> text</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token builtin">str</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">-</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> Tuple</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">Intent</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token builtin">float</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic"># Pattern matching logic</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> Intent</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">UNKNOWN</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0.0</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="multi-modal-integration">Multi-Modal Integration<a href="#multi-modal-integration" class="hash-link" aria-label="Direct link to Multi-Modal Integration" title="Direct link to Multi-Modal Integration" translate="no">​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># Coordinated expression across modalities</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">class</span><span class="token plain"> </span><span class="token class-name">MultiModalIntegrator</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">async</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">def</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">express</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">self</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> message</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> MultiModalMessage</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        tasks </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">gesture_controller</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">execute_gesture</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">message</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">gesture</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">face_controller</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">set_expression</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">message</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">facial_expression</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            self</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">gaze_controller</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">set_gaze</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">message</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">gaze_target</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">await</span><span class="token plain"> asyncio</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">gather</span><span class="token punctuation" style="color:#393A34">(</span><span class="token operator" style="color:#393A34">*</span><span class="token plain">tasks</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="additional-resources">Additional Resources<a href="#additional-resources" class="hash-link" aria-label="Direct link to Additional Resources" title="Direct link to Additional Resources" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="documentation">Documentation<a href="#documentation" class="hash-link" aria-label="Direct link to Documentation" title="Direct link to Documentation" translate="no">​</a></h3>
+<ul>
+<li class=""><a href="https://platform.openai.com/docs" target="_blank" rel="noopener noreferrer" class="">OpenAI API Documentation</a></li>
+<li class=""><a href="https://github.com/openai/whisper" target="_blank" rel="noopener noreferrer" class="">Whisper Speech Recognition</a></li>
+<li class=""><a href="https://wiki.ros.org/audio_common" target="_blank" rel="noopener noreferrer" class="">ROS 2 Audio Packages</a></li>
+<li class=""><a href="https://gtts.readthedocs.io/" target="_blank" rel="noopener noreferrer" class="">gTTS Text-to-Speech</a></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="tutorials">Tutorials<a href="#tutorials" class="hash-link" aria-label="Direct link to Tutorials" title="Direct link to Tutorials" translate="no">​</a></h3>
+<ul>
+<li class="">OpenAI API Quickstart Guide</li>
+<li class="">Whisper Local Installation Tutorial</li>
+<li class="">ROS 2 Audio Stream Processing</li>
+<li class="">Multi-Modal HRI Research Papers</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="community">Community<a href="#community" class="hash-link" aria-label="Direct link to Community" title="Direct link to Community" translate="no">​</a></h3>
+<ul>
+<li class="">ROS Discourse - Robotics Software</li>
+<li class="">OpenAI Community Forum</li>
+<li class="">Human-Robot Interaction Conference (HRI)</li>
+<li class="">Reddit r/robotics</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-13-progress-checklist">Week 13 Progress Checklist<a href="#week-13-progress-checklist" class="hash-link" aria-label="Direct link to Week 13 Progress Checklist" title="Direct link to Week 13 Progress Checklist" translate="no">​</a></h2>
+<p>Use this checklist to track your progress through the week:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="foundation">Foundation<a href="#foundation" class="hash-link" aria-label="Direct link to Foundation" title="Direct link to Foundation" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Understand the conversational AI pipeline architecture</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Identify key components and their interactions</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Recognize trade-offs in different implementation approaches</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="speech-recognition">Speech Recognition<a href="#speech-recognition" class="hash-link" aria-label="Direct link to Speech Recognition" title="Direct link to Speech Recognition" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Implement audio preprocessing and VAD</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Integrate speech recognition provider</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Handle noise and far-field audio challenges</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="natural-language-understanding">Natural Language Understanding<a href="#natural-language-understanding" class="hash-link" aria-label="Direct link to Natural Language Understanding" title="Direct link to Natural Language Understanding" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Design intent taxonomy for robot commands</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Implement pattern-based intent classification</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Create entity extraction for robot-relevant entities</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Test NLU on varied user input</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="dialogue-management">Dialogue Management<a href="#dialogue-management" class="hash-link" aria-label="Direct link to Dialogue Management" title="Direct link to Dialogue Management" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Implement conversation context tracking</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Integrate GPT for response generation</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Add robot-specific constraints and safety</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Handle dialogue state and turn-taking</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="multi-modal-integration-1">Multi-Modal Integration<a href="#multi-modal-integration-1" class="hash-link" aria-label="Direct link to Multi-Modal Integration" title="Direct link to Multi-Modal Integration" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Create modality-specific controllers</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Implement coordinated multi-modal expression</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Design appropriate expression scenarios</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Test synchronization and timing</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="integration">Integration<a href="#integration" class="hash-link" aria-label="Direct link to Integration" title="Direct link to Integration" translate="no">​</a></h3>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Combine all components into complete system</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Test end-to-end conversational flow</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Evaluate system performance</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Identify and address edge cases</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="transition-to-next-section">Transition to Next Section<a href="#transition-to-next-section" class="hash-link" aria-label="Direct link to Transition to Next Section" title="Direct link to Transition to Next Section" translate="no">​</a></h2>
+<p>After completing Week 13, you will be ready to explore <strong>Robot Learning and Adaptation</strong> in Part 7, where you will learn about:</p>
+<ul>
+<li class="">Reinforcement learning for robot skill acquisition</li>
+<li class="">Imitation learning from human demonstrations</li>
+<li class="">Online adaptation and few-shot learning</li>
+<li class="">Transfer learning from simulation to reality</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="quick-preview-part-7-topics">Quick Preview: Part 7 Topics<a href="#quick-preview-part-7-topics" class="hash-link" aria-label="Direct link to Quick Preview: Part 7 Topics" title="Direct link to Quick Preview: Part 7 Topics" translate="no">​</a></h3>
+<ul>
+<li class="">Markov Decision Processes and policy learning</li>
+<li class="">Reward shaping and task specification</li>
+<li class="">Behavior cloning and demonstration learning</li>
+<li class="">Domain randomization and adaptation</li>
+<li class="">Meta-learning for rapid adaptation</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="assessment-criteria">Assessment Criteria<a href="#assessment-criteria" class="hash-link" aria-label="Direct link to Assessment Criteria" title="Direct link to Assessment Criteria" translate="no">​</a></h2>
+<table><thead><tr><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead><tbody><tr><td>Speech Recognition</td><td>20%</td><td>Functional ASR with preprocessing</td></tr><tr><td>Intent Classification</td><td>20%</td><td>Accurate intent recognition</td></tr><tr><td>Entity Extraction</td><td>15%</td><td>Complete entity identification</td></tr><tr><td>Dialogue Management</td><td>25%</td><td>Natural, context-aware responses</td></tr><tr><td>Multi-Modal Integration</td><td>15%</td><td>Coordinated expression</td></tr><tr><td>Code Quality</td><td>5%</td><td>Clean, documented implementation</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="tips-for-success">Tips for Success<a href="#tips-for-success" class="hash-link" aria-label="Direct link to Tips for Success" title="Direct link to Tips for Success" translate="no">​</a></h2>
+<ol>
+<li class="">
+<p><strong>Start with simple patterns</strong>: Begin with basic keyword matching before adding complexity</p>
+</li>
+<li class="">
+<p><strong>Test incrementally</strong>: Verify each component works before integration</p>
+</li>
+<li class="">
+<p><strong>Use real audio data</strong>: Test with actual robot microphone input when possible</p>
+</li>
+<li class="">
+<p><strong>Plan for failure</strong>: Design graceful degradation when components fail</p>
+</li>
+<li class="">
+<p><strong>Iterate on prompts</strong>: GPT responses often need prompt refinement</p>
+</li>
+<li class="">
+<p><strong>Document edge cases</strong>: Note unusual inputs that cause problems</p>
+</li>
+</ol>
+<hr>
+<p><strong>Part 6: Conversational Robotics</strong> | <a class="" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/part-6-conversational/conversational-robotics">Chapter 6: Conversational Robotics</a> | <a class="" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/appendix/D-assessment-rubrics">Appendix: Assessment Rubrics</a></p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/part-6-conversational/06a-week-13-overview.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/conversational-robotics"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Conversational Robotics</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Ary-s-Physical-Humanoid-Robotics/docs/appendix/hardware-specifications"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Appendix A: Hardware Specifications</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#week-focus-conversational-ai-integration" class="table-of-contents__link toc-highlight">Week Focus: Conversational AI Integration</a><ul><li><a href="#learning-objectives" class="table-of-contents__link toc-highlight">Learning Objectives</a></li><li><a href="#prerequisites" class="table-of-contents__link toc-highlight">Prerequisites</a></li></ul></li><li><a href="#key-concepts" class="table-of-contents__link toc-highlight">Key Concepts</a><ul><li><a href="#11-the-conversational-ai-pipeline" class="table-of-contents__link toc-highlight">1.1 The Conversational AI Pipeline</a></li><li><a href="#12-speech-recognition-considerations" class="table-of-contents__link toc-highlight">1.2 Speech Recognition Considerations</a></li><li><a href="#13-intent-classification-strategies" class="table-of-contents__link toc-highlight">1.3 Intent Classification Strategies</a></li><li><a href="#14-entity-extraction-for-robot-commands" class="table-of-contents__link toc-highlight">1.4 Entity Extraction for Robot Commands</a></li><li><a href="#15-multi-modal-integration-principles" class="table-of-contents__link toc-highlight">1.5 Multi-Modal Integration Principles</a></li></ul></li><li><a href="#practice-exercises" class="table-of-contents__link toc-highlight">Practice Exercises</a><ul><li><a href="#exercise-1-speech-recognition-setup-3-hours" class="table-of-contents__link toc-highlight">Exercise 1: Speech Recognition Setup (3 hours)</a></li><li><a href="#exercise-2-intent-classification-system-3-hours" class="table-of-contents__link toc-highlight">Exercise 2: Intent Classification System (3 hours)</a></li><li><a href="#exercise-3-entity-extraction-pipeline-2-hours" class="table-of-contents__link toc-highlight">Exercise 3: Entity Extraction Pipeline (2 hours)</a></li><li><a href="#exercise-4-dialogue-manager-with-gpt-4-hours" class="table-of-contents__link toc-highlight">Exercise 4: Dialogue Manager with GPT (4 hours)</a></li><li><a href="#exercise-5-multi-modal-expression-system-3-hours" class="table-of-contents__link toc-highlight">Exercise 5: Multi-Modal Expression System (3 hours)</a></li></ul></li><li><a href="#estimated-time-commitment" class="table-of-contents__link toc-highlight">Estimated Time Commitment</a></li><li><a href="#hardware-and-software-requirements" class="table-of-contents__link toc-highlight">Hardware and Software Requirements</a><ul><li><a href="#software" class="table-of-contents__link toc-highlight">Software</a></li><li><a href="#optional-hardware" class="table-of-contents__link toc-highlight">Optional Hardware</a></li><li><a href="#api-keys-required" class="table-of-contents__link toc-highlight">API Keys Required</a></li></ul></li><li><a href="#discussion-questions" class="table-of-contents__link toc-highlight">Discussion Questions</a></li><li><a href="#code-examples-summary" class="table-of-contents__link toc-highlight">Code Examples Summary</a><ul><li><a href="#speech-recognition-pipeline" class="table-of-contents__link toc-highlight">Speech Recognition Pipeline</a></li><li><a href="#intent-classification" class="table-of-contents__link toc-highlight">Intent Classification</a></li><li><a href="#multi-modal-integration" class="table-of-contents__link toc-highlight">Multi-Modal Integration</a></li></ul></li><li><a href="#additional-resources" class="table-of-contents__link toc-highlight">Additional Resources</a><ul><li><a href="#documentation" class="table-of-contents__link toc-highlight">Documentation</a></li><li><a href="#tutorials" class="table-of-contents__link toc-highlight">Tutorials</a></li><li><a href="#community" class="table-of-contents__link toc-highlight">Community</a></li></ul></li><li><a href="#week-13-progress-checklist" class="table-of-contents__link toc-highlight">Week 13 Progress Checklist</a><ul><li><a href="#foundation" class="table-of-contents__link toc-highlight">Foundation</a></li><li><a href="#speech-recognition" class="table-of-contents__link toc-highlight">Speech Recognition</a></li><li><a href="#natural-language-understanding" class="table-of-contents__link toc-highlight">Natural Language Understanding</a></li><li><a href="#dialogue-management" class="table-of-contents__link toc-highlight">Dialogue Management</a></li><li><a href="#multi-modal-integration-1" class="table-of-contents__link toc-highlight">Multi-Modal Integration</a></li><li><a href="#integration" class="table-of-contents__link toc-highlight">Integration</a></li></ul></li><li><a href="#transition-to-next-section" class="table-of-contents__link toc-highlight">Transition to Next Section</a><ul><li><a href="#quick-preview-part-7-topics" class="table-of-contents__link toc-highlight">Quick Preview: Part 7 Topics</a></li></ul></li><li><a href="#assessment-criteria" class="table-of-contents__link toc-highlight">Assessment Criteria</a></li><li><a href="#tips-for-success" class="table-of-contents__link toc-highlight">Tips for Success</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://discordapp.com/invite/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://x.com/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">X<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/facebook/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Muhammad Ariyan. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

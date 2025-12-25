@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-part-5-humanoid/05a-week-11-12-overview" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Weeks 11-12: Humanoid Robot Development | Ary&#x27;s Physical &amp; Humanoid Robotics</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/05a-week-11-12-overview"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Weeks 11-12: Humanoid Robot Development | Ary&#x27;s Physical &amp; Humanoid Robotics"><meta data-rh="true" name="description" content="This section provides a structured learning plan for mastering humanoid robot development. The two-week curriculum builds practical skills in humanoid kinematics, bipedal locomotion, manipulation, and natural human-robot interaction."><meta data-rh="true" property="og:description" content="This section provides a structured learning plan for mastering humanoid robot development. The two-week curriculum builds practical skills in humanoid kinematics, bipedal locomotion, manipulation, and natural human-robot interaction."><link data-rh="true" rel="icon" href="/Ary-s-Physical-Humanoid-Robotics/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/05a-week-11-12-overview"><link data-rh="true" rel="alternate" href="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/05a-week-11-12-overview" hreflang="en"><link data-rh="true" rel="alternate" href="https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/05a-week-11-12-overview" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Weeks 11-12: Humanoid Robot Development","item":"https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/05a-week-11-12-overview"}]}</script><link rel="stylesheet" href="/Ary-s-Physical-Humanoid-Robotics/assets/css/styles.abb38a41.css">
+<script src="/Ary-s-Physical-Humanoid-Robotics/assets/js/runtime~main.7290ef3b.js" defer="defer"></script>
+<script src="/Ary-s-Physical-Humanoid-Robotics/assets/js/main.7f2c837c.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Ary-s-Physical-Humanoid-Robotics/img/logo.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Ary-s-Physical-Humanoid-Robotics/"><div class="navbar__logo"><img src="/Ary-s-Physical-Humanoid-Robotics/img/logo.svg" alt="Ary&#x27;s Physical Humanoid Robotics Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Ary-s-Physical-Humanoid-Robotics/img/logo.svg" alt="Ary&#x27;s Physical Humanoid Robotics Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Ary&#x27;s Physical Humanoid Robotics</b></a><a class="navbar__item navbar__link" href="/Ary-s-Physical-Humanoid-Robotics/chat">Chat</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/MuhammadAriyan/Ary-s-Physical-Humanoid-Robotics" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-1-foundations/introduction-to-physical-ai"><span title="Part 1: Foundations (Weeks 1-2)" class="categoryLinkLabel_W154">Part 1: Foundations (Weeks 1-2)</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-1-foundations/introduction-to-physical-ai"><span title="Introduction to Physical AI" class="linkLabel_WmDU">Introduction to Physical AI</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-1-foundations/01a-week-1-2-overview"><span title="Week 1-2 Overview: Physical AI Foundations" class="linkLabel_WmDU">Week 1-2 Overview: Physical AI Foundations</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-2-ros2/ros2-fundamentals"><span title="Part 2: ROS 2 Fundamentals (Weeks 3-5)" class="categoryLinkLabel_W154">Part 2: ROS 2 Fundamentals (Weeks 3-5)</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-3-simulation/gazebo-unity-simulation"><span title="Part 3: Simulation (Weeks 6-7)" class="categoryLinkLabel_W154">Part 3: Simulation (Weeks 6-7)</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-4-isaac/nvidia-isaac-platform"><span title="Part 4: NVIDIA Isaac (Weeks 8-10)" class="categoryLinkLabel_W154">Part 4: NVIDIA Isaac (Weeks 8-10)</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/humanoid-robot-development"><span title="Part 5: Humanoid Development (Weeks 11-12)" class="categoryLinkLabel_W154">Part 5: Humanoid Development (Weeks 11-12)</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/humanoid-robot-development"><span title="Humanoid Robot Development" class="linkLabel_WmDU">Humanoid Robot Development</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/05a-week-11-12-overview"><span title="Weeks 11-12: Humanoid Robot Development" class="linkLabel_WmDU">Weeks 11-12: Humanoid Robot Development</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/conversational-robotics"><span title="Part 6: Conversational Robotics (Week 13)" class="categoryLinkLabel_W154">Part 6: Conversational Robotics (Week 13)</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/Ary-s-Physical-Humanoid-Robotics/docs/appendix/hardware-specifications"><span title="Appendices" class="categoryLinkLabel_W154">Appendices</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/Ary-s-Physical-Humanoid-Robotics/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Part 5: Humanoid Development (Weeks 11-12)</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Weeks 11-12: Humanoid Robot Development</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Part 5: Humanoid Robot Development - Weeks 11-12 Overview</h1></header>
+<p>This section provides a structured learning plan for mastering humanoid robot development. The two-week curriculum builds practical skills in humanoid kinematics, bipedal locomotion, manipulation, and natural human-robot interaction.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="overview">Overview<a href="#overview" class="hash-link" aria-label="Direct link to Overview" title="Direct link to Overview" translate="no">​</a></h2>
+<p>Humanoid robot development represents the culmination of skills learned throughout this course, integrating perception, control, and planning into anthropomorphic robotic systems. This section focuses on the unique challenges of bipedal locomotion, dextrous manipulation, and natural human-robot interaction that distinguish humanoid robots from other robotic platforms.</p>
+<p>By the end of Week 12, you will have implemented a complete humanoid controller capable of stable walking and basic manipulation tasks, with understanding of how these systems integrate into real robot platforms like the Unitree H1.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-11-kinematics-and-locomotion">Week 11: Kinematics and Locomotion<a href="#week-11-kinematics-and-locomotion" class="hash-link" aria-label="Direct link to Week 11: Kinematics and Locomotion" title="Direct link to Week 11: Kinematics and Locomotion" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="learning-objectives">Learning Objectives<a href="#learning-objectives" class="hash-link" aria-label="Direct link to Learning Objectives" title="Direct link to Learning Objectives" translate="no">​</a></h3>
+<p>By the end of Week 11, you will be able to:</p>
+<ul>
+<li class="">Understand and implement forward kinematics for humanoid kinematic chains</li>
+<li class="">Solve inverse kinematics for multi-DOF legs using analytical and numerical methods</li>
+<li class="">Implement ZMP-based balance control for stable bipedal walking</li>
+<li class="">Generate walking trajectories with proper timing and foot placement</li>
+<li class="">Analyze humanoid robot dynamics and stability margins</li>
+<li class="">Integrate kinematics solvers with ROS 2 control systems</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="core-topics">Core Topics<a href="#core-topics" class="hash-link" aria-label="Direct link to Core Topics" title="Direct link to Core Topics" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-humanoid-kinematic-structures">1. Humanoid Kinematic Structures<a href="#1-humanoid-kinematic-structures" class="hash-link" aria-label="Direct link to 1. Humanoid Kinematic Structures" title="Direct link to 1. Humanoid Kinematic Structures" translate="no">​</a></h4>
+<p>Humanoid robots present unique kinematic challenges compared to industrial manipulators. The kinematic chain structure must account for the bipedal base, which moves during locomotion, as well as the bilateral symmetry of arms and legs. Understanding this hierarchical structure is essential for implementing forward and inverse kinematics algorithms.</p>
+<p>The standard humanoid kinematic structure includes:</p>
+<ul>
+<li class=""><strong>Pelvis/Torso</strong>: Central reference frame for the entire body</li>
+<li class=""><strong>Legs (3 DOF each)</strong>: Hip roll/pitch, knee pitch, ankle pitch/roll</li>
+<li class=""><strong>Arms (3-4 DOF each)</strong>: Shoulder pitch/roll, elbow, wrist</li>
+<li class=""><strong>Head (2-3 DOF)</strong>: Neck pitch/yaw, eye vergence</li>
+</ul>
+<p>This structure mirrors human anatomy and enables operation in human-designed environments.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-forward-kinematics">2. Forward Kinematics<a href="#2-forward-kinematics" class="hash-link" aria-label="Direct link to 2. Forward Kinematics" title="Direct link to 2. Forward Kinematics" translate="no">​</a></h4>
+<p>Forward kinematics computes the position and orientation of each link given joint angles. For humanoid robots, this is particularly important for:</p>
+<ul>
+<li class="">End-effector position feedback during manipulation</li>
+<li class="">Foot position estimation for balance control</li>
+<li class="">Self-collision detection and avoidance</li>
+<li class="">Visualization and state reporting</li>
+</ul>
+<p>The transformation from pelvis to each end-effector follows the chain of homogeneous transformations through each joint. The Denavit-Hartenberg convention provides a standardized method for computing these transformations.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-inverse-kinematics-for-legs">3. Inverse Kinematics for Legs<a href="#3-inverse-kinematics-for-legs" class="hash-link" aria-label="Direct link to 3. Inverse Kinematics for Legs" title="Direct link to 3. Inverse Kinematics for Legs" translate="no">​</a></h4>
+<p>Inverse kinematics for humanoid legs is more complex than industrial arms due to the requirement for balance. Key considerations include:</p>
+<ul>
+<li class=""><strong>Redundancy Resolution</strong>: Using extra DOF for obstacle avoidance or energy efficiency</li>
+<li class=""><strong>Singularity Handling</strong>: Avoiding configurations where Jacobian becomes singular</li>
+<li class=""><strong>Reachability</strong>: Determining if a target position is achievable</li>
+<li class=""><strong>Multiple Solutions</strong>: Finding the most appropriate solution among possible configurations</li>
+</ul>
+<p>Analytical solutions exist for 3-DOF legs by decomposing the problem into frontal and sagittal plane components. This decoupling simplifies the solution and improves computational efficiency for real-time control.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-bipedal-walking-control">4. Bipedal Walking Control<a href="#4-bipedal-walking-control" class="hash-link" aria-label="Direct link to 4. Bipedal Walking Control" title="Direct link to 4. Bipedal Walking Control" translate="no">​</a></h4>
+<p>Walking control for humanoid robots combines multiple subsystems:</p>
+<ul>
+<li class=""><strong>Footstep Planning</strong>: Determining where to place each foot</li>
+<li class=""><strong>ZMP Computation</strong>: Ensuring stability throughout the gait cycle</li>
+<li class=""><strong>Trajectory Generation</strong>: Creating smooth reference trajectories</li>
+<li class=""><strong>Balance Control</strong>: Compensating for disturbances and modeling errors</li>
+<li class=""><strong>Joint Control</strong>: Executing the planned trajectories</li>
+</ul>
+<p>The Zero Moment Point (ZMP) is the foundation of walking stability. The ZMP is the point on the ground where the total moment from gravitational and inertial forces equals zero. For stable walking, the ZMP must remain within the support polygon formed by the feet in contact with the ground.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-dynamic-walking-considerations">5. Dynamic Walking Considerations<a href="#5-dynamic-walking-considerations" class="hash-link" aria-label="Direct link to 5. Dynamic Walking Considerations" title="Direct link to 5. Dynamic Walking Considerations" translate="no">​</a></h4>
+<p>Static walking (where the robot pauses in double support) is simpler but slow. Dynamic walking maintains forward motion throughout the gait cycle and requires:</p>
+<ul>
+<li class="">Proper timing of heel strike and toe-off</li>
+<li class="">Swing foot trajectory planning</li>
+<li class="">Upper body motion for momentum compensation</li>
+<li class="">Landing impact absorption</li>
+</ul>
+<p>Modern approaches use model-predictive control to plan multiple steps ahead, optimizing for stability, speed, and energy efficiency.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-concepts-to-master">Key Concepts to Master<a href="#key-concepts-to-master" class="hash-link" aria-label="Direct link to Key Concepts to Master" title="Direct link to Key Concepts to Master" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Kinematic Chains</strong>: Hierarchical joint structures with parent-child relationships</li>
+<li class=""><strong>Homogeneous Transformations</strong>: 4x4 matrices representing position and orientation</li>
+<li class=""><strong>DH Parameters</strong>: Standardized description of robot geometry</li>
+<li class=""><strong>ZMP (Zero Moment Point)</strong>: Stability criterion for bipedal walking</li>
+<li class=""><strong>Gait Cycle</strong>: Phases of walking (stance, swing, double support)</li>
+<li class=""><strong>Support Polygon</strong>: Convex hull of contact points with ground</li>
+<li class=""><strong>Jacobian</strong>: Velocity transformation between joint and task space</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="practice-exercises">Practice Exercises<a href="#practice-exercises" class="hash-link" aria-label="Direct link to Practice Exercises" title="Direct link to Practice Exercises" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p><strong>Exercise 1: Forward Kinematics Implementation</strong> (3 hours)</p>
+<ul>
+<li class="">Define humanoid leg kinematic chain with DH parameters</li>
+<li class="">Implement forward kinematics function for foot position</li>
+<li class="">Compute Jacobian matrix for velocity mapping</li>
+<li class="">Test with various joint angle combinations</li>
+<li class="">Visualize results in RViz</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Exercise 2: Analytical Inverse Kinematics</strong> (4 hours)</p>
+<ul>
+<li class="">Derive analytical solution for 3-DOF leg</li>
+<li class="">Implement IK solver with reachability checking</li>
+<li class="">Handle multiple solution cases</li>
+<li class="">Test edge cases and singularities</li>
+<li class="">Compare with numerical solutions</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Exercise 3: ZMP Balance Controller</strong> (4 hours)</p>
+<ul>
+<li class="">Implement ZMP computation from joint torques</li>
+<li class="">Design balance controller using ZMP error</li>
+<li class="">Tune controller gains for stability</li>
+<li class="">Test push recovery responses</li>
+<li class="">Measure stability margins</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Exercise 4: Walking Trajectory Generator</strong> (4 hours)</p>
+<ul>
+<li class="">Generate footstep plan from velocity command</li>
+<li class="">Implement swing foot trajectory (parabolic lift)</li>
+<li class="">Create double support transition logic</li>
+<li class="">Generate joint reference trajectories</li>
+<li class="">Integrate with balance controller</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Exercise 5: Complete Walking Controller</strong> (5 hours)
+into complete - Integrate all components controller</p>
+<ul>
+<li class="">Implement gait state machine</li>
+<li class="">Test in simulation with realistic parameters</li>
+<li class="">Tune for smooth transitions</li>
+<li class="">Measure walking performance metrics</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="estimated-time-commitment">Estimated Time Commitment<a href="#estimated-time-commitment" class="hash-link" aria-label="Direct link to Estimated Time Commitment" title="Direct link to Estimated Time Commitment" translate="no">​</a></h3>
+<table><thead><tr><th>Activity</th><th>Hours</th></tr></thead><tbody><tr><td>Reading and tutorials</td><td>8</td></tr><tr><td>Exercise 1: Forward Kinematics</td><td>3</td></tr><tr><td>Exercise 2: Inverse Kinematics</td><td>4</td></tr><tr><td>Exercise 3: ZMP Balance</td><td>4</td></tr><tr><td>Exercise 4: Trajectory Generation</td><td>4</td></tr><tr><td>Exercise 5: Complete Controller</td><td>5</td></tr><tr><td>Troubleshooting and review</td><td>4</td></tr><tr><td><strong>Total</strong></td><td><strong>32 hours</strong></td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-12-manipulation-and-human-robot-interaction">Week 12: Manipulation and Human-Robot Interaction<a href="#week-12-manipulation-and-human-robot-interaction" class="hash-link" aria-label="Direct link to Week 12: Manipulation and Human-Robot Interaction" title="Direct link to Week 12: Manipulation and Human-Robot Interaction" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="learning-objectives-1">Learning Objectives<a href="#learning-objectives-1" class="hash-link" aria-label="Direct link to Learning Objectives" title="Direct link to Learning Objectives" translate="no">​</a></h3>
+<p>By the end of Week 12, you will be able to:</p>
+<ul>
+<li class="">Design and implement grasp planning algorithms for humanoid hands</li>
+<li class="">Understand different grasp types and their appropriate applications</li>
+<li class="">Implement multi-modal human-robot interaction systems</li>
+<li class="">Design natural gaze and attention behaviors</li>
+<li class="">Integrate speech, gesture, and body language for cohesive HRI</li>
+<li class="">Evaluate HRI quality through user studies</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="core-topics-1">Core Topics<a href="#core-topics-1" class="hash-link" aria-label="Direct link to Core Topics" title="Direct link to Core Topics" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-robot-hands-and-manipulation">1. Robot Hands and Manipulation<a href="#1-robot-hands-and-manipulation" class="hash-link" aria-label="Direct link to 1. Robot Hands and Manipulation" title="Direct link to 1. Robot Hands and Manipulation" translate="no">​</a></h4>
+<p>Humanoid manipulation aims to replicate the versatility of human hands. Unlike industrial grippers optimized for specific tasks, humanoid hands must handle diverse objects, adapt grasp types, and perform manipulation in unstructured environments.</p>
+<p><strong>Grasp Classification</strong>:</p>
+<ul>
+<li class=""><strong>Power Grasps</strong>: Wrap fingers around objects for high-force tasks. Examples include cylindrical grip (holding a hammer), spherical grip (holding a ball), and ulnar grip (holding a tool like a knife).</li>
+<li class=""><strong>Precision Grasps</strong>: Use fingertips for delicate manipulation. Examples include pinch grip (holding a small object), lateral pinch (holding a key), and tripod grip (holding a pen).</li>
+<li class=""><strong>Intermediate Grasps</strong>: Balance force and precision for everyday tasks like tool use, food manipulation, and object transfer.</li>
+</ul>
+<p><strong>Grasp Quality Metrics</strong>:</p>
+<ul>
+<li class=""><strong>Force Closure</strong>: Ability to resist arbitrary disturbance forces</li>
+<li class=""><strong>Form Closure</strong>: Geometric constraints preventing motion</li>
+<li class=""><strong>Grasp Dexterity</strong>: Ability to reposition object in hand</li>
+<li class=""><strong>Grasp Stability</strong>: Resistance to specific expected disturbances</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-grasp-planning">2. Grasp Planning<a href="#2-grasp-planning" class="hash-link" aria-label="Direct link to 2. Grasp Planning" title="Direct link to 2. Grasp Planning" translate="no">​</a></h4>
+<p>Grasp planning determines how to position the hand and apply forces to grasp an object. The planning process involves:</p>
+<ol>
+<li class=""><strong>Object Perception</strong>: Estimating object shape, size, and weight</li>
+<li class=""><strong>Grasp Selection</strong>: Choosing appropriate grasp type for task</li>
+<li class=""><strong>Hand Configuration</strong>: Computing joint angles for desired grasp</li>
+<li class=""><strong>Approach Planning</strong>: Path from current pose to grasp pose</li>
+<li class=""><strong>Force Planning</strong>: Applying appropriate grip force</li>
+</ol>
+<p>Learning-based approaches can predict grasp success from visual input, while analytical methods optimize grasp quality metrics over candidate grasps.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-natural-human-robot-interaction">3. Natural Human-Robot Interaction<a href="#3-natural-human-robot-interaction" class="hash-link" aria-label="Direct link to 3. Natural Human-Robot Interaction" title="Direct link to 3. Natural Human-Robot Interaction" translate="no">​</a></h4>
+<p>Human-robot interaction for humanoid robots must account for the unique expectations humans have when interacting with anthropomorphic systems. Key principles include:</p>
+<p><strong>Social Signals</strong>:</p>
+<ul>
+<li class=""><strong>Gaze</strong>: Eye contact and attention direction</li>
+<li class=""><strong>Gestures</strong>: Deictic (pointing), emblematic (thumbs up), beat gestures</li>
+<li class=""><strong>Posture</strong>: Body orientation and stance</li>
+<li class=""><strong>Facial Expressions</strong>: Emotional state communication</li>
+<li class=""><strong>Proxemics</strong>: Appropriate interaction distance</li>
+</ul>
+<p><strong>Interaction Fluency</strong>:</p>
+<ul>
+<li class="">Turn-taking in conversation</li>
+<li class="">Response timing and natural pacing</li>
+<li class="">Error recovery and repair</li>
+<li class="">Adaptation to user preferences</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-multimodal-interaction-architecture">4. Multimodal Interaction Architecture<a href="#4-multimodal-interaction-architecture" class="hash-link" aria-label="Direct link to 4. Multimodal Interaction Architecture" title="Direct link to 4. Multimodal Interaction Architecture" translate="no">​</a></h4>
+<p>A complete HRI system integrates multiple communication channels:</p>
+<ul>
+<li class=""><strong>Speech Recognition and Synthesis</strong>: Spoken language input and output</li>
+<li class=""><strong>Gesture Recognition</strong>: Understanding user gestures</li>
+<li class=""><strong>Gaze Tracking</strong>: Detecting where users are looking</li>
+<li class=""><strong>Face Detection and Recognition</strong>: Identifying and tracking users</li>
+<li class=""><strong>Body Pose Estimation</strong>: Understanding user posture and gestures</li>
+</ul>
+<p>The system must fuse these modalities to understand user intent and generate appropriate responses.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-gaze-and-attention-modeling">5. Gaze and Attention Modeling<a href="#5-gaze-and-attention-modeling" class="hash-link" aria-label="Direct link to 5. Gaze and Attention Modeling" title="Direct link to 5. Gaze and Attention Modeling" translate="no">​</a></h4>
+<p>Gaze behavior is fundamental to natural interaction. Humans use eye contact to establish communication channels, signal attention, and convey emotional state. A humanoid robot&#x27;s gaze behavior should:</p>
+<ul>
+<li class="">Make appropriate eye contact during conversation</li>
+<li class="">Shift attention when new people enter the space</li>
+<li class="">Follow the focus of user attention</li>
+<li class="">Signal internal states (thinking, processing, understanding)</li>
+</ul>
+<p>Attention modeling computes where the robot should look based on:</p>
+<ul>
+<li class="">Detected people and their engagement level</li>
+<li class="">Recent speech activity and turn-taking</li>
+<li class="">Task context and goals</li>
+<li class="">Social norms and politeness</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-body-language-and-gestures">6. Body Language and Gestures<a href="#6-body-language-and-gestures" class="hash-link" aria-label="Direct link to 6. Body Language and Gestures" title="Direct link to 6. Body Language and Gestures" translate="no">​</a></h4>
+<p>Body language supplements speech and provides additional communication channels:</p>
+<ul>
+<li class=""><strong>Nodding/Shaking</strong>: Agreement/disagreement signals</li>
+<li class=""><strong>Head Tilts</strong>: Interest, confusion, or thoughtfulness</li>
+<li class=""><strong>Arm Gestures</strong>: Emphasizing speech, indicating direction</li>
+<li class=""><strong>Postural Mirroring</strong>: Building rapport through alignment</li>
+</ul>
+<p>Implementation requires coordinated control of multiple joints to produce natural, smooth movements.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-concepts-to-master-1">Key Concepts to Master<a href="#key-concepts-to-master-1" class="hash-link" aria-label="Direct link to Key Concepts to Master" title="Direct link to Key Concepts to Master" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Grasp Types</strong>: Power, precision, and intermediate grasps</li>
+<li class=""><strong>Grasp Quality</strong>: Force closure, form closure, manipulability</li>
+<li class=""><strong>Grasp Planning</strong>: Object analysis, candidate generation, selection</li>
+<li class=""><strong>Social Signals</strong>: Gaze, gestures, posture, proxemics</li>
+<li class=""><strong>Attention Model</strong>: Computing interaction focus</li>
+<li class=""><strong>Multimodal Fusion</strong>: Combining speech, gesture, and gaze</li>
+<li class=""><strong>Body Language</strong>: Coordinated movement for expression</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="practice-exercises-1">Practice Exercises<a href="#practice-exercises-1" class="hash-link" aria-label="Direct link to Practice Exercises" title="Direct link to Practice Exercises" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p><strong>Exercise 1: Grasp Type Analysis</strong> (2 hours)</p>
+<ul>
+<li class="">Classify grasps by type and task suitability</li>
+<li class="">Analyze force requirements for different objects</li>
+<li class="">Design grasp selection decision tree</li>
+<li class="">Evaluate trade-offs between grasp types</li>
+<li class="">Document findings with examples</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Exercise 2: Grasp Planning Implementation</strong> (4 hours)</p>
+<ul>
+<li class="">Implement grasp candidate generation</li>
+<li class="">Compute grasp quality metrics</li>
+<li class="">Select best grasp for task constraints</li>
+<li class="">Generate hand configuration</li>
+<li class="">Test with various object types</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Exercise 3: HRI Framework Setup</strong> (3 hours)</p>
+<ul>
+<li class="">Set up person tracking system</li>
+<li class="">Implement attention model</li>
+<li class="">Create gaze behavior generator</li>
+<li class="">Design interaction state machine</li>
+<li class="">Test with multiple users</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Exercise 4: Multimodal Interaction</strong> (4 hours)</p>
+<ul>
+<li class="">Integrate speech recognition</li>
+<li class="">Add gesture recognition</li>
+<li class="">Implement multimodal intent understanding</li>
+<li class="">Generate coordinated responses</li>
+<li class="">Test interaction flow</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Exercise 5: Complete HRI Integration</strong> (5 hours)</p>
+<ul>
+<li class="">Combine manipulation and interaction</li>
+<li class="">Implement task-oriented dialogue</li>
+<li class="">Add body language animations</li>
+<li class="">Conduct user evaluation</li>
+<li class="">Refine based on feedback</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="estimated-time-commitment-1">Estimated Time Commitment<a href="#estimated-time-commitment-1" class="hash-link" aria-label="Direct link to Estimated Time Commitment" title="Direct link to Estimated Time Commitment" translate="no">​</a></h3>
+<table><thead><tr><th>Activity</th><th>Hours</th></tr></thead><tbody><tr><td>Reading and tutorials</td><td>6</td></tr><tr><td>Exercise 1: Grasp Analysis</td><td>2</td></tr><tr><td>Exercise 2: Grasp Planning</td><td>4</td></tr><tr><td>Exercise 3: HRI Framework</td><td>3</td></tr><tr><td>Exercise 4: Multimodal Interaction</td><td>4</td></tr><tr><td>Exercise 5: Complete Integration</td><td>5</td></tr><tr><td>Troubleshooting and review</td><td>4</td></tr><tr><td><strong>Total</strong></td><td><strong>28 hours</strong></td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="combined-weekly-schedule">Combined Weekly Schedule<a href="#combined-weekly-schedule" class="hash-link" aria-label="Direct link to Combined Weekly Schedule" title="Direct link to Combined Weekly Schedule" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-11-kinematics-and-locomotion-1">Week 11: Kinematics and Locomotion<a href="#week-11-kinematics-and-locomotion-1" class="hash-link" aria-label="Direct link to Week 11: Kinematics and Locomotion" title="Direct link to Week 11: Kinematics and Locomotion" translate="no">​</a></h3>
+<table><thead><tr><th>Day</th><th>Morning (9-12)</th><th>Afternoon (1-5)</th><th>Evening (7-9)</th></tr></thead><tbody><tr><td>Mon</td><td>Kinematic theory reading</td><td>Exercise 1: Forward Kinematics</td><td>Review code</td></tr><tr><td>Tue</td><td>Jacobian derivation practice</td><td>Exercise 2: Inverse Kinematics</td><td>Reading papers</td></tr><tr><td>Wed</td><td>ZMP theory study</td><td>Exercise 3: ZMP Balance</td><td>Lab session</td></tr><tr><td>Thu</td><td>Gait analysis</td><td>Exercise 4: Trajectory Generation</td><td>Documentation</td></tr><tr><td>Fri</td><td>Controller design</td><td>Exercise 5: Complete Controller</td><td>Debugging</td></tr><tr><td>Sat</td><td>Integration testing</td><td>Performance optimization</td><td>Rest</td></tr><tr><td>Sun</td><td>Review and reflection</td><td>Week 12 preview</td><td>Rest</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-12-manipulation-and-hri">Week 12: Manipulation and HRI<a href="#week-12-manipulation-and-hri" class="hash-link" aria-label="Direct link to Week 12: Manipulation and HRI" title="Direct link to Week 12: Manipulation and HRI" translate="no">​</a></h3>
+<table><thead><tr><th>Day</th><th>Morning (9-12)</th><th>Afternoon (1-5)</th><th>Evening (7-9)</th></tr></thead><tbody><tr><td>Mon</td><td>Manipulation theory</td><td>Exercise 1: Grasp Analysis</td><td>User studies review</td></tr><tr><td>Tue</td><td>Grasp planning algorithms</td><td>Exercise 2: Grasp Planning</td><td>Code review</td></tr><tr><td>Wed</td><td>HRI principles</td><td>Exercise 3: HRI Framework</td><td>Reading</td></tr><tr><td>Thu</td><td>Multimodal systems</td><td>Exercise 4: Multimodal</td><td>Documentation</td></tr><tr><td>Fri</td><td>Body language design</td><td>Exercise 5: Complete Integration</td><td>Testing</td></tr><tr><td>Sat</td><td>Final integration</td><td>User evaluation</td><td>Rest</td></tr><tr><td>Sun</td><td>Project completion</td><td>Documentation</td><td>Rest</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="hardware-requirements">Hardware Requirements<a href="#hardware-requirements" class="hash-link" aria-label="Direct link to Hardware Requirements" title="Direct link to Hardware Requirements" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="simulation-environment">Simulation Environment<a href="#simulation-environment" class="hash-link" aria-label="Direct link to Simulation Environment" title="Direct link to Simulation Environment" translate="no">​</a></h3>
+<table><thead><tr><th>Component</th><th>Minimum</th><th>Recommended</th></tr></thead><tbody><tr><td>CPU</td><td>4-core @ 2.5 GHz</td><td>8-core @ 4.0 GHz</td></tr><tr><td>RAM</td><td>8 GB</td><td>16 GB</td></tr><tr><td>GPU</td><td>Intel HD 4000</td><td>NVIDIA GTX 1060+</td></tr><tr><td>Storage</td><td>50 GB free</td><td>100 GB SSD</td></tr><tr><td>ROS 2</td><td>Humble</td><td>Humble</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="physical-robot-unitree-h1">Physical Robot (Unitree H1)<a href="#physical-robot-unitree-h1" class="hash-link" aria-label="Direct link to Physical Robot (Unitree H1)" title="Direct link to Physical Robot (Unitree H1)" translate="no">​</a></h3>
+<table><thead><tr><th>Component</th><th>Specification</th></tr></thead><tbody><tr><td>Total DOF</td><td>19</td></tr><tr><td>Control Rate</td><td>200 Hz</td></tr><tr><td>Communication</td><td>Ethernet, CAN</td></tr><tr><td>Power</td><td>450W peak</td></tr><tr><td>Operating Time</td><td>~2 hours walking</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="deliverables">Deliverables<a href="#deliverables" class="hash-link" aria-label="Direct link to Deliverables" title="Direct link to Deliverables" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-11-deliverables">Week 11 Deliverables<a href="#week-11-deliverables" class="hash-link" aria-label="Direct link to Week 11 Deliverables" title="Direct link to Week 11 Deliverables" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Forward Kinematics Module</strong>: Complete Python implementation with tests</li>
+<li class=""><strong>Inverse Kinematics Solver</strong>: Analytical solver with reachability checking</li>
+<li class=""><strong>ZMP Balance Controller</strong>: Working controller with stability analysis</li>
+<li class=""><strong>Walking Trajectory Generator</strong>: Footstep and joint trajectory generation</li>
+<li class=""><strong>Complete Walking Controller</strong>: Integrated controller with state machine</li>
+<li class=""><strong>Documentation</strong>: Technical report with analysis and performance metrics</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-12-deliverables">Week 12 Deliverables<a href="#week-12-deliverables" class="hash-link" aria-label="Direct link to Week 12 Deliverables" title="Direct link to Week 12 Deliverables" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Grasp Planning System</strong>: Complete implementation with quality evaluation</li>
+<li class=""><strong>HRI Framework</strong>: Person tracking, attention model, gaze system</li>
+<li class=""><strong>Multimodal Integration</strong>: Speech, gesture, and gaze fusion</li>
+<li class=""><strong>Body Language Generator</strong>: Coordinated gesture animations</li>
+<li class=""><strong>User Evaluation</strong>: Results from interaction testing</li>
+<li class=""><strong>Documentation</strong>: System architecture and API documentation</li>
+</ol>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="assessment-criteria">Assessment Criteria<a href="#assessment-criteria" class="hash-link" aria-label="Direct link to Assessment Criteria" title="Direct link to Assessment Criteria" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-11-assessment">Week 11 Assessment<a href="#week-11-assessment" class="hash-link" aria-label="Direct link to Week 11 Assessment" title="Direct link to Week 11 Assessment" translate="no">​</a></h3>
+<table><thead><tr><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead><tbody><tr><td>Forward Kinematics</td><td>15%</td><td>Correct transformation computation</td></tr><tr><td>Inverse Kinematics</td><td>20%</td><td>Accurate, efficient IK solutions</td></tr><tr><td>Balance Controller</td><td>25%</td><td>Stable ZMP tracking, disturbance rejection</td></tr><tr><td>Trajectory Generation</td><td>20%</td><td>Smooth, properly timed trajectories</td></tr><tr><td>Integration</td><td>15%</td><td>Complete working system</td></tr><tr><td>Documentation</td><td>5%</td><td>Clear code and reports</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="week-12-assessment">Week 12 Assessment<a href="#week-12-assessment" class="hash-link" aria-label="Direct link to Week 12 Assessment" title="Direct link to Week 12 Assessment" translate="no">​</a></h3>
+<table><thead><tr><th>Criterion</th><th>Weight</th><th>Description</th></tr></thead><tbody><tr><td>Grasp Planning</td><td>20%</td><td>Quality metrics, diverse grasp support</td></tr><tr><td>HRI Framework</td><td>25%</td><td>Attention model, gaze behavior</td></tr><tr><td>Multimodal Fusion</td><td>20%</td><td>Robust intent understanding</td></tr><tr><td>Body Language</td><td>15%</td><td>Natural, coordinated animations</td></tr><tr><td>User Evaluation</td><td>15%</td><td>Meaningful results and analysis</td></tr><tr><td>Documentation</td><td>5%</td><td>Complete system documentation</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="troubleshooting-common-issues">Troubleshooting Common Issues<a href="#troubleshooting-common-issues" class="hash-link" aria-label="Direct link to Troubleshooting Common Issues" title="Direct link to Troubleshooting Common Issues" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="kinematics-issues">Kinematics Issues<a href="#kinematics-issues" class="hash-link" aria-label="Direct link to Kinematics Issues" title="Direct link to Kinematics Issues" translate="no">​</a></h3>
+<p><strong>Problem</strong>: IK solver converges slowly or fails to converge</p>
+<ul>
+<li class="">Check joint limit constraints</li>
+<li class="">Verify Jacobian computation</li>
+<li class="">Add solution initialization from previous pose</li>
+<li class="">Consider numerical stability of matrix operations</li>
+</ul>
+<p><strong>Problem</strong>: Foot positions drift during walking</p>
+<ul>
+<li class="">Accumulate integration errors in forward kinematics</li>
+<li class="">Use closed-loop position feedback</li>
+<li class="">Implement periodic recalibration</li>
+<li class="">Check for numerical precision issues</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="walking-issues">Walking Issues<a href="#walking-issues" class="hash-link" aria-label="Direct link to Walking Issues" title="Direct link to Walking Issues" translate="no">​</a></h3>
+<p><strong>Problem</strong>: Robot falls during gait transition</p>
+<ul>
+<li class="">Insufficient ZMP margin in double support</li>
+<li class="">Check transition timing parameters</li>
+<li class="">Verify joint velocity limits</li>
+<li class="">Adjust balance controller gains</li>
+</ul>
+<p><strong>Problem</strong>: Foot scuffing during swing</p>
+<ul>
+<li class="">Swing height too low</li>
+<li class="">Trajectory smoothing insufficient</li>
+<li class="">Check timing of heel-toe transition</li>
+<li class="">Adjust ground clearance parameters</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="hri-issues">HRI Issues<a href="#hri-issues" class="hash-link" aria-label="Direct link to HRI Issues" title="Direct link to HRI Issues" translate="no">​</a></h3>
+<p><strong>Problem</strong>: Gaze appears unnatural or jittery</p>
+<ul>
+<li class="">Smoothing filter too aggressive</li>
+<li class="">Missing intermediate waypoints</li>
+<li class="">Transition timing too fast</li>
+<li class="">Implement proper acceleration limiting</li>
+</ul>
+<p><strong>Problem</strong>: Multimodal fusion produces wrong intent</p>
+<ul>
+<li class="">Confidence thresholds misaligned</li>
+<li class="">Modalities conflict without proper weighting</li>
+<li class="">Temporal alignment incorrect</li>
+<li class="">Review fusion algorithm implementation</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="integration-with-unitree-h1">Integration with Unitree H1<a href="#integration-with-unitree-h1" class="hash-link" aria-label="Direct link to Integration with Unitree H1" title="Direct link to Integration with Unitree H1" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="hardware-interface">Hardware Interface<a href="#hardware-interface" class="hash-link" aria-label="Direct link to Hardware Interface" title="Direct link to Hardware Interface" translate="no">​</a></h3>
+<p>The Unitree H1 robot provides a high-level API for joint control:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Enable robot</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ros2 launch unitree_h1 bringup.launch.py</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Check joint status</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ros2 topic echo /joint_states</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Send position commands</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ros2 topic pub /joint_commands std_msgs/msg/Float64MultiArray &quot;...&quot;</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="simulation-integration">Simulation Integration<a href="#simulation-integration" class="hash-link" aria-label="Direct link to Simulation Integration" title="Direct link to Simulation Integration" translate="no">​</a></h3>
+<p>For simulation testing before hardware deployment:</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># Load H1 robot model</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> unitree_h1_interface </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> H1Robot</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">robot </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> H1Robot</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">use_sim</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">True</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">robot</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">reset</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Send joint commands</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">commands </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">&quot;left_knee&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0.5</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;right_knee&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0.5</span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">robot</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">send_joint_commands</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">commands</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Get state feedback</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">state </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> robot</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">get_state</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;Left foot position: </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">state</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation">left_foot_position</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">&quot;</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="performance-tuning">Performance Tuning<a href="#performance-tuning" class="hash-link" aria-label="Direct link to Performance Tuning" title="Direct link to Performance Tuning" translate="no">​</a></h3>
+<p>Key parameters for H1 walking:</p>
+<table><thead><tr><th>Parameter</th><th>Default</th><th>Tuning Range</th></tr></thead><tbody><tr><td>Step length</td><td>0.25 m</td><td>0.15-0.35 m</td></tr><tr><td>Step frequency</td><td>2.5 Hz</td><td>1.5-3.0 Hz</td></tr><tr><td>Pelvis height</td><td>0.95 m</td><td>0.85-1.05 m</td></tr><tr><td>ZMP margin</td><td>0.02 m</td><td>0.01-0.05 m</td></tr></tbody></table>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="next-steps">Next Steps<a href="#next-steps" class="hash-link" aria-label="Direct link to Next Steps" title="Direct link to Next Steps" translate="no">​</a></h2>
+<p>After completing Weeks 11-12, continue with:</p>
+<ul>
+<li class=""><strong>Week 13-14</strong>: Learning-based control for improved locomotion</li>
+<li class=""><strong>Week 15-16</strong>: Final integration project combining all skills</li>
+<li class=""><strong>Chapter 6</strong>: Advanced topics in learning-based humanoid control</li>
+<li class=""><strong>Part 6</strong>: Conversational AI for extended HRI capabilities</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="additional-resources">Additional Resources<a href="#additional-resources" class="hash-link" aria-label="Direct link to Additional Resources" title="Direct link to Additional Resources" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="documentation">Documentation<a href="#documentation" class="hash-link" aria-label="Direct link to Documentation" title="Direct link to Documentation" translate="no">​</a></h3>
+<ul>
+<li class=""><a href="https://www.unitree.com/products/h1" target="_blank" rel="noopener noreferrer" class="">Unitree H1 Documentation</a></li>
+<li class=""><a href="https://control.ros.org/" target="_blank" rel="noopener noreferrer" class="">ROS 2 Control Documentation</a></li>
+<li class=""><a href="https://arxiv.org/list/cs.RO/recent" target="_blank" rel="noopener noreferrer" class="">Humanoid Robotics Literature</a></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="tutorials">Tutorials<a href="#tutorials" class="hash-link" aria-label="Direct link to Tutorials" title="Direct link to Tutorials" translate="no">​</a></h3>
+<ul>
+<li class=""><a href="https://www.roboticsbook.org/" target="_blank" rel="noopener noreferrer" class="">Robot Dynamics Course</a></li>
+<li class=""><a href="https://github.com/stephane-caron/pink" target="_blank" rel="noopener noreferrer" class="">Walking Control Tutorial</a></li>
+<li class=""><a href="https://github.com/robotics/graspit" target="_blank" rel="noopener noreferrer" class="">Grasp Planning Examples</a></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="community">Community<a href="#community" class="hash-link" aria-label="Direct link to Community" title="Direct link to Community" translate="no">​</a></h3>
+<ul>
+<li class=""><a href="https://discourse.ros.org/" target="_blank" rel="noopener noreferrer" class="">ROS Humanoid Forum</a></li>
+<li class=""><a href="https://humanoids.org/" target="_blank" rel="noopener noreferrer" class="">Humanoid Research Group</a></li>
+<li class=""><a href="https://forum.unitree.com/" target="_blank" rel="noopener noreferrer" class="">Unitree Developer Community</a></li>
+</ul>
+<hr>
+<div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>Pro Tip</div><div class="admonitionContent_BuS1"><p>When debugging walking controllers, visualize the ZMP trajectory in real-time. This helps identify stability issues before they cause falls and provides intuition for tuning controller gains.</p></div></div>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>Important</div><div class="admonitionContent_BuS1"><p>Always test walking controllers at reduced speed before attempting full-speed operation. The ZMP margin should be sufficient to handle modeling errors and sensor noise.</p></div></div>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>Caution</div><div class="admonitionContent_BuS1"><p>Physical robot testing requires safety observers and emergency stop capability. Never test new controllers on hardware without proper safety measures in place.</p></div></div>
+<p><strong>Part 5: Humanoid Development</strong> | <a class="" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/part-5-humanoid/humanoid-robot-development">Chapter 5: Humanoid Robot Development</a> | <a class="" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/part-6-conversational/conversational-robotics">Part 6: Conversational Robotics</a></p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/docs/part-5-humanoid/05a-week-11-12-overview.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-5-humanoid/humanoid-robot-development"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Humanoid Robot Development</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Ary-s-Physical-Humanoid-Robotics/docs/part-6-conversational/conversational-robotics"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Conversational Robotics</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#overview" class="table-of-contents__link toc-highlight">Overview</a></li><li><a href="#week-11-kinematics-and-locomotion" class="table-of-contents__link toc-highlight">Week 11: Kinematics and Locomotion</a><ul><li><a href="#learning-objectives" class="table-of-contents__link toc-highlight">Learning Objectives</a></li><li><a href="#core-topics" class="table-of-contents__link toc-highlight">Core Topics</a></li><li><a href="#key-concepts-to-master" class="table-of-contents__link toc-highlight">Key Concepts to Master</a></li><li><a href="#practice-exercises" class="table-of-contents__link toc-highlight">Practice Exercises</a></li><li><a href="#estimated-time-commitment" class="table-of-contents__link toc-highlight">Estimated Time Commitment</a></li></ul></li><li><a href="#week-12-manipulation-and-human-robot-interaction" class="table-of-contents__link toc-highlight">Week 12: Manipulation and Human-Robot Interaction</a><ul><li><a href="#learning-objectives-1" class="table-of-contents__link toc-highlight">Learning Objectives</a></li><li><a href="#core-topics-1" class="table-of-contents__link toc-highlight">Core Topics</a></li><li><a href="#key-concepts-to-master-1" class="table-of-contents__link toc-highlight">Key Concepts to Master</a></li><li><a href="#practice-exercises-1" class="table-of-contents__link toc-highlight">Practice Exercises</a></li><li><a href="#estimated-time-commitment-1" class="table-of-contents__link toc-highlight">Estimated Time Commitment</a></li></ul></li><li><a href="#combined-weekly-schedule" class="table-of-contents__link toc-highlight">Combined Weekly Schedule</a><ul><li><a href="#week-11-kinematics-and-locomotion-1" class="table-of-contents__link toc-highlight">Week 11: Kinematics and Locomotion</a></li><li><a href="#week-12-manipulation-and-hri" class="table-of-contents__link toc-highlight">Week 12: Manipulation and HRI</a></li></ul></li><li><a href="#hardware-requirements" class="table-of-contents__link toc-highlight">Hardware Requirements</a><ul><li><a href="#simulation-environment" class="table-of-contents__link toc-highlight">Simulation Environment</a></li><li><a href="#physical-robot-unitree-h1" class="table-of-contents__link toc-highlight">Physical Robot (Unitree H1)</a></li></ul></li><li><a href="#deliverables" class="table-of-contents__link toc-highlight">Deliverables</a><ul><li><a href="#week-11-deliverables" class="table-of-contents__link toc-highlight">Week 11 Deliverables</a></li><li><a href="#week-12-deliverables" class="table-of-contents__link toc-highlight">Week 12 Deliverables</a></li></ul></li><li><a href="#assessment-criteria" class="table-of-contents__link toc-highlight">Assessment Criteria</a><ul><li><a href="#week-11-assessment" class="table-of-contents__link toc-highlight">Week 11 Assessment</a></li><li><a href="#week-12-assessment" class="table-of-contents__link toc-highlight">Week 12 Assessment</a></li></ul></li><li><a href="#troubleshooting-common-issues" class="table-of-contents__link toc-highlight">Troubleshooting Common Issues</a><ul><li><a href="#kinematics-issues" class="table-of-contents__link toc-highlight">Kinematics Issues</a></li><li><a href="#walking-issues" class="table-of-contents__link toc-highlight">Walking Issues</a></li><li><a href="#hri-issues" class="table-of-contents__link toc-highlight">HRI Issues</a></li></ul></li><li><a href="#integration-with-unitree-h1" class="table-of-contents__link toc-highlight">Integration with Unitree H1</a><ul><li><a href="#hardware-interface" class="table-of-contents__link toc-highlight">Hardware Interface</a></li><li><a href="#simulation-integration" class="table-of-contents__link toc-highlight">Simulation Integration</a></li><li><a href="#performance-tuning" class="table-of-contents__link toc-highlight">Performance Tuning</a></li></ul></li><li><a href="#next-steps" class="table-of-contents__link toc-highlight">Next Steps</a></li><li><a href="#additional-resources" class="table-of-contents__link toc-highlight">Additional Resources</a><ul><li><a href="#documentation" class="table-of-contents__link toc-highlight">Documentation</a></li><li><a href="#tutorials" class="table-of-contents__link toc-highlight">Tutorials</a></li><li><a href="#community" class="table-of-contents__link toc-highlight">Community</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://discordapp.com/invite/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://x.com/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">X<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/facebook/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 Muhammad Ariyan. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
