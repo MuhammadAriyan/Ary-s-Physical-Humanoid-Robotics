@@ -107,7 +107,7 @@ Object detection سینسر ڈیٹا میں دلچسپی کی مثالوں کی 
 
 ```python
 # Example: Isaac Perception pipeline for object detection
-# Udaharan: Isaac Perception pipeline object detection ke liye
+# Udaharan: Isaac Perception pipeline object detection کے لیے
 import numpy as np
 from typing import Dict, List, Tuple
 from omni.isaac.sensor import CameraSensor
@@ -150,7 +150,7 @@ class IsaacPerceptionPipeline:
         self.confidence_threshold = 0.5
 
         # Class names for common household objects
-        # Common household objects ke liye class names
+        # Common household objects کے لیے class names
         self.class_names = [
             "person", "cup", "bottle", "bowl", "tool",
             "chair", "table", "door", "box", "misc"
@@ -164,7 +164,7 @@ class IsaacPerceptionPipeline:
         import tensorrt as trt
 
         # TensorRT logger for warnings and errors
-        # Warnings aur errors ke liye TensorRT logger
+        # Warnings اور errors کے لیے TensorRT logger
         logger = trt.Logger(trt.Logger.WARNING)
 
         # Load engine from serialized plan
@@ -198,7 +198,7 @@ class IsaacPerceptionPipeline:
         rgb_image = self.camera.get_rgb()
 
         # Preprocess for neural network input
-        # Neural network input ke liye preprocess karna
+        # Neural network input کے لیے preprocess کرنا
         input_tensor = self._preprocess_image(rgb_image)
 
         # Run detection inference
@@ -309,7 +309,7 @@ class IsaacPerceptionPipeline:
         )
 
         # Get argmax for class labels
-        # Class labels ke liye argmax get karna
+        # Class labels کے لیے argmax get کرنا
         mask = cp.argmax(seg_output, axis=-1)
 
         return cp.asnumpy(mask)
@@ -359,7 +359,7 @@ class DepthEstimationPipeline:
         model.load_state_dict(state_dict)
 
         # Optimize with TensorRT for GPU inference
-        # GPU inference ke liye TensorRT se optimize karna
+        # GPU inference کے لیے TensorRT سے optimize کرنا
         compiled_model = torch_tensorrt.compile(
             model,
             inputs=[
@@ -542,7 +542,7 @@ class IsaacGymManipulationEnv(gym.Env):
         num_per_row = int(np.sqrt(self.num_envs))
 
         # Asset paths for robot hand and objects
-        # Robot hand aur objects ke liye asset paths
+        # Robot hand اور objects کے لیے asset paths
         hand_asset_path = "assets/robot_hand.urdf"
         object_asset_path = "assets/cube.urdf"
 
@@ -600,7 +600,7 @@ class IsaacGymManipulationEnv(gym.Env):
             self.object_handles.append(object_handle)
 
         # Create viewer for visualization
-        # Visualization ke liye viewer create karna
+        # Visualization کے لیے viewer create کرنا
         if not self.headless:
             self.viewer = self.gym.create_viewer(self.sim, gymapi.CameraProperties())
 
@@ -719,7 +719,7 @@ class IsaacGymManipulationEnv(gym.Env):
         # Robot hands par joint position targets apply karna
         for i, env in enumerate(self.envs):
             # Apply PD control for smooth tracking
-            # Smooth tracking ke liye PD control apply karna
+            # Smooth tracking کے لیے PD control apply کرنا
             joint_positions = actions[i].cpu().numpy()
             # In practice, use joint controller interface
             # Practice mein, joint controller interface use karna
@@ -764,12 +764,12 @@ class IsaacGymManipulationEnv(gym.Env):
 
     def _compute_reward(self) -> torch.Tensor:
         """Compute dense reward for grasping task."""
-        # Grasping task ke liye dense reward compute karna
+        # Grasping task کے لیے dense reward compute کرنا
         import torch
         from isaacgym import gymtorch
 
         # Get hand and object positions
-        # Hand aur object positions get karna
+        # Hand اور object positions get کرنا
         hand_states = self.gym.get_actor_rigid_body_states(
             self.envs,
             self.hand_handles,
@@ -785,15 +785,15 @@ class IsaacGymManipulationEnv(gym.Env):
         object_positions = object_states["pose"][:, :3]
 
         # Distance between hand and object
-        # Hand aur object ke beech distance
+        # Hand اور object کے بیچ distance
         distance = torch.norm(hand_positions - object_positions, dim=1)
 
         # Reward: negative distance (closer is better)
-        # Reward: negative distance (closer better hai)
+        # Reward: negative distance (قریب تر بہتر ہے)
         reward = -distance
 
         # Bonus for successful grasp (very close distance)
-        # Successful grasp ke liye bonus (very close distance)
+        # Successful grasp کے لیے bonus (very close distance)
         grasp_bonus = torch.where(
             distance < 0.02,
             torch.ones_like(distance) * 1.0,
@@ -845,7 +845,7 @@ Isaac Gym مقبول RL الگورتھم کے ساتھ مربوط ہوتا ہے 
 
 ```python
 # Example: PPO training for robot manipulation
-# Udaharan: Robot manipulation ke liye PPO training
+# Udaharan: Robot manipulation کے لیے PPO training
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -1077,7 +1077,7 @@ class PPOAgent:
         obs, returns, advantages, old_log_probs = self.compute_returns_and_advantages()
 
         # Flatten for minibatch sampling
-        # Minibatch sampling ke liye flatten karna
+        # Minibatch sampling کے لیے flatten کرنا
         flat_obs = obs.reshape(-1, *obs.shape[2:])
         flat_returns = returns.reshape(-1)
         flat_advantages = advantages.reshape(-1)
@@ -1174,7 +1174,7 @@ class PPOAgent:
         log_probs = dist.log_prob(actions)
 
         # Clip for numerical stability
-        # Numerical stability ke liye clip karna
+        # Numerical stability کے لیے clip کرنا
         log_probs = torch.clamp(log_probs, -20, 20)
 
         # Compute entropy
@@ -1227,7 +1227,7 @@ Online adaptation تعیناتی کے دوران learning جاری رکھتا ہ
 
 ```python
 # Example: Policy export and deployment for physical robot
-# Udaharan: Physical robot ke liye policy export aur deployment
+# Udaharan: Physical robot کے لیے policy export اور deployment
 import torch
 import tensorrt as trt
 import numpy as np
@@ -1285,7 +1285,7 @@ class PolicyDeployer:
             enabled_precisions = {torch.float}
 
         # Compile model with TensorRT
-        # TensorRT ke saath model compile karna
+        # TensorRT کے ساتھ model compile کرنا
         self.trt_module = torch_tensorrt.compile(
             self.model,
             inputs=[
@@ -1328,7 +1328,7 @@ class PolicyDeployer:
         """
         Create inference session with input/output buffers.
         """
-        # Input/output buffers ke saath inference session create karna
+        # Input/output buffers کے ساتھ inference session create کرنا
         if engine is None:
             engine = self.load_engine()
 
@@ -1588,3 +1588,4 @@ class RobotControlInterface:
 **اگلا باب:** حصہ 5 - ہیومینائڈ روبوٹ ڈیزائن
 
 حصہ 5 میں، آپ اس باب سے simulation اور learning کی بنیادوں کو ہیومینائڈ روبوٹس کے لیے کنٹرول سسٹمز ڈیزائن اور لاگو کرنے میں استعمال کریں گے۔ موضوعات میں دو پیروں پر چلنے کی منصوبہ بندی، پورے جسم کے کنٹرول کی تعمیر، اور انسان-روبوٹ تعامل کے انٹرفیس شامل ہیں۔
+
