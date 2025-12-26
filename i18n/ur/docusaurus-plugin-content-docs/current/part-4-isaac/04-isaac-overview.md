@@ -436,7 +436,7 @@ class DepthEstimationPipeline:
 
         # Apply depth scaling from relative to metric
         # Relative se metric mein depth scaling apply karna
-        # Yeh training dataset aur model par depend karta hai
+        # یہ training dataset اور model پر منحصر ہے
         depth_scaled = depth_squeezed * (self.max_depth - self.min_depth)
         depth_scaled = np.clip(depth_scaled, self.min_depth, self.max_depth)
 
@@ -587,7 +587,7 @@ class IsaacGymManipulationEnv(gym.Env):
             self.hand_handles.append(hand_handle)
 
             # Create object to grasp
-            # Grasp karne ke liye object create karna
+            # Grasp کے لیے object بنانا
             object_pose = gymapi.Transform()
             object_pose.p = gymapi.Vec3(
                 (np.random.rand() - 0.5) * 0.2,
@@ -1223,7 +1223,7 @@ Online adaptation تعیناتی کے دوران learning جاری رکھتا ہ
 
 ### تعیناتی پائپ لائن
 
-Trained policies ko physical robots par deploy karne ke liye trained networks export aur optimize karne ki zarurat hai. Isaac PyTorch models ko TensorRT engines mein convert karne ke liye tools provide karta hai efficient GPU inference ke liye. Deployment pipeline ko sensor input processing, policy inference, aur actuator command execution real time mein handle karna chahiye.
+تربیت یافتہ policies کو جسمانی روبوٹس پر تعینات کرنے کے لیے تربیت یافتہ networks کو export اور optimize کرنے کی ضرورت ہے۔ Isaac PyTorch ماڈلز کو TensorRT engines میں تبدیل کرنے کے لیے ٹولز فراہم کرتا ہے مؤثر GPU inference کے لیے۔ Deployment پائپ لائن کو sensor input processing، policy inference، اور actuator command execution حقیقی وقت میں handle کرنا چاہیے۔
 
 ```python
 # Example: Policy export and deployment for physical robot
@@ -1539,7 +1539,7 @@ class RobotControlInterface:
         done = self._check_safety_conditions()
 
         # Wait to maintain control frequency
-        # Control frequency maintain karne ke liye wait karna
+        # Control frequency برقرار رکھنے کے لیے انتظار
         elapsed = time.time() - start_time
         if elapsed < self.control_period:
             time.sleep(self.control_period - elapsed)
@@ -1555,7 +1555,7 @@ class RobotControlInterface:
 
     def _check_safety_conditions(self) -> bool:
         """Check for safety violations requiring emergency stop."""
-        # Safety violations check karna jo emergency stop require karti hain
+        # Safety violations کی جانچ جو emergency stop کی ضرورت رکھتی ہیں
         # Joint limit checking
         # Joint limit checking
         joint_positions = self.joint_encoder.read_positions()
@@ -1577,14 +1577,14 @@ class RobotControlInterface:
         return False
 ```
 
-## 4.6 Summary aur Part 5 se Connection
+## 4.6 خلاصہ اور حصہ 5 سے تعلق
 
-Is chapter ne physical AI development ke liye NVIDIA Isaac platform par comprehensive overview provide kiya hai. Aap ne seekha hai kaise Isaac Sim photorealistic rendering aur accurate physics ke saath high-fidelity simulation enable karta hai. Perception pipelines demonstrate karti hain kaise AI-powered computer vision robot systems mein integrate kiya ja sakta hai. Manipulation aur reinforcement learning sections ne dikha hai kaise Isaac Gym massive parallelization ke through policy learning accelerate karta hai. Finally, sim-to-real transfer techniques simulation se physical deployment tak bridge provide karti hain.
+اس باب نے فزیکل AI ڈیولپمنٹ کے لیے NVIDIA Isaac پلیٹ فارم پر جامع جائزہ فراہم کیا ہے۔ آپ نے سیکھا ہے کہ کیسے Isaac Sim photorealistic رینڈرنگ اور درست physics کے ساتھ اعلیٰ معیار کی simulation کو ممکن بناتا ہے۔ Perception پائپ لائنز یہ ظاہر کرتی ہیں کہ کیسے AI پر مبنی کمپیوٹر ویژن کو روبوٹ سسٹمز میں مربوط کیا جا سکتا ہے۔ ہیرا پھیری اور reinforcement learning کے حصوں نے دکھایا ہے کہ کیسے Isaac Gym بڑے پیمانے پر parallelization کے ذریعے policy learning کو تیز کرتا ہے۔ آخر میں، sim-to-real منتقلی کی تکنیکیں simulation سے جسمانی تعیناتی تک پل فراہم کرتی ہیں۔
 
-Part 5 - Humanoid Robot Design ki taraf badhte hue, aap in Isaac capabilities ko specific humanoid platforms ke liye perception aur control systems develop karne ke liye apply karenge. Yahan simulation setup, policy training, aur deployment mein developed skills directly support karenge subsequent chapters mein covered implementation challenges. Isaac ka humanoid kinematics ke saath integration aapko complete behavioral systems develop aur test karne dega physical deployment se pehle.
+حصہ 5 - ہیومینائڈ روبوٹ ڈیزائن کی طرف بڑھتے ہوئے، آپ ان Isaac صلاحیتوں کو مخصوص ہیومینائڈ پلیٹ فارمز کے لیے ادراک اور کنٹرول سسٹمز تیار کرنے کے لیے لاگو کریں گے۔ یہاں simulation سیٹ اپ، policy تربیت، اور تعیناتی میں تیار کردہ مہارتیں براہ راست بعد کے ابواب میں شامل implementation چیلنجز کی حمایت کریں گی۔ Isaac کا ہیومینائڈ kinematics کے ساتھ انضمام آپ کو مکمل رویاتی نظام تیار اور جانچنے دے گا جسمانی تعیناتی سے پہلے۔
 
 ---
 
-**Next Chapter:** Part 5 - Humanoid Robot Design
+**اگلا باب:** حصہ 5 - ہیومینائڈ روبوٹ ڈیزائن
 
-Part 5 mein, aap is chapter se simulation aur learning foundations ko apply karenge humanoid robots ke liye control systems design aur implement karne mein. Topics include bipedal locomotion planning, whole-body control architectures, aur human-robot interaction interfaces.
+حصہ 5 میں، آپ اس باب سے simulation اور learning کی بنیادوں کو ہیومینائڈ روبوٹس کے لیے کنٹرول سسٹمز ڈیزائن اور لاگو کرنے میں استعمال کریں گے۔ موضوعات میں دو پیروں پر چلنے کی منصوبہ بندی، پورے جسم کے کنٹرول کی تعمیر، اور انسان-روبوٹ تعامل کے انٹرفیس شامل ہیں۔
