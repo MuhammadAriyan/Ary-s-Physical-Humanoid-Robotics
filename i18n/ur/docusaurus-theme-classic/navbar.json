@@ -1,0 +1,18 @@
+{
+  "title": {
+    "message": "اری کی جسمانی ہیومینائڈ روبوٹکس",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "اری کی جسمانی ہیومینائڈ روبوٹکس لوگو",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Chat": {
+    "message": "چیٹ",
+    "description": "Navbar item with label Chat"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

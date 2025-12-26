@@ -1,0 +1,34 @@
+{
+  "version.label": {
+    "message": "اگلا",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Part 1: Foundations (Weeks 1-2)": {
+    "message": "حصہ 1: بنیادیں (ہفتے 1-2)",
+    "description": "The label for category Part 1: Foundations (Weeks 1-2) in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Part 2: ROS 2 Fundamentals (Weeks 3-5)": {
+    "message": "حصہ 2: ROS 2 بنیادیں (ہفتے 3-5)",
+    "description": "The label for category Part 2: ROS 2 Fundamentals (Weeks 3-5) in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Part 3: Simulation (Weeks 6-7)": {
+    "message": "حصہ 3: سمیولیشن (ہفتے 6-7)",
+    "description": "The label for category Part 3: Simulation (Weeks 6-7) in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Part 4: NVIDIA Isaac (Weeks 8-10)": {
+    "message": "حصہ 4: NVIDIA Isaac (ہفتے 8-10)",
+    "description": "The label for category Part 4: NVIDIA Isaac (Weeks 8-10) in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Part 5: Humanoid Development (Weeks 11-12)": {
+    "message": "حصہ 5: ہیومینائڈ ڈیولپمنٹ (ہفتے 11-12)",
+    "description": "The label for category Part 5: Humanoid Development (Weeks 11-12) in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Part 6: Conversational Robotics (Week 13)": {
+    "message": "حصہ 6: گفتگو کی روبوٹکس (ہفتہ 13)",
+    "description": "The label for category Part 6: Conversational Robotics (Week 13) in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Appendices": {
+    "message": "ضمیمہ جات",
+    "description": "The label for category Appendices in sidebar tutorialSidebar"
+  }
+}
