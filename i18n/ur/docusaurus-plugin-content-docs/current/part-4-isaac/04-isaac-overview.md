@@ -315,11 +315,11 @@ class IsaacPerceptionPipeline:
         return cp.asnumpy(mask)
 ```
 
-### Depth aur 3D Perception
+### گہرائی اور 3D ادراک
 
-Humanoid robots ko sirf yeh samajhna nahi hai ki objects exist karte hain, balki yeh bhi samajhna hai ki wo three-dimensional space mein kahan hain. Depth sensors aur multi-view geometry 3D information provide karti hain jo manipulation aur navigation ke liye necessary hai. Isaac Sim high-fidelity depth sensor simulation provide karta hai jo learning-based depth estimation ke liye training data generate karta hai.
+ہیومینائڈ روبوٹس کو صرف یہ سمجھنا نہیں ہے کہ اشیاء موجود ہیں، بلکہ یہ بھی سمجھنا ہے کہ وہ تین جہتی خلا میں کہاں ہیں۔ ڈیپتھ سینسرز اور multi-view geometry 3D معلومات فراہم کرتے ہیں جو ہیرا پھیری اور نیویگیشن کے لیے ضروری ہے۔ Isaac Sim اعلیٰ معیار کی ڈیپتھ سینسر simulation فراہم کرتا ہے جو learning پر مبنی depth estimation کے لیے تربیتی ڈیٹا پیدا کرتا ہے۔
 
-Monocular cameras se depth estimation neural networks use karta hai single RGB images se dense depth maps predict karne ke liye. Yeh networks RGB-D captures ke large datasets se seekhti hain aur new environments par generalize kar. Isaac Sim se sakti hain synthetic data par training real datasets supplement kar sakti hai domains ke liye jahan data collection opportunities limited hain.
+Monocular کیمروں سے depth estimation neural networks استعمال کرتا ہے single RGB تصاویر سے dense depth maps کی پیش گوئی کرنے کے لیے۔ یہ networks RGB-D captures کے بڑے datasets سے سیکھتے ہیں اور نئے ماحول پر عمومی بنتے ہیں۔ Isaac Sim سے synthetic ڈیٹا پر تربیت حقیقی datasets کی تکمیل کر سکتی ہے ان ڈومینز کے لیے جہاں ڈیٹا اکٹھا کرنے کے مواقع محدود ہیں۔
 
 ```python
 # Example: Depth estimation from RGB using neural network
@@ -445,21 +445,21 @@ class DepthEstimationPipeline:
 
 ### Point Cloud Processing
 
-Point clouds depth se direct 3D geometry representation provide karti hain. Point clouds efficiently process karne ke liye GPU acceleration zaruri hai due to millions of points generated per frame. Isaac cuML-accelerated algorithms provide karta hai common point cloud operations ke liye jaise filtering, clustering, aur feature extraction.
+Point clouds گہرائی سے براہ راست 3D geometry کی نمائندگی فراہم کرتے ہیں۔ Point clouds کو مؤثر طریقے سے process کرنے کے لیے GPU تیز رفتاری ضروری ہے کیونکہ ہر فریم میں لاکھوں نقاط پیدا ہوتے ہیں۔ Isaac cuML-تیز شدہ الگورتھم عام point cloud operations کے لیے فراہم کرتا ہے جیسے فلٹرنگ، کلسٹرنگ، اور خصوصیات کی نکاسی۔
 
-Point cloud segmentation objects ko backgrounds se separate karta hai aur points ko distinct instances mein group karta hai. Humanoid robots ke liye, floor, walls, furniture, aur objects ko segment karna manipulation planning ke liye scene understanding enable karta hai. Learning-based segmentation networks jo Isaac Sim se synthetic data par trained hain real-world deployment par transfer kar sakti hain.
+Point cloud segmentation اشیاء کو پس منظر سے الگ کرتا ہے اور نقاط کو الگ instances میں گروپ کرتا ہے۔ ہیومینائڈ روبوٹس کے لیے، فرش، دیواروں، فرنیچر، اور اشیاء کو segment کرنا manipulation planning کے لیے منظر کی سمجھ بوجھ کو ممکن بناتا ہے۔ Learning پر مبنی segmentation networks جو Isaac Sim سے synthetic ڈیٹا پر تربیت یافتہ ہیں حقیقی دنیا کی تعیناتی پر منتقل ہو سکتے ہیں۔
 
-## 4.3 Isaac Gym se Manipulation
+## 4.3 Isaac Gym سے ہیرا پھیری
 
-Manipulation robotic hands aur arms ko precisely control karna require karta hai objects grasp karne aur move karne ke liye. Isaac Gym reinforcement learning use karke manipulation policies train karne ke liye unified environment provide karta hai. GPU-accelerated simulation thousands of parallel environments support karta hai, enabling sample-efficient policy learning.
+ہیرا پھیری robotic ہاتھوں اور بازوؤں کو درست طریقے سے کنٹرول کرنے کی ضرورت ہوتی ہے اشیاء کو پکڑنے اور منتقل کرنے کے لیے۔ Isaac Gym reinforcement learning استعمال کرکے manipulation policies کی تربیت کے لیے متحد ماحول فراہم کرتا ہے۔ GPU تیز رفتار simulation ہزاروں متوازی ماحول کی حمایت کرتا ہے، نمونہ مؤثر policy learning کو ممکن بناتے ہوئے۔
 
-### Isaac Gym Fundamentals
+### Isaac Gym کی بنیادی باتیں
 
-Isaac Gym Omniverse physics simulation ko massively parallel reinforcement learning support karne ke liye extend karta hai. Traditional approaches multiple simulation instances CPU cores par run karte hain, single-core performance se limited. Isaac Gym instead saari simulations GPU par run karta hai, modern graphics processors ki massive parallelism leverage karke.
+Isaac Gym Omniverse physics simulation کو بڑے پیمانے پر متوازی reinforcement learning کی حمایت کے لیے بڑھاتا ہے۔ روایتی طریقے متعدد simulation instances کو CPU cores پر چلاتے ہیں، single-core کی کارکردگی سے محدود۔ Isaac Gym اس کے بجائے تمام simulations کو GPU پر چلاتا ہے، جدید graphics processors کی بڑے پیمانے پر parallelism کا فائدہ اٹھاتے ہوئے۔
 
-Architecture physics simulation ko GPU par Python training code se separate karta hai. Yeh training loop ko simulation ke saath same GPU par execute karne deti hai, data transfer overhead minimize karke. Result yeh hai ki training throughput GPU capability ke saath scale karta hai, CPU core count nahi.
+Architecture physics simulation کو GPU پر Python تربیتی کوڈ سے الگ کرتا ہے۔ یہ training loop کو simulation کے ساتھ ایک ہی GPU پر execute کرنے دیتا ہے، ڈیٹا منتقلی کے overhead کو کم کرتے ہوئے۔ نتیجہ یہ ہے کہ تربیت کی throughput GPU کی صلاحیت کے ساتھ بڑھتی ہے، CPU core count نہیں۔
 
-Manipulation ke liye Isaac Gym set up karne mein simulation environment configure karna, robot aur object dynamics define karna, aur reinforcement learning ke liye reward function specify karna shamil hai. Niche example complete manipulation training setup demonstrate karta hai:
+ہیرا پھیری کے لیے Isaac Gym سیٹ اپ کرنے میں simulation ماحول کی تشکیل، روبوٹ اور object dynamics کی تعریف، اور reinforcement learning کے لیے reward function کی وضاحت شامل ہے۔ نیچے دی گئی مثال مکمل manipulation تربیتی سیٹ اپ کا مظاہرہ کرتی ہے:
 
 ```python
 # Example: Isaac Gym manipulation training setup
