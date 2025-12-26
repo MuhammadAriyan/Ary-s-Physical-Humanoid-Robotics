@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import clsx from 'clsx';
 import styles from '../theme/FubuniChatInjector/styles.module.css';
+import Layout from '@theme/Layout';
 
 export default function DocsLanding(): React.ReactNode {
   const [hasSeenIntro, setHasSeenIntro] = useState(false);
@@ -39,7 +40,8 @@ export default function DocsLanding(): React.ReactNode {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <Layout>
+      <div className={styles.container}>
       {/* Home Icon */}
       <Link to="/" className={styles.homeIcon} aria-label="Go to home">
         <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
@@ -178,7 +180,9 @@ export default function DocsLanding(): React.ReactNode {
             </Link>
           </div>
         </div>
+
       </div>
     </div>
+    </Layout>
   );
 }
