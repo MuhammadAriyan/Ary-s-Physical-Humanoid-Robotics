@@ -5,9 +5,8 @@ const getAuthUrl = () => {
   if (typeof window !== "undefined") {
     // Client-side: check for production or use localhost
     if (window.location.hostname !== "localhost") {
-      // Production: use relative path (works on any hosting)
-      // For GitHub Pages and other static hosts, use same origin
-      return window.location.origin + "/auth-service";
+      // Production: use Koyeb-deployed auth service
+      return "https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app";
     }
   }
   return "http://localhost:4000";

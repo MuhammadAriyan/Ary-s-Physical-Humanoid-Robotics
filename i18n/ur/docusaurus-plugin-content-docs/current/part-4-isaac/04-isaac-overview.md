@@ -1,68 +1,68 @@
 ---
-title: "NVIDIA Isaac Platform"
+title: "NVIDIA Isaac پلیٹ فارم"
 sidebar_position: 4
 ---
 
-# Chapter 4: Physical AI ke liye NVIDIA Isaac Platform
+# باب 4: فزیکل AI کے لیے NVIDIA Isaac پلیٹ فارم
 
-## Learning Objectives
+## سیکھنے کے مقاصد
 
-Is chapter ke ant mein, aap kar payenge:
-- NVIDIA Isaac ecosystem ki architecture aur components ko samajhna
-- Isaac Sim ko high-fidelity robot simulation ke liye configure karna RTX-powered rendering ke saath
-- GPU-accelerated computer vision use karke AI-powered perception pipelines implement karna
-- Isaac Gym use karke GPU-based reinforcement learning se manipulation policies train karna
-- Trained policies ko physical robots par deploy karne ke liye sim-to-real transfer techniques apply karna
-- Humanoid robot control ke liye complete perception-to-action pipelines banana
+اس باب کے اختتام پر، آپ یہ کر سکیں گے:
+- NVIDIA Isaac ایکوسسٹم کی تعمیر اور اجزاء کو سمجھنا
+- Isaac Sim کو اعلیٰ معیار کی روبوٹ سمیولیشن کے لیے RTX پاورڈ رینڈرنگ کے ساتھ کانفیگر کرنا
+- GPU تیز رفتار کمپیوٹر ویژن استعمال کرتے ہوئے AI پر مبنی ادراک پائپ لائنز لاگو کرنا
+- Isaac Gym استعمال کرتے ہوئے GPU پر مبنی تقویتی سیکھنے سے ہیرا پھیری کی پالیسیاں تربیت دینا
+- تربیت یافتہ پالیسیوں کو جسمانی روبوٹس پر تعینات کرنے کے لیے sim-to-real منتقلی کی تکنیکیں لاگو کرنا
+- ہیومینائڈ روبوٹ کنٹرول کے لیے مکمل ادراک سے عمل تک کی پائپ لائنز بنانا
 
-## 4.1 NVIDIA Isaac Ecosystem ka Parichay
+## 4.1 NVIDIA Isaac ایکوسسٹم کا تعارف
 
-NVIDIA Isaac platform physical AI applications develop karne, test karne, aur deploy karne ke liye ek comprehensive ecosystem hai. Traditional robot development tools jo simulation, perception, aur learning ko alag concerns ke tor par treat karte hain, Isaac ek integrated workflow provide karta hai jo concept se deployment tak poore development cycle ko accelerate karta hai.
+NVIDIA Isaac پلیٹ فارم فزیکل AI ایپلیکیشنز تیار کرنے، ٹیسٹ کرنے، اور تعینات کرنے کے لیے ایک جامع ایکوسسٹم ہے۔ روایتی روبوٹ ڈیولپمنٹ ٹولز جو simulation، perception، اور learning کو الگ concerns کے طور پر ٹریٹ کرتے ہیں، Isaac ایک مربوط ورک فلو فراہم کرتا ہے جو concept سے deployment تک پورے ڈیولپمنٹ سائیکل کو تیز کرتا ہے۔
 
-### NVIDIA Isaac kya hai?
+### NVIDIA Isaac کیا ہے؟
 
-NVIDIA Isaac do primary components comprise karta hai jo saath mein kaam karte hain: Isaac SDK aur Isaac Sim. Isaac SDK robot navigation, manipulation, aur perception algorithms ke liye APIs ke saath software development kit provide karta hai. Isaac Sim NVIDIA Omniverse par built simulation environment hai jo photorealistic rendering, accurate physics, aur physical robot deployments ke saath seamless data exchange deliver karta hai.
+NVIDIA Isaac دو بنیادی components پر مشتمل ہے جو ساتھ مل کر کام کرتے ہیں: Isaac SDK اور Isaac Sim۔ Isaac SDK روبوٹ navigation، manipulation، اور perception algorithms کے لیے APIs کے ساتھ software development kit فراہم کرتا ہے۔ Isaac Sim NVIDIA Omniverse پر بنایا گیا simulation environment ہے جو photorealistic rendering، accurate physics، اور physical robot deployments کے ساتھ seamless data exchange فراہم کرتا ہے۔
 
-Platform NVIDIA ki GPU computing, deep learning, aur real-time simulation ki strengths leverage karta hai humanoid robot development ki unique challenges address karne ke liye. Humanoid robots ko sophisticated perception ki zarurat hoti hai human environments ko samajhne ke liye, precise manipulation diverse objects ke saath interact karne ke liye, aur robust locomotion complex terrain navigate karne ke liye. Isaac har challenge ke liye purpose-built tools provide karta hai while maintaining consistency across the development workflow.
+پلیٹ فارم NVIDIA کی GPU computing، deep learning، اور real-time simulation کی طاقتوں کا فائدہ اٹھاتا ہے humanoid robot development کے منفرد چیلنجز کو حل کرنے کے لیے۔ Humanoid robots کو sophisticated perception کی ضرورت ہوتی ہے انسانی ماحول کو سمجھنے کے لیے، precise manipulation مختلف اشیاء کے ساتھ تعامل کرنے کے لیے، اور robust locomotion پیچیدہ علاقوں کو navigate کرنے کے لیے۔ Isaac ہر چیلنج کے لیے مخصوص ٹولز فراہم کرتا ہے جبکہ پوری development workflow میں مستقل مزاجی برقرار رکھتا ہے۔
 
-Isaac Sim khud ko dusre simulation platforms se alag karta hai kai key capabilities se. RTX GPU architecture real-time ray tracing enable karta hai jo photorealistic sensor data produce karta hai, yeh perception models train karne ke liye critical hai jo real-world conditions par generalize honge. Physics simulation PhysX 5 use karta hai accurate contact dynamics ke liye, yeh humanoid walking aur manipulation ke liye essential hai. Omniverse streaming capabilities simulations ko data center infrastructure par remotely operate karne deti hai, enabling large-scale parallel training scenarios.
+Isaac Sim خود کو دوسرے simulation platforms سے الگ کرتا ہے کئی اہم صلاحیتوں سے۔ RTX GPU architecture real-time ray tracing ممکن بناتا ہے جو photorealistic sensor data پیدا کرتا ہے، یہ perception models کی تربیت کے لیے بہت اہم ہے جو حقیقی دنیا کی صورتحال پر عمومی بنیں گے۔ Physics simulation PhysX 5 استعمال کرتا ہے درست contact dynamics کے لیے، یہ humanoid walking اور manipulation کے لیے ضروری ہے۔ Omniverse streaming capabilities simulations کو data center infrastructure پر دور سے چلانے کی اجازت دیتی ہے، بڑے پیمانے پر متوازی تربیتی منظرناموں کو ممکن بناتے ہوئے۔
 
-### Isaac Platform Architecture
+### Isaac پلیٹ فارم کی تعمیر
 
-Isaac architecture ek layered design follow karta hai jo concerns separate karta hai while maintaining tight integration. Foundation mein Omniverse hai, NVIDIA's open platform 3D workflows aur applications banana ke liye. Omniverse real-time rendering engine, physics simulation backbone, aur data exchange protocols provide karta hai jo Isaac Sim build karta hai.
+Isaac architecture ایک layered ڈیزائن کی پیروی کرتا ہے جو concerns کو الگ کرتا ہے جبکہ مضبوط انضمام برقرار رکھتا ہے۔ بنیاد میں Omniverse ہے، NVIDIA کا کھلا پلیٹ فارم 3D workflows اور applications بنانے کے لیے۔ Omniverse real-time rendering engine، physics simulation backbone، اور data exchange protocols فراہم کرتا ہے جن پر Isaac Sim تعمیر ہوتا ہے۔
 
-Omniverse ke upar, Isaac Sim robotics ke liye domain-specific abstractions provide karta hai. Isaac Gym module GPU-accelerated reinforcement learning provide karta hai with support for thousands of parallel environments. Isaac Perception module computer vision algorithms provide karta hai jo GPU execution ke liye optimized hain. Isaac Manipulation module grasp planning aur motion generation deliver karta hai robotic arms aur hands ke liye.
+Omniverse کے اوپر، Isaac Sim robotics کے لیے domain-specific abstractions فراہم کرتا ہے۔ Isaac Gym module GPU-accelerated reinforcement learning فراہم کرتا ہے ہزاروں متوازی ماحول کی سہولت کے ساتھ۔ Isaac Perception module computer vision algorithms فراہم کرتا ہے جو GPU execution کے لیے بہتر بنائے گئے ہیں۔ Isaac Manipulation module grasp planning اور motion generation فراہم کرتا ہے robotic arms اور hands کے لیے۔
 
-Application layer Isaac ko ROS 2 interfaces aur custom controller bindings ke through real robot hardware se connect karta hai. Simulation mein trained policies ko TensorRT-optimized inference engines export kiya ja sakta hai deployment ke liye NVIDIA Jetson ya NVIDIA AGX platforms par. Yeh end-to-end workflow ensure karta hai simulation mein developments directly physical robot capabilities mein translate hon.
+Application layer Isaac کو ROS 2 interfaces اور custom controller bindings کے ذریعے حقیقی روبوٹ ہارڈویئر سے جوڑتا ہے۔ Simulation میں تربیت یافتہ policies کو TensorRT-optimized inference engines میں export کیا جا سکتا ہے deployment کے لیے NVIDIA Jetson یا NVIDIA AGX platforms پر۔ یہ end-to-end workflow یقینی بناتا ہے کہ simulation میں ڈیولپمنٹس براہ راست physical robot capabilities میں تبدیل ہوں۔
 
 ```python
 # Example: Isaac Sim initialization and robot loading
-# Udaharan: Isaac Sim initialization aur robot loading
+# Udaharan: Isaac Sim initialization اور robot loading
 import omni.isaac.core
 from omni.isaac.core import SimulationContext
 from omni.isaac.core.objects import DynamicCuboid
 
-# Simulation context initialize karna
-# Simulation context ko initialize karna
+# Simulation context initialize کرنا
+# Simulation context کو initialize کرنا
 simulation_context = SimulationContext(
     stage_units_in_meters=1.0,
     physics_dt=1.0 / 60.0,
     rendering_dt=1.0 / 60.0
 )
 
-# GPU physics simulation set up karna
-# GPU physics simulation ko setup karna
+# GPU physics simulation set up کرنا
+# GPU physics simulation کو setup کرنا
 omni.isaac.core.utils.physx.set_physics_gpu_device(0)
 
-# USD se humanoid robot load karna
-# USD se humanoid robot ko load karna
+# USD سے humanoid robot load کرنا
+# USD سے humanoid robot کو load کرنا
 from pxr import Usd, UsdGeom
 stage = simulation_context.stage
 UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
 UsdGeom.SetStageMetersPerUnit(stage, 1.0)
 
-# Robot ko USD file se load karna
-# Robot ko USD file se load karna
+# Robot کو USD file سے load کرنا
+# Robot کو USD file سے load کرنا
 robot_prim_path = "/World/HumanoidRobot"
 from omni.isaac.core.utils.prims import create_prim_from_usd
 robot = create_prim_from_usd(
@@ -72,11 +72,11 @@ robot = create_prim_from_usd(
 )
 ```
 
-### Hardware Requirements aur Setup
+### Hardware Requirements اور Setup
 
-Effective Isaac development ke liye appropriate hardware ki zarurat hai platform ki capabilities leverage karne ke liye. GPU requirements substantial hain due to real-time rendering aur physics simulation demands. Development workstations ke liye, NVIDIA RTX 3090 ya RTX 4090 interactive simulation ke liye necessary performance provide karta hai. Large-scale training scenarios ke liye, NVIDIA A100 ya H100 GPUs parallel environment execution ke liye memory aur compute capacity provide karte hain.
+مؤثر Isaac development کے لیے مناسب hardware کی ضرورت ہے پلیٹ فارم کی صلاحیتوں کا فائدہ اٹھانے کے لیے۔ GPU requirements کافی ہیں real-time rendering اور physics simulation کے تقاضوں کی وجہ سے۔ Development workstations کے لیے، NVIDIA RTX 3090 یا RTX 4090 interactive simulation کے لیے ضروری کارکردگی فراہم کرتا ہے۔ بڑے پیمانے پر تربیتی منظرناموں کے لیے، NVIDIA A100 یا H100 GPUs متوازی environment execution کے لیے memory اور compute capacity فراہم کرتے ہیں۔
 
-Niche table different development scenarios ke liye hardware recommendations summarize karti hai:
+نیچے دی گئی table مختلف development scenarios کے لیے hardware سفارشات کا خلاصہ پیش کرتی ہے:
 
 | Scenario | GPU | Memory | Storage | Use Case |
 |----------|-----|--------|---------|----------|
@@ -85,29 +85,29 @@ Niche table different development scenarios ke liye hardware recommendations sum
 | Production Training | A100 80GB | 80GB | 4TB NVME | Large-scale RL training, dataset generation |
 | Edge Deployment | Jetson AGX Orin | 64GB | 1TB NVME | Robot onboard inference |
 
-Memory requirements simulation complexity ke saath scale karti hain. Single humanoid robot simulation with full sensor suite typically 4-8GB GPU memory require karta hai rendering aur physics ke liye. Reinforcement learning ke liye parallel environments add karne se requirement multiply hoti hai. Memory allocation carefully plan karne se development ke dauran bottlenecks prevent hoti hain.
+Memory requirements simulation کی پیچیدگی کے ساتھ بڑھتی ہیں۔ مکمل sensor suite کے ساتھ ایک humanoid robot simulation عام طور پر 4-8GB GPU memory کی ضرورت ہوتی ہے rendering اور physics کے لیے۔ Reinforcement learning کے لیے متوازی environments شامل کرنے سے requirement کئی گنا ہو جاتی ہے۔ Memory allocation کی محتاط منصوبہ بندی development کے دوران رکاوٹوں کو روکتی ہے۔
 
-## 4.2 AI-Powered Perception
+## 4.2 AI پر مبنی ادراک
 
-Perception humanoid robot autonomy ke liye foundation banata hai. Environment ko samajhna, objects detect karna, motion track karna, aur scenes recognize karna sab sophisticated computer vision capabilities require karta hai. Isaac Perception GPU-accelerated implementations provide karta hai state-of-the-art algorithms ki jo simulation mein efficiently run hoti hain aur physical robots par deploy hoti hain.
+ادراک ہیومینائڈ روبوٹ کی خودمختاری کے لیے بنیاد بناتا ہے۔ ماحول کو سمجھنا، اشیاء کا پتہ لگانا، حرکت کو ٹریک کرنا، اور مناظر کو پہچاننا سب پیچیدہ کمپیوٹر ویژن صلاحیتوں کی ضرورت ہے۔ Isaac Perception GPU تیز رفتار implementations فراہم کرتا ہے جدید ترین الگورتھم کی جو simulation میں مؤثر طریقے سے چلتے ہیں اور جسمانی روبوٹس پر تعینات ہوتے ہیں۔
 
-### Computer Vision Foundation
+### کمپیوٹر ویژن کی بنیاد
 
-Traditional computer vision approaches par depend karte the hand-crafted features aur algorithmic pipelines par. Modern perception systems instead use karte hain deep neural networks jo hierarchical representations directly data se seekhte hain. Isaac in networks ko simulation pipeline ke saath integrate karta hai, enabling training on synthetic data aur deployment on physical hardware.
+روایتی کمپیوٹر ویژن طریقے ہاتھ سے بنائی گئی خصوصیات اور الگورتھمک پائپ لائنز پر انحصار کرتے تھے۔ جدید ادراک کے نظام اس کے بجائے گہرے neural networks استعمال کرتے ہیں جو hierarchical نمائندگی براہ راست ڈیٹا سے سیکھتے ہیں۔ Isaac ان networks کو simulation پائپ لائن کے ساتھ مربوط کرتا ہے، مصنوعی ڈیٹا پر تربیت اور جسمانی ہارڈویئر پر تعیناتی کو ممکن بناتے ہوئے۔
 
-Isaac mein perception pipeline modular design follow karta hai. Sensor interfaces cameras, depth sensors, aur LIDAR se raw data capture karti hain. Preprocessing stages data normalize karti hain aur neural network inference ke liye inputs prepare karti hain. Detection aur segmentation networks objects aur unki boundaries identify karti hain. Tracking algorithms identity across frames maintain karti hain. Higher-level modules multiple sensors se information fuse karti hain aur scene understanding build karti hain.
+Isaac میں ادراک پائپ لائن ماڈیولر ڈیزائن کی پیروی کرتی ہے۔ سینسر انٹرفیس کیمروں، ڈیپتھ سینسرز، اور LIDAR سے خام ڈیٹا حاصل کرتے ہیں۔ پری پروسیسنگ مراحل ڈیٹا کو معمول بناتے ہیں اور neural network inference کے لیے ان پٹس تیار کرتے ہیں۔ Detection اور segmentation networks اشیاء اور ان کی حدود کی شناخت کرتے ہیں۔ ٹریکنگ الگورتھم فریمز میں شناخت برقرار رکھتے ہیں۔ اعلیٰ سطح کے ماڈیولز متعدد سینسرز سے معلومات کو یکجا کرتے ہیں اور منظر کی سمجھ بوجھ بناتے ہیں۔
 
-GPU acceleration real-time perception ke liye essential hai. Modern neural networks billions of operations require karte hain per inference. In networks ko CPU par run karke robot control ke liye required frame rates achieve nahi ho sakti. Isaac TensorRT optimization leverage karta hai 100+ FPS inference speeds achieve karne ke liye RTX GPUs par, enabling perception at control frequencies.
+GPU تیز رفتار حقیقی وقت کے ادراک کے لیے ضروری ہے۔ جدید neural networks ہر inference کے لیے اربوں آپریشنز کی ضرورت رکھتے ہیں۔ ان networks کو CPU پر چلانے سے روبوٹ کنٹرول کے لیے درکار فریم ریٹس حاصل نہیں کیے جا سکتے۔ Isaac TensorRT optimization کا فائدہ اٹھاتا ہے RTX GPUs پر 100+ FPS inference speeds حاصل کرنے کے لیے، کنٹرول فریکوئنسیز پر ادراک کو ممکن بناتے ہوئے۔
 
-### Object Detection aur Segmentation
+### Object Detection اور Segmentation
 
-Object detection sensor data mein instances of interest identify karti hain aur unhe bounding boxes ya segmentation masks ke saath localize karti hai. Humanoid robots ke liye, cups, tools, aur obstacles jaise common objects detect karna manipulation aur navigation enable karta hai. Isaac popular detection architectures ke implementations provide karta hai jo robotics applications ke liye optimized hain.
+Object detection سینسر ڈیٹا میں دلچسپی کی مثالوں کی شناخت کرتی ہے اور انہیں bounding boxes یا segmentation masks کے ساتھ مقامی بناتی ہے۔ ہیومینائڈ روبوٹس کے لیے، کپ، ٹولز، اور رکاوٹوں جیسی عام اشیاء کا پتہ لگانا ہیرا پھیری اور نیویگیشن کو ممکن بناتا ہے۔ Isaac مقبول detection architectures کی implementations فراہم کرتا ہے جو robotics ایپلیکیشنز کے لیے بہتر بنائی گئی ہیں۔
 
-Niche example object detection ke liye complete perception pipeline demonstrate karta hai:
+نیچے دی گئی مثال object detection کے لیے مکمل ادراک پائپ لائن کا مظاہرہ کرتی ہے:
 
 ```python
 # Example: Isaac Perception pipeline for object detection
-# Udaharan: Isaac Perception pipeline object detection ke liye
+# Udaharan: Isaac Perception pipeline object detection کے لیے
 import numpy as np
 from typing import Dict, List, Tuple
 from omni.isaac.sensor import CameraSensor
@@ -129,7 +129,7 @@ class IsaacPerceptionPipeline:
         self.device = device
 
         # Initialize camera sensor from USD
-        # USD se camera sensor initialize karna
+        # USD سے camera sensor initialize کرنا
         self.camera = CameraSensor(
             prim_path=camera_prim_path,
             width=1280,
@@ -138,11 +138,11 @@ class IsaacPerceptionPipeline:
         )
 
         # Load TensorRT optimized detection model
-        # TensorRT optimized detection model load karna
+        # TensorRT optimized detection model load کرنا
         self.detector = self._load_trt_model(detection_model_path, "detection")
 
         # Load TensorRT optimized segmentation model
-        # TensorRT optimized segmentation model load karna
+        # TensorRT optimized segmentation model load کرنا
         self.segmenter = self._load_trt_model(segmentation_model_path, "segmentation")
 
         # Detection confidence threshold
@@ -150,7 +150,7 @@ class IsaacPerceptionPipeline:
         self.confidence_threshold = 0.5
 
         # Class names for common household objects
-        # Common household objects ke liye class names
+        # Common household objects کے لیے class names
         self.class_names = [
             "person", "cup", "bottle", "bowl", "tool",
             "chair", "table", "door", "box", "misc"
@@ -164,11 +164,11 @@ class IsaacPerceptionPipeline:
         import tensorrt as trt
 
         # TensorRT logger for warnings and errors
-        # Warnings aur errors ke liye TensorRT logger
+        # Warnings اور errors کے لیے TensorRT logger
         logger = trt.Logger(trt.Logger.WARNING)
 
         # Load engine from serialized plan
-        # Serialized plan se engine load karna
+        # Serialized plan سے engine load کرنا
         with open(model_path, "rb") as f:
             engine_data = f.read()
 
@@ -176,7 +176,7 @@ class IsaacPerceptionPipeline:
         engine = runtime.deserialize_cuda_engine(engine_data)
 
         # Create execution context
-        # Execution context create karna
+        # Execution context create کرنا
         context = engine.create_execution_context()
 
         return {
@@ -194,15 +194,15 @@ class IsaacPerceptionPipeline:
             detections: List of detection dictionaries with bbox, class, confidence
         """
         # Capture RGB image from simulation camera
-        # Simulation camera se RGB image capture karna
+        # Simulation camera سے RGB image capture کرنا
         rgb_image = self.camera.get_rgb()
 
         # Preprocess for neural network input
-        # Neural network input ke liye preprocess karna
+        # Neural network input کے لیے preprocess کرنا
         input_tensor = self._preprocess_image(rgb_image)
 
         # Run detection inference
-        # Detection inference run karna
+        # Detection inference run کرنا
         detections = self._run_detection_inference(input_tensor)
 
         return rgb_image, detections
@@ -213,19 +213,19 @@ class IsaacPerceptionPipeline:
         Includes normalization, resizing, and tensor conversion.
         """
         # Resize to model input size (e.g., 640 x 640)
-        # Model input size par resize karna (e.g., 640 x 640)
+        # Model input size پر resize کرنا (e.g., 640 x 640)
         resized = np.resize(image, (640, 640, 3))
 
         # Normalize to [0, 1]
-        # [0, 1] par normalize karna
+        # [0, 1] پر normalize کرنا
         normalized = resized.astype(np.float32) / 255.0
 
         # Convert HWC to CHW format
-        # HWC format se CHW mein convert karna
+        # HWC format سے CHW میں convert کرنا
         transposed = np.transpose(normalized, (2, 0, 1))
 
         # Add batch dimension
-        # Batch dimension add karna
+        # Batch dimension add کرنا
         batched = np.expand_dims(transposed, axis=0)
 
         return batched
@@ -241,16 +241,16 @@ class IsaacPerceptionPipeline:
         import cupy as cp
 
         # Move input to GPU
-        # Input ko GPU par move karna
+        # Input کو GPU پر move کرنا
         gpu_input = cp.asarray(input_tensor)
 
         # Allocate output buffers
-        # Output buffers allocate karna
+        # Output buffers allocate کرنا
         num_detections = 100
         detection_output = cp.zeros((1, num_detections, 6), dtype=cp.float32)
 
         # Run inference
-        # Inference run karna
+        # Inference run کرنا
         context = self.detector["context"]
         context.execute_v2(
             bindings=[
@@ -260,11 +260,11 @@ class IsaacPerceptionPipeline:
         )
 
         # Transfer results to CPU
-        # Results ko CPU par transfer karna
+        # Results کو CPU پر transfer کرنا
         output_cpu = cp.asnumpy(detection_output)
 
         # Parse detections
-        # Detectations parse karna
+        # Detectations parse کرنا
         detections = []
         for i in range(num_detections):
             confidence = output_cpu[0, i, 4]
@@ -294,7 +294,7 @@ class IsaacPerceptionPipeline:
         input_tensor = self._preprocess_image(rgb_image)
 
         # Run segmentation inference
-        # Segmentation inference run karna
+        # Segmentation inference run کرنا
         import cupy as cp
 
         gpu_input = cp.asarray(input_tensor)
@@ -309,21 +309,21 @@ class IsaacPerceptionPipeline:
         )
 
         # Get argmax for class labels
-        # Class labels ke liye argmax get karna
+        # Class labels کے لیے argmax get کرنا
         mask = cp.argmax(seg_output, axis=-1)
 
         return cp.asnumpy(mask)
 ```
 
-### Depth aur 3D Perception
+### گہرائی اور 3D ادراک
 
-Humanoid robots ko sirf yeh samajhna nahi hai ki objects exist karte hain, balki yeh bhi samajhna hai ki wo three-dimensional space mein kahan hain. Depth sensors aur multi-view geometry 3D information provide karti hain jo manipulation aur navigation ke liye necessary hai. Isaac Sim high-fidelity depth sensor simulation provide karta hai jo learning-based depth estimation ke liye training data generate karta hai.
+ہیومینائڈ روبوٹس کو صرف یہ سمجھنا نہیں ہے کہ اشیاء موجود ہیں، بلکہ یہ بھی سمجھنا ہے کہ وہ تین جہتی خلا میں کہاں ہیں۔ ڈیپتھ سینسرز اور multi-view geometry 3D معلومات فراہم کرتے ہیں جو ہیرا پھیری اور نیویگیشن کے لیے ضروری ہے۔ Isaac Sim اعلیٰ معیار کی ڈیپتھ سینسر simulation فراہم کرتا ہے جو learning پر مبنی depth estimation کے لیے تربیتی ڈیٹا پیدا کرتا ہے۔
 
-Monocular cameras se depth estimation neural networks use karta hai single RGB images se dense depth maps predict karne ke liye. Yeh networks RGB-D captures ke large datasets se seekhti hain aur new environments par generalize kar. Isaac Sim se sakti hain synthetic data par training real datasets supplement kar sakti hai domains ke liye jahan data collection opportunities limited hain.
+Monocular کیمروں سے depth estimation neural networks استعمال کرتا ہے single RGB تصاویر سے dense depth maps کی پیش گوئی کرنے کے لیے۔ یہ networks RGB-D captures کے بڑے datasets سے سیکھتے ہیں اور نئے ماحول پر عمومی بنتے ہیں۔ Isaac Sim سے synthetic ڈیٹا پر تربیت حقیقی datasets کی تکمیل کر سکتی ہے ان ڈومینز کے لیے جہاں ڈیٹا اکٹھا کرنے کے مواقع محدود ہیں۔
 
 ```python
 # Example: Depth estimation from RGB using neural network
-# Udaharan: RGB se neural network use karke depth estimation
+# Udaharan: RGB سے neural network use کر کے depth estimation
 class DepthEstimationPipeline:
     """
     Monocular depth estimation using a neural network.
@@ -340,7 +340,7 @@ class DepthEstimationPipeline:
         self.max_depth = max_depth
 
         # Load depth estimation model
-        # Depth estimation model load karna
+        # Depth estimation model load کرنا
         self.model = self._load_depth_model(model_path)
         self.model.eval()
 
@@ -354,12 +354,12 @@ class DepthEstimationPipeline:
         model = torch.hub.load("intel-isl/MiDaS", "MiDaS_small")
 
         # Load trained weights
-        # Trained weights load karna
+        # Trained weights load کرنا
         state_dict = torch.load(model_path)
         model.load_state_dict(state_dict)
 
         # Optimize with TensorRT for GPU inference
-        # GPU inference ke liye TensorRT se optimize karna
+        # GPU inference کے لیے TensorRT سے optimize کرنا
         compiled_model = torch_tensorrt.compile(
             model,
             inputs=[
@@ -384,17 +384,17 @@ class DepthEstimationPipeline:
         import cupy as cp
 
         # Preprocess
-        # Preprocess karna
+        # Preprocess کرنا
         input_tensor = self._preprocess_depth(rgb_image)
 
         # Move to GPU and run inference
-        # GPU par move karna aur inference run karna
+        # GPU پر move کرنا اور inference run کرنا
         with torch.no_grad():
             gpu_input = torch.tensor(input_tensor, device="cuda")
             depth_raw = self.model(gpu_input)
 
         # Postprocess to metric depth
-        # Metric depth mein postprocess karna
+        # Metric depth میں postprocess کرنا
         depth_metric = self._postprocess_depth(depth_raw)
 
         return depth_metric
@@ -404,21 +404,21 @@ class DepthEstimationPipeline:
         import cv2
 
         # Resize to model input size
-        # Model input size par resize karna
+        # Model input size پر resize کرنا
         resized = cv2.resize(image, (384, 384))
 
         # Convert to tensor and normalize
-        # Tensor mein convert karna aur normalize karna
+        # Tensor میں convert کرنا اور normalize کرنا
         tensor = torch.from_numpy(resized).float().permute(2, 0, 1) / 255.0
 
         # Apply ImageNet normalization
-        # ImageNet normalization apply karna
+        # ImageNet normalization apply کرنا
         mean = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
         std = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
         normalized = (tensor - mean) / std
 
         # Add batch dimension
-        # Batch dimension add karna
+        # Batch dimension add کرنا
         batched = normalized.unsqueeze(0)
 
         return batched.numpy()
@@ -428,15 +428,15 @@ class DepthEstimationPipeline:
         import cv2
 
         # Remove batch dimension
-        # Batch dimension hata karna
+        # Batch dimension hata کرنا
         depth_squeezed = depth_raw.squeeze().cpu().numpy()
 
         # Resize to original image size
         # (Assume original size is stored or passed as parameter)
 
         # Apply depth scaling from relative to metric
-        # Relative se metric mein depth scaling apply karna
-        # Yeh training dataset aur model par depend karta hai
+        # Relative سے metric میں depth scaling apply کرنا
+        # یہ training dataset اور model پر منحصر ہے
         depth_scaled = depth_squeezed * (self.max_depth - self.min_depth)
         depth_scaled = np.clip(depth_scaled, self.min_depth, self.max_depth)
 
@@ -445,21 +445,21 @@ class DepthEstimationPipeline:
 
 ### Point Cloud Processing
 
-Point clouds depth se direct 3D geometry representation provide karti hain. Point clouds efficiently process karne ke liye GPU acceleration zaruri hai due to millions of points generated per frame. Isaac cuML-accelerated algorithms provide karta hai common point cloud operations ke liye jaise filtering, clustering, aur feature extraction.
+Point clouds گہرائی سے براہ راست 3D geometry کی نمائندگی فراہم کرتے ہیں۔ Point clouds کو مؤثر طریقے سے process کرنے کے لیے GPU تیز رفتاری ضروری ہے کیونکہ ہر فریم میں لاکھوں نقاط پیدا ہوتے ہیں۔ Isaac cuML-تیز شدہ الگورتھم عام point cloud operations کے لیے فراہم کرتا ہے جیسے فلٹرنگ، کلسٹرنگ، اور خصوصیات کی نکاسی۔
 
-Point cloud segmentation objects ko backgrounds se separate karta hai aur points ko distinct instances mein group karta hai. Humanoid robots ke liye, floor, walls, furniture, aur objects ko segment karna manipulation planning ke liye scene understanding enable karta hai. Learning-based segmentation networks jo Isaac Sim se synthetic data par trained hain real-world deployment par transfer kar sakti hain.
+Point cloud segmentation اشیاء کو پس منظر سے الگ کرتا ہے اور نقاط کو الگ instances میں گروپ کرتا ہے۔ ہیومینائڈ روبوٹس کے لیے، فرش، دیواروں، فرنیچر، اور اشیاء کو segment کرنا manipulation planning کے لیے منظر کی سمجھ بوجھ کو ممکن بناتا ہے۔ Learning پر مبنی segmentation networks جو Isaac Sim سے synthetic ڈیٹا پر تربیت یافتہ ہیں حقیقی دنیا کی تعیناتی پر منتقل ہو سکتے ہیں۔
 
-## 4.3 Isaac Gym se Manipulation
+## 4.3 Isaac Gym سے ہیرا پھیری
 
-Manipulation robotic hands aur arms ko precisely control karna require karta hai objects grasp karne aur move karne ke liye. Isaac Gym reinforcement learning use karke manipulation policies train karne ke liye unified environment provide karta hai. GPU-accelerated simulation thousands of parallel environments support karta hai, enabling sample-efficient policy learning.
+ہیرا پھیری robotic ہاتھوں اور بازوؤں کو درست طریقے سے کنٹرول کرنے کی ضرورت ہوتی ہے اشیاء کو پکڑنے اور منتقل کرنے کے لیے۔ Isaac Gym reinforcement learning استعمال کرکے manipulation policies کی تربیت کے لیے متحد ماحول فراہم کرتا ہے۔ GPU تیز رفتار simulation ہزاروں متوازی ماحول کی حمایت کرتا ہے، نمونہ مؤثر policy learning کو ممکن بناتے ہوئے۔
 
-### Isaac Gym Fundamentals
+### Isaac Gym کی بنیادی باتیں
 
-Isaac Gym Omniverse physics simulation ko massively parallel reinforcement learning support karne ke liye extend karta hai. Traditional approaches multiple simulation instances CPU cores par run karte hain, single-core performance se limited. Isaac Gym instead saari simulations GPU par run karta hai, modern graphics processors ki massive parallelism leverage karke.
+Isaac Gym Omniverse physics simulation کو بڑے پیمانے پر متوازی reinforcement learning کی حمایت کے لیے بڑھاتا ہے۔ روایتی طریقے متعدد simulation instances کو CPU cores پر چلاتے ہیں، single-core کی کارکردگی سے محدود۔ Isaac Gym اس کے بجائے تمام simulations کو GPU پر چلاتا ہے، جدید graphics processors کی بڑے پیمانے پر parallelism کا فائدہ اٹھاتے ہوئے۔
 
-Architecture physics simulation ko GPU par Python training code se separate karta hai. Yeh training loop ko simulation ke saath same GPU par execute karne deti hai, data transfer overhead minimize karke. Result yeh hai ki training throughput GPU capability ke saath scale karta hai, CPU core count nahi.
+Architecture physics simulation کو GPU پر Python تربیتی کوڈ سے الگ کرتا ہے۔ یہ training loop کو simulation کے ساتھ ایک ہی GPU پر execute کرنے دیتا ہے، ڈیٹا منتقلی کے overhead کو کم کرتے ہوئے۔ نتیجہ یہ ہے کہ تربیت کی throughput GPU کی صلاحیت کے ساتھ بڑھتی ہے، CPU core count نہیں۔
 
-Manipulation ke liye Isaac Gym set up karne mein simulation environment configure karna, robot aur object dynamics define karna, aur reinforcement learning ke liye reward function specify karna shamil hai. Niche example complete manipulation training setup demonstrate karta hai:
+ہیرا پھیری کے لیے Isaac Gym سیٹ اپ کرنے میں simulation ماحول کی تشکیل، روبوٹ اور object dynamics کی تعریف، اور reinforcement learning کے لیے reward function کی وضاحت شامل ہے۔ نیچے دی گئی مثال مکمل manipulation تربیتی سیٹ اپ کا مظاہرہ کرتی ہے:
 
 ```python
 # Example: Isaac Gym manipulation training setup
@@ -486,16 +486,16 @@ class IsaacGymManipulationEnv(gym.Env):
         self.headless = headless
 
         # Initialize Isaac Gym
-        # Isaac Gym initialize karna
+        # Isaac Gym initialize کرنا
         import isaacgym
         from isaacgym import gymapi, gymtorch
 
         # Create the simulation
-        # Simulation create karna
+        # Simulation create کرنا
         self.gym = gymapi.acquire_gym()
 
         # Create simulation configuration
-        # Simulation configuration create karna
+        # Simulation configuration create کرنا
         sim_params = gymapi.SimParams()
         sim_params.dt = 1.0 / 60.0  # 60 Hz control
         sim_params.num_client_threads = 0
@@ -503,13 +503,13 @@ class IsaacGymManipulationEnv(gym.Env):
         sim_params.device_id = 0 if device == "cuda" else -1
 
         # Configure physics
-        # Physics configure karna
+        # Physics configure کرنا
         sim_params.physx.solver_type = 1  # PGS solver
         sim_params.physx.num_position_iterations = 4
         sim_params.physx.num_velocity_iterations = 1
 
         # Create simulation
-        # Simulation create karna
+        # Simulation create کرنا
         self.sim = self.gym.create_sim(
             device_id=sim_params.device_id,
             graphics_device_id=sim_params.device_id,
@@ -518,15 +518,15 @@ class IsaacGymManipulationEnv(gym.Env):
         )
 
         # Create environments
-        # Environments create karna
+        # Environments create کرنا
         self._create_environments()
 
         # Define observation and action spaces
-        # Observation aur action spaces define karna
+        # Observation اور action spaces define کرنا
         self._setup_spaces()
 
         # Track episode progress
-        # Episode progress track karna
+        # Episode progress track کرنا
         self.reset_buf = torch.ones(num_envs, dtype=torch.bool, device=device)
         self.progress_buf = torch.zeros(num_envs, dtype=torch.int32, device=device)
         self.max_episode_length = 500
@@ -542,12 +542,12 @@ class IsaacGymManipulationEnv(gym.Env):
         num_per_row = int(np.sqrt(self.num_envs))
 
         # Asset paths for robot hand and objects
-        # Robot hand aur objects ke liye asset paths
+        # Robot hand اور objects کے لیے asset paths
         hand_asset_path = "assets/robot_hand.urdf"
         object_asset_path = "assets/cube.urdf"
 
         # Load assets
-        # Assets load karna
+        # Assets load کرنا
         hand_asset = self.gym.load_asset(
             self.sim,
             "assets",
@@ -562,7 +562,7 @@ class IsaacGymManipulationEnv(gym.Env):
         )
 
         # Create environments
-        # Environments create karna
+        # Environments create کرنا
         self.envs = []
         self.hand_handles = []
         self.object_handles = []
@@ -578,7 +578,7 @@ class IsaacGymManipulationEnv(gym.Env):
             self.envs.append(env)
 
             # Create robot hand
-            # Robot hand create karna
+            # Robot hand create کرنا
             hand_pose = gymapi.Transform()
             hand_pose.p = gymapi.Vec3(0, 0, 0.5)
             hand_handle = self.gym.create_actor(
@@ -587,7 +587,7 @@ class IsaacGymManipulationEnv(gym.Env):
             self.hand_handles.append(hand_handle)
 
             # Create object to grasp
-            # Grasp karne ke liye object create karna
+            # Grasp کے لیے object بنانا
             object_pose = gymapi.Transform()
             object_pose.p = gymapi.Vec3(
                 (np.random.rand() - 0.5) * 0.2,
@@ -600,7 +600,7 @@ class IsaacGymManipulationEnv(gym.Env):
             self.object_handles.append(object_handle)
 
         # Create viewer for visualization
-        # Visualization ke liye viewer create karna
+        # Visualization کے لیے viewer create کرنا
         if not self.headless:
             self.viewer = self.gym.create_viewer(self.sim, gymapi.CameraProperties())
 
@@ -632,10 +632,10 @@ class IsaacGymManipulationEnv(gym.Env):
     ) -> Tuple[torch.Tensor, dict]:
         """Reset environments to initial state."""
         # Reset object positions
-        # Object positions reset karna
+        # Object positions reset کرنا
         for i, env in enumerate(self.envs):
             # Randomize object position
-            # Object position randomize karna
+            # Object position randomize کرنا
             pose = gymapi.Transform()
             pose.p = gymapi.Vec3(
                 (np.random.rand() - 0.5) * 0.2,
@@ -650,7 +650,7 @@ class IsaacGymManipulationEnv(gym.Env):
             )
 
         # Reset hand to starting position
-        # Hand ko starting position par reset karna
+        # Hand کو starting position پر reset کرنا
         for i, env in enumerate(self.envs):
             pose = gymapi.Transform()
             pose.p = gymapi.Vec3(0, 0, 0.5)
@@ -662,7 +662,7 @@ class IsaacGymManipulationEnv(gym.Env):
             )
 
         # Get observation after reset
-        # Reset ke baad observation get karna
+        # Reset کے بعد observation get کرنا
         obs = self._get_observation()
 
         return obs, {}
@@ -684,45 +684,45 @@ class IsaacGymManipulationEnv(gym.Env):
             info: Additional information
         """
         # Apply actions as joint position targets
-        # Actions ko joint position targets ke tor par apply karna
+        # Actions کو joint position targets کے طور پر apply کرنا
         self._apply_actions(actions)
 
         # Step physics simulation
-        # Physics simulation step karna
+        # Physics simulation step کرنا
         for _ in range(4):  # Sub-stepping for stability
             self.gym.simulate(self.sim)
 
         # Step visual update
-        # Visual update step karna
+        # Visual update step کرنا
         self.gym.fetch_results(self.sim, True)
 
         # Get new observations
-        # Naye observations get karna
+        # Naye observations get کرنا
         obs = self._get_observation()
 
         # Calculate rewards
-        # Rewards calculate karna
+        # Rewards calculate کرنا
         rewards = self._compute_reward()
 
         # Check episode termination
-        # Episode termination check karna
+        # Episode termination check کرنا
         dones = self._check_termination()
 
         # Update episode progress
-        # Episode progress update karna
+        # Episode progress update کرنا
         self.progress_buf += 1
 
         return obs, rewards, dones, {}
 
     def _apply_actions(self, actions: torch.Tensor):
         """Apply joint position targets to robot hands."""
-        # Robot hands par joint position targets apply karna
+        # Robot hands پر joint position targets apply کرنا
         for i, env in enumerate(self.envs):
             # Apply PD control for smooth tracking
-            # Smooth tracking ke liye PD control apply karna
+            # Smooth tracking کے لیے PD control apply کرنا
             joint_positions = actions[i].cpu().numpy()
             # In practice, use joint controller interface
-            # Practice mein, joint controller interface use karna
+            # Practice میں, joint controller interface use کرنا
             self.gym.set_actor_dof_position_targets(
                 env,
                 self.hand_handles[i],
@@ -731,16 +731,16 @@ class IsaacGymManipulationEnv(gym.Env):
 
     def _get_observation(self) -> torch.Tensor:
         """Collect observations from all environments."""
-        # Saare environments se observations collect karna
+        # Saare environments سے observations collect کرنا
         import torch
         from isaacgym import gymtorch
 
         # Stack observations from multiple sources
-        # Multiple sources se observations stack karna
+        # Multiple sources سے observations stack کرنا
         observations = []
 
         # Get hand states
-        # Hand states get karna
+        # Hand states get کرنا
         hand_states = self.gym.get_actor_dof_states(
             self.envs,
             self.hand_handles,
@@ -750,7 +750,7 @@ class IsaacGymManipulationEnv(gym.Env):
         observations.append(hand_states["velocity"])
 
         # Get object states
-        # Object states get karna
+        # Object states get کرنا
         object_states = self.gym.get_actor_rigid_body_states(
             self.envs,
             self.object_handles,
@@ -759,17 +759,17 @@ class IsaacGymManipulationEnv(gym.Env):
         observations.append(object_states["pose"])
 
         # Concatenate and return
-        # Concatenate karna aur return karna
+        # Concatenate کرنا اور return کرنا
         return torch.cat(observations, dim=-1)
 
     def _compute_reward(self) -> torch.Tensor:
         """Compute dense reward for grasping task."""
-        # Grasping task ke liye dense reward compute karna
+        # Grasping task کے لیے dense reward compute کرنا
         import torch
         from isaacgym import gymtorch
 
         # Get hand and object positions
-        # Hand aur object positions get karna
+        # Hand اور object positions get کرنا
         hand_states = self.gym.get_actor_rigid_body_states(
             self.envs,
             self.hand_handles,
@@ -785,15 +785,15 @@ class IsaacGymManipulationEnv(gym.Env):
         object_positions = object_states["pose"][:, :3]
 
         # Distance between hand and object
-        # Hand aur object ke beech distance
+        # Hand اور object کے بیچ distance
         distance = torch.norm(hand_positions - object_positions, dim=1)
 
         # Reward: negative distance (closer is better)
-        # Reward: negative distance (closer better hai)
+        # Reward: negative distance (قریب تر بہتر ہے)
         reward = -distance
 
         # Bonus for successful grasp (very close distance)
-        # Successful grasp ke liye bonus (very close distance)
+        # Successful grasp کے لیے bonus (very close distance)
         grasp_bonus = torch.where(
             distance < 0.02,
             torch.ones_like(distance) * 1.0,
@@ -805,15 +805,15 @@ class IsaacGymManipulationEnv(gym.Env):
 
     def _check_termination(self) -> torch.Tensor:
         """Check if episodes should terminate."""
-        # Check karna ki episodes terminate honi chahiye ya nahi
+        # Check کرنا کہ episodes terminate ہونی چاہیے یا نہیں
         import torch
 
         # Max episode length exceeded
-        # Max episode length exceed ho gayi
+        # Max episode length exceed ہو گئی
         maxed_out = self.progress_buf >= self.max_episode_length
 
         # Object fell off table (y position too low)
-        # Object table se gir gayi (y position too low)
+        # Object table سے گر گئی (y position too low)
         object_states = self.gym.get_actor_rigid_body_states(
             self.envs,
             self.object_handles,
@@ -825,27 +825,27 @@ class IsaacGymManipulationEnv(gym.Env):
         return torch.logical_or(maxed_out, fallen)
 ```
 
-### Grasp Planning aur Execution
+### گرفت کی منصوبہ بندی اور عملدرآمد
 
-Successful manipulation ke liye sirf motor control nahi, balki intelligent decision-making bhi zaruri hai ki objects ko kaise approach kiya jaye aur grasp kiya jaye. Grasp planning algorithms potential grasps evaluate karti hain aur unhe select karti hain jo success hone ke sabse zyada likely hain. Isaac grasp sampling algorithms provide karta hai jo diverse objects ke liye candidate grasps generate karti hain.
+کامیاب ہیرا پھیری کے لیے صرف موٹر کنٹرول نہیں، بلکہ ذہین فیصلہ سازی بھی ضروری ہے کہ اشیاء کو کیسے approach کیا جائے اور پکڑا جائے۔ Grasp planning الگورتھم ممکنہ grasps کا جائزہ لیتے ہیں اور ان کو منتخب کرتے ہیں جو کامیاب ہونے کے سب سے زیادہ امکان رکھتے ہیں۔ Isaac grasp sampling الگورتھم فراہم کرتا ہے جو متنوع اشیاء کے لیے امیدوار grasps پیدا کرتے ہیں۔
 
-Learning-based grasp planning ne analytical approaches se superior performance dikhai hai novel objects ke liye. Neural networks grasp quality seekh sakti hain experience se, unseen objects aur challenging configurations par generalizing. Aise networks train karne ke liye large datasets of grasp attempts ki zarurat hoti hai, jo simulation efficiently generate kar sakta hai.
+Learning پر مبنی grasp planning نے تجزیاتی طریقوں سے بہتر کارکردگی دکھائی ہے نئی اشیاء کے لیے۔ Neural networks grasp کے معیار کو تجربے سے سیکھ سکتے ہیں، نادیدہ اشیاء اور مشکل configurations پر عمومی بنتے ہوئے۔ ایسے networks کی تربیت کے لیے grasp attempts کے بڑے datasets کی ضرورت ہوتی ہے، جو simulation مؤثر طریقے سے پیدا کر سکتا ہے۔
 
-## 4.4 Robot Control ke liye Reinforcement Learning
+## 4.4 روبوٹ کنٹرول کے لیے Reinforcement Learning
 
-Reinforcement learning complex robot behaviors ke liye ek path offer karta hai jo hand-engineering se resist karte hain. Har movement explicitly program karne ki bajaye, RL robots ko trial and error se seekhne deta hai. Isaac Gym policies at scale train karne ke liye computational substrate provide karta hai.
+Reinforcement learning پیچیدہ روبوٹ رویوں کے لیے ایک راستہ پیش کرتا ہے جو ہاتھ سے engineering سے مزاحمت کرتے ہیں۔ ہر حرکت کو واضح طور پر پروگرام کرنے کے بجائے، RL روبوٹس کو آزمائش اور غلطی سے سیکھنے دیتا ہے۔ Isaac Gym بڑے پیمانے پر policies کی تربیت کے لیے computational substrate فراہم کرتا ہے۔
 
-### Robotics ke liye RL Fundamentals
+### Robotics کے لیے RL بنیادیں
 
-Reinforcement learning us problem ko address karta hai jismein agent environment ke saath interaction se cumulative reward maximize karna seekhta hai. Agent environment state observe karta hai, actions leta hai, rewards receive karta hai, aur experience ke based par apna policy update karta hai. Robotics ke liye, yeh paradigm intricate sensorimotor behaviors learning enable karta hai jo manually design karna difficult hai.
+Reinforcement learning اس مسئلے کو حل کرتا ہے جس میں agent ماحول کے ساتھ تعامل سے مجموعی reward کو زیادہ سے زیادہ کرنا سیکھتا ہے۔ Agent ماحول کی حالت کا مشاہدہ کرتا ہے، actions لیتا ہے، rewards حاصل کرتا ہے، اور تجربے کی بنیاد پر اپنی policy کو update کرتا ہے۔ Robotics کے لیے، یہ نمونہ پیچیدہ sensorimotor رویوں کی learning کو ممکن بناتا ہے جو دستی طور پر design کرنا مشکل ہے۔
 
-Robotics RL mein challenge sample efficiency aur safety mein hai. Physical robots wo millions of episodes execute nahi kar sakte jo simulation-based RL often require karta hai. Hardware par directly train karne se damage ka risk hota hai aur careful safety constraints ki zarurat hoti hai. Isaac Sim in challenges ko address karta hai fast, parallel simulation provide karke jahan policies billions of simulated interactions se seekh sakti hain deployment se pehle.
+Robotics RL میں چیلنج نمونے کی کارکردگی اور حفاظت میں ہے۔ جسمانی روبوٹس وہ لاکھوں episodes execute نہیں کر سکتے جو simulation پر مبنی RL اکثر ضرورت رکھتا ہے۔ ہارڈویئر پر براہ راست تربیت سے نقصان کا خطرہ ہوتا ہے اور محتاط حفاظتی پابندیوں کی ضرورت ہوتی ہے۔ Isaac Sim ان چیلنجز کو حل کرتا ہے تیز، متوازی simulation فراہم کرکے جہاں policies اربوں simulated تعاملات سے سیکھ سکتی ہیں تعیناتی سے پہلے۔
 
-Isaac Gym popular RL algorithms ke saath integrate hoti hai jaise PPO (Proximal Policy Optimization), SAC (Soft Actor-Critic), aur TD3 (Twin Delayed DDPG). Niche example Isaac Gym ke saath PPO training dikhata hai:
+Isaac Gym مقبول RL الگورتھم کے ساتھ مربوط ہوتا ہے جیسے PPO (Proximal Policy Optimization)، SAC (Soft Actor-Critic)، اور TD3 (Twin Delayed DDPG)۔ نیچے دی گئی مثال Isaac Gym کے ساتھ PPO تربیت دکھاتی ہے:
 
 ```python
 # Example: PPO training for robot manipulation
-# Udaharan: Robot manipulation ke liye PPO training
+# Udaharan: Robot manipulation کے لیے PPO training
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -879,7 +879,7 @@ class PPOPolicyNetwork(nn.Module):
             in_dim = h_dim
 
         # Policy head (mean of action distribution)
-        # Policy head (action distribution ka mean)
+        # Policy head (action distribution کا mean)
         self.policy_mean = nn.Linear(hidden_dims[-1], action_dim)
         self.policy_log_std = nn.Parameter(torch.zeros(action_dim))
 
@@ -915,13 +915,13 @@ class PPOPolicyNetwork(nn.Module):
         features = self.feature_net(observations)
 
         # Get action distribution parameters
-        # Action distribution parameters get karna
+        # Action distribution parameters get کرنا
         mean = self.policy_mean(features)
         log_std = self.policy_log_std.expand_as(mean)
         std = torch.exp(log_std)
 
         # Sample action
-        # Action sample karna
+        # Action sample کرنا
         if deterministic:
             actions = mean
             log_probs = torch.zeros_like(mean)
@@ -931,7 +931,7 @@ class PPOPolicyNetwork(nn.Module):
             log_probs = dist.log_prob(actions)
 
         # Clip actions to valid range
-        # Actions ko valid range mein clip karna
+        # Actions کو valid range میں clip کرنا
         actions = torch.tanh(actions)
 
         # Value estimate
@@ -1020,7 +1020,7 @@ class PPOAgent:
         value: torch.Tensor
     ):
         """Store transition in replay buffer."""
-        # Replay buffer mein transition store karna
+        # Replay buffer میں transition store کرنا
         self.buffer["observations"].append(observation)
         self.buffer["actions"].append(action)
         self.buffer["rewards"].append(reward)
@@ -1033,7 +1033,7 @@ class PPOAgent:
         Compute discounted returns and GAE advantages.
         """
         # Convert buffer to tensors
-        # Buffer ko tensors mein convert karna
+        # Buffer کو tensors میں convert کرنا
         observations = torch.stack(self.buffer["observations"])
         rewards = torch.tensor(self.buffer["rewards"])
         dones = torch.tensor(self.buffer["dones"])
@@ -1041,7 +1041,7 @@ class PPOAgent:
         values = torch.stack(self.buffer["values"])
 
         # Compute discounted returns
-        # Discounted returns compute karna
+        # Discounted returns compute کرنا
         returns = torch.zeros_like(rewards)
         R = 0
         for t in reversed(range(len(rewards))):
@@ -1051,7 +1051,7 @@ class PPOAgent:
             returns[t] = R
 
         # Compute advantages using GAE
-        # GAE use karke advantages compute karna
+        # GAE use کر کے advantages compute کرنا
         advantages = torch.zeros_like(rewards)
         gae = 0
         lam = 0.95  # GAE lambda
@@ -1064,27 +1064,27 @@ class PPOAgent:
             advantages[t] = gae
 
         # Normalize advantages
-        # Advantages normalize karna
+        # Advantages normalize کرنا
         advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
 
         return observations, returns, advantages, old_log_probs
 
     def update(self):
         """Perform PPO update step."""
-        # PPO update step perform karna
+        # PPO update step perform کرنا
         # Compute returns and advantages
-        # Returns aur advantages compute karna
+        # Returns اور advantages compute کرنا
         obs, returns, advantages, old_log_probs = self.compute_returns_and_advantages()
 
         # Flatten for minibatch sampling
-        # Minibatch sampling ke liye flatten karna
+        # Minibatch sampling کے لیے flatten کرنا
         flat_obs = obs.reshape(-1, *obs.shape[2:])
         flat_returns = returns.reshape(-1)
         flat_advantages = advantages.reshape(-1)
         flat_old_log_probs = old_log_probs.reshape(-1)
 
         # Calculate number of minibatches
-        # Minibatches ki ginti karna
+        # Minibatches کی گنتی کرنا
         num_samples = flat_obs.shape[0]
         num_batches = num_samples // self.minibatch_size
 
@@ -1103,11 +1103,11 @@ class PPOAgent:
             batch_old_log_probs = flat_old_log_probs[indices]
 
             # Get new log probs and values
-            # Naye log probs aur values get karna
+            # Naye log probs اور values get کرنا
             new_log_probs, entropy = self._get_log_probs_and_entropy(batch_obs, batch_actions)
 
             # Compute PPO clipped objective
-            # PPO clipped objective compute karna
+            # PPO clipped objective compute کرنا
             ratio = torch.exp(new_log_probs - batch_old_log_probs)
             surr1 = ratio * batch_advantages
             surr2 = torch.clamp(ratio, 1 - self.clip_epsilon, 1 + self.clip_epsilon) * batch_advantages
@@ -1137,7 +1137,7 @@ class PPOAgent:
             total_entropy += entropy.item()
 
         # Clear buffer
-        # Buffer clear karna
+        # Buffer clear کرنا
         self.buffer = {
             "observations": [],
             "actions": [],
@@ -1148,7 +1148,7 @@ class PPOAgent:
         }
 
         # Log metrics
-        # Metrics log karna
+        # Metrics log کرنا
         return {
             "policy_loss": total_policy_loss / self.update_epochs,
             "value_loss": total_value_loss / self.update_epochs,
@@ -1169,16 +1169,16 @@ class PPOAgent:
         std = torch.exp(log_std)
 
         # Compute log prob of actions
-        # Actions ka log prob compute karna
+        # Actions کا log prob compute کرنا
         dist = Normal(mean, std)
         log_probs = dist.log_prob(actions)
 
         # Clip for numerical stability
-        # Numerical stability ke liye clip karna
+        # Numerical stability کے لیے clip کرنا
         log_probs = torch.clamp(log_probs, -20, 20)
 
         # Compute entropy
-        # Entropy compute karna
+        # Entropy compute کرنا
         entropy = 0.5 + 0.5 * np.log(2 * np.pi) + torch.log(std)
         entropy = entropy.sum(dim=-1)
 
@@ -1187,47 +1187,47 @@ class PPOAgent:
 
 ### Domain Randomization
 
-Real world mein transfer karne wali policies train karne ke liye unhe simulation ke dauran variation expose karne ki zarurat hai. Domain randomization systematically simulation parameters vary karta hai jaise lighting, object colors, friction coefficients, aur physics dynamics. Yeh variation policies ko robust teach karta hai distribution shift ke against jiska wo encounter karenge when deployed.
+حقیقی دنیا میں منتقل ہونے والی policies کی تربیت کے لیے انہیں simulation کے دوران تبدیلی سے آشنا کرنے کی ضرورت ہے۔ Domain randomization منظم طریقے سے simulation parameters میں تبدیلی کرتا ہے جیسے lighting، object کے رنگ، friction coefficients، اور physics dynamics۔ یہ تبدیلی policies کو مضبوط سکھاتی ہے distribution shift کے خلاف جس کا وہ سامنا کریں گے جب تعینات ہوں۔
 
-Effective domain randomization realism aur variation ke beech balance karta hai. Kam variation se policies simulation artifacts par overfit hoti hain. Zyada variation se learning unnecessarily difficult ho jati hai. Research suggest karti hai ki randomization par focus karna chahiye parameters par jo task performance aur simulation aur reality ke beech distribution gap ko sabse zyada affect karte hain.
+مؤثر domain randomization حقیقت پسندی اور تبدیلی کے درمیان توازن رکھتا ہے۔ کم تبدیلی سے policies simulation artifacts پر overfit ہوتی ہیں۔ زیادہ تبدیلی سے learning غیر ضروری طور پر مشکل ہو جاتی ہے۔ تحقیق تجویز کرتی ہے کہ randomization کو ان parameters پر مرکوز رکھنا چاہیے جو task کی کارکردگی اور simulation اور حقیقت کے درمیان distribution gap کو سب سے زیادہ متاثر کرتے ہیں۔
 
-## 4.5 Sim-to-Real Transfer Techniques
+## 4.5 Sim-to-Real منتقلی کی تکنیکیں
 
-Simulation mein trained policies ko physical robots par deploy karna ek significant challenge hai. Sim-to-real gap physics dynamics, sensor characteristics, aur environmental conditions mein differences comprise karta hai. Successful transfer in gaps ko address karna require karta hai careful system design aur training ke through.
+Simulation میں تربیت یافتہ policies کو جسمانی روبوٹس پر تعینات کرنا ایک اہم چیلنج ہے۔ Sim-to-real gap physics dynamics، sensor خصوصیات، اور ماحولیاتی حالات میں فرق پر مشتمل ہے۔ کامیاب منتقلی کے لیے ان gaps کو حل کرنا محتاط نظام کی تشکیل اور تربیت کی ضرورت ہے۔
 
-### Sim-to-Real Gap ko samajhna
+### Sim-to-Real Gap کو سمجھنا
 
-Fundamental challenge yeh hai ki simulations approximate models of physical reality hain. Physics engines contact dynamics, friction, aur actuator behavior ke baare mein simplifying assumptions karte hain. Rendering engines light transport aur material appearance approximate karti hain. Yeh approximations compound hokar policies create karte hain jo simulation artifacts exploit karti hain, robust behaviors seekhne ki bajaye.
+بنیادی چیلنج یہ ہے کہ simulations جسمانی حقیقت کے تخمینہ ماڈل ہیں۔ Physics engines contact dynamics، friction، اور actuator رویے کے بارے میں آسان فرضیات کرتے ہیں۔ Rendering engines روشنی کی منتقلی اور مواد کی ظاہری شکل کا تخمینہ لگاتے ہیں۔ یہ تخمینے مل کر policies بناتے ہیں جو simulation artifacts کا فائدہ اٹھاتی ہیں، مضبوط رویے سیکھنے کے بجائے۔
 
-Physics gaps kai tariko se manifest hoti hain. Contact models in simulators collisions ko penalty forces ya impulse-based resolution ke through handle karte hain, dono actual physical contact ke approximations hain. Simulated contacts ki stiffness, damping, aur friction rarely real materials se precisely match karti hain. Robot dynamics models perfect torque transmission assume karte hain, gearbox compliance, joint friction, aur calibration errors ignore karke.
+Physics gaps کئی طریقوں سے ظاہر ہوتے ہیں۔ Simulators میں contact models collisions کو penalty forces یا impulse پر مبنی resolution کے ذریعے handle کرتے ہیں، دونوں حقیقی جسمانی contact کے تخمینے ہیں۔ Simulated contacts کی stiffness، damping، اور friction شاذ و نادر ہی حقیقی مواد سے بالکل میچ کرتے ہیں۔ Robot dynamics ماڈل کامل torque transmission فرض کرتے ہیں، gearbox compliance، joint friction، اور calibration errors کو نظر انداز کرتے ہوئے۔
 
-Perception gaps simulated aur real sensor data ke beech differences se arise hoti hain. Simulation se camera images ke pass idealized noise profiles, perfect white balance, aur consistent lens characteristics hote hain. Real cameras ke pass lens aberrations, rolling shutter effects, aur exposure variations hote hain. Simulation mein depth sensors material properties aur lighting conditions ke baare mein simplifying assumptions karte hain.
+Perception gaps simulated اور حقیقی sensor ڈیٹا کے درمیان فرق سے پیدا ہوتے ہیں۔ Simulation سے کیمرا تصاویر کے پاس مثالی noise profiles، کامل white balance، اور مستقل lens خصوصیات ہوتی ہیں۔ حقیقی کیمروں کے پاس lens aberrations، rolling shutter effects، اور exposure میں تبدیلیاں ہوتی ہیں۔ Simulation میں depth sensors مواد کی خصوصیات اور lighting conditions کے بارے میں آسان فرضیات کرتے ہیں۔
 
-### System Identification aur Calibration
+### System Identification اور Calibration
 
-System identification techniques physical systems ke characteristics measure karte hain aur simulation parameters ko match karne ke liye tune karti hain. Yeh calibration process sim-to-real gap ko reduce karta hai simulation fidelity improve karke. Humanoid robots ke liye, system identification joint dynamics, sensor characteristics, aur contact properties par focus karta hai.
+System identification تکنیکیں جسمانی نظاموں کی خصوصیات کی پیمائش کرتی ہیں اور simulation parameters کو میچ کرنے کے لیے ٹیون کرتی ہیں۔ یہ calibration عمل sim-to-real gap کو کم کرتا ہے simulation کی وفاداری بہتر بناکر۔ ہیومینائڈ روبوٹس کے لیے، system identification joint dynamics، sensor خصوصیات، اور contact خصوصیات پر مرکوز ہوتی ہے۔
 
-Actuator characterization commanded signals aur actual motion ke beech relationship measure karta hai. Isme motor resistance, gearbox ratios, friction profiles, aur torque limits identify karna shamil hai. Identified parameters simulation joint models configure karne ke liye use hoti hain, dynamic accuracy improve karke.
+Actuator characterization کمانڈ شدہ signals اور حقیقی حرکت کے درمیان تعلق کی پیمائش کرتا ہے۔ اس میں motor resistance، gearbox ratios، friction profiles، اور torque کی حدود کی شناخت شامل ہے۔ شناخت شدہ parameters simulation joint ماڈلز کی تشکیل کے لیے استعمال ہوتے ہیں، dynamic درستگی بہتر بناکر۔
 
-Sensor calibration noise characteristics, biases, aur scale factors measure karta hai. IMU calibration accelerometer aur gyroscope biases, scale factors, aur axis alignments determine karta hai. Camera calibration intrinsics, distortion coefficients, aur robot base frames ke relative extrinsics measure karta hai.
+Sensor calibration noise خصوصیات، biases، اور scale factors کی پیمائش کرتا ہے۔ IMU calibration accelerometer اور gyroscope biases، scale factors، اور axis alignments کا تعین کرتا ہے۔ Camera calibration intrinsics، distortion coefficients، اور robot base frames کے متعلقہ extrinsics کی پیمائش کرتا ہے۔
 
 ### Domain Adaptation
 
-Domain adaptation techniques simulation aur real data ke beech distribution shift reduce karti hain bina exact system identification require kiye. Yeh approaches synthetic data par models train karte hain jabki real distributions par various mechanisms ke through generalize karti hain.
+Domain adaptation تکنیکیں simulation اور حقیقی ڈیٹا کے درمیان distribution shift کو کم کرتی ہیں بغیر exact system identification کی ضرورت کے۔ یہ approaches synthetic ڈیٹا پر models کی تربیت کرتے ہیں جبکہ حقیقی distributions پر مختلف طریقہ کار کے ذریعے عمومی بنتے ہیں۔
 
-Domain randomization varied synthetic data par train karta hai policies ko distribution shift ke against robust banana ke liye. Key insight yeh hai ki agar real distribution training distribution ke andar contained hai, to transfer succeed hoti hai. Real variation effective hone ke liye randomization ko span karna chahiye.
+Domain randomization متنوع synthetic ڈیٹا پر تربیت دیتا ہے policies کو distribution shift کے خلاف مضبوط بنانے کے لیے۔ اہم بصیرت یہ ہے کہ اگر حقیقی distribution تربیتی distribution کے اندر موجود ہے، تو منتقلی کامیاب ہوتی ہے۔ حقیقی تبدیلی مؤثر ہونے کے لیے randomization کو پھیلانا چاہیے۔
 
-Domain adaptation networks domains ke beech map seekhne ke liye learn karti hain. Ek encoder network real images ko synthetic images jaisa dikhane ke liye transform karta hai, ya vice versa. Policy training phir domain-adapted representations use karti hai, distribution gap reduce karke.
+Domain adaptation networks domains کے درمیان نقشہ سیکھنے کے لیے سیکھتے ہیں۔ ایک encoder network حقیقی تصاویر کو synthetic تصاویر جیسا دکھانے کے لیے تبدیل کرتا ہے، یا اس کے برعکس۔ Policy تربیت پھر domain-adapted representations استعمال کرتی ہے، distribution gap کو کم کرتے ہوئے۔
 
-Online adaptation deployment ke dauran learning continue karta hai. Real-world interactions new training data provide karte hain jo distribution shift ke liye correct karta hai. Yeh careful safety constraints aur stable learning rates require karta hai policy degradation prevent karne ke liye.
+Online adaptation تعیناتی کے دوران learning جاری رکھتا ہے۔ حقیقی دنیا کے تعاملات نیا تربیتی ڈیٹا فراہم کرتے ہیں جو distribution shift کے لیے درست کرتا ہے۔ اس کے لیے محتاط حفاظتی پابندیاں اور مستحکم learning rates کی ضرورت ہے policy کی خرابی کو روکنے کے لیے۔
 
-### Deployment Pipeline
+### تعیناتی پائپ لائن
 
-Trained policies ko physical robots par deploy karne ke liye trained networks export aur optimize karne ki zarurat hai. Isaac PyTorch models ko TensorRT engines mein convert karne ke liye tools provide karta hai efficient GPU inference ke liye. Deployment pipeline ko sensor input processing, policy inference, aur actuator command execution real time mein handle karna chahiye.
+تربیت یافتہ policies کو جسمانی روبوٹس پر تعینات کرنے کے لیے تربیت یافتہ networks کو export اور optimize کرنے کی ضرورت ہے۔ Isaac PyTorch ماڈلز کو TensorRT engines میں تبدیل کرنے کے لیے ٹولز فراہم کرتا ہے مؤثر GPU inference کے لیے۔ Deployment پائپ لائن کو sensor input processing، policy inference، اور actuator command execution حقیقی وقت میں handle کرنا چاہیے۔
 
 ```python
 # Example: Policy export and deployment for physical robot
-# Udaharan: Physical robot ke liye policy export aur deployment
+# Udaharan: Physical robot کے لیے policy export اور deployment
 import torch
 import tensorrt as trt
 import numpy as np
@@ -1252,7 +1252,7 @@ class PolicyDeployer:
         self.engine_path = engine_path
 
         # Set model to evaluation mode
-        # Model ko evaluation mode par set karna
+        # Model کو evaluation mode پر set کرنا
         self.model.eval()
 
         # TensorRT logger
@@ -1276,7 +1276,7 @@ class PolicyDeployer:
         import torch_tensorrt
 
         # Determine precision
-        # Precision determine karna
+        # Precision determine کرنا
         if precision == "fp16":
             enabled_precisions = {torch.float, torch.half}
         elif precision == "int8":
@@ -1285,7 +1285,7 @@ class PolicyDeployer:
             enabled_precisions = {torch.float}
 
         # Compile model with TensorRT
-        # TensorRT ke saath model compile karna
+        # TensorRT کے ساتھ model compile کرنا
         self.trt_module = torch_tensorrt.compile(
             self.model,
             inputs=[
@@ -1300,14 +1300,14 @@ class PolicyDeployer:
         )
 
         # Save engine
-        # Engine save karna
+        # Engine save کرنا
         self.save_engine()
 
     def save_engine(self):
         """Save TensorRT engine to file."""
-        # TensorRT engine ko file mein save karna
+        # TensorRT engine کو file میں save کرنا
         # Get serialized engine
-        # Serialized engine get karna
+        # Serialized engine get کرنا
         engine = self.trt_module._engine
 
         with open(self.engine_path, "wb") as f:
@@ -1315,7 +1315,7 @@ class PolicyDeployer:
 
     def load_engine(self) -> trt.ICudaEngine:
         """Load TensorRT engine from file."""
-        # TensorRT engine ko file se load karna
+        # TensorRT engine کو file سے load کرنا
         with open(self.engine_path, "rb") as f:
             engine_data = f.read()
 
@@ -1328,7 +1328,7 @@ class PolicyDeployer:
         """
         Create inference session with input/output buffers.
         """
-        # Input/output buffers ke saath inference session create karna
+        # Input/output buffers کے ساتھ inference session create کرنا
         if engine is None:
             engine = self.load_engine()
 
@@ -1336,7 +1336,7 @@ class PolicyDeployer:
         self.context = engine.create_execution_context()
 
         # Allocate buffers
-        # Buffers allocate karna
+        # Buffers allocate کرنا
         self.host_inputs = []
         self.gpu_inputs = []
         self.host_outputs = []
@@ -1348,13 +1348,13 @@ class PolicyDeployer:
             dtype = trt.nptype(engine.get_binding_dtype(i))
 
             # Allocate host and device memory
-            # Host aur device memory allocate karna
+            # Host اور device memory allocate کرنا
             size = trt.volume(shape)
             host_mem = np.empty(size, dtype=dtype)
             gpu_mem = torch.cuda.mem_alloc(size * dtype().itemsize)
 
             # Store bindings
-            # Bindings store karna
+            # Bindings store کرنا
             if engine.binding_is_input(binding_name):
                 self.host_inputs.append(host_mem)
                 self.gpu_inputs.append(gpu_mem)
@@ -1363,7 +1363,7 @@ class PolicyDeployer:
                 self.gpu_outputs.append(gpu_mem)
 
         # Create CUDA stream
-        # CUDA stream create karna
+        # CUDA stream create کرنا
         self.stream = torch.cuda.current_stream().cuda_stream
 
     def infer(self, input_data: np.ndarray) -> np.ndarray:
@@ -1377,7 +1377,7 @@ class PolicyDeployer:
             output_data: numpy array of shape output_shape
         """
         # Copy input to GPU
-        # Input ko GPU par copy karna
+        # Input کو GPU پر copy کرنا
         np.copyto(self.host_inputs[0], input_data.flatten())
         torch.cuda.memcpy_async(
             self.gpu_inputs[0],
@@ -1386,18 +1386,18 @@ class PolicyDeployer:
         )
 
         # Bind buffers
-        # Buffers bind karna
+        # Buffers bind کرنا
         bindings = [int(self.gpu_inputs[0]), int(self.gpu_outputs[0])]
 
         # Execute inference
-        # Inference execute karna
+        # Inference execute کرنا
         self.context.execute_async(
             bindings=bindings,
             stream_handle=self.stream
         )
 
         # Copy output from GPU
-        # Output ko GPU se copy karna
+        # Output کو GPU سے copy کرنا
         torch.cuda.memcpy_async(
             torch.from_numpy(self.host_outputs[0]).cuda(),
             self.gpu_outputs[0],
@@ -1405,11 +1405,11 @@ class PolicyDeployer:
         )
 
         # Synchronize
-        # Synchronize karna
+        # Synchronize کرنا
         torch.cuda.synchronize()
 
         # Reshape output
-        # Output reshape karna
+        # Output reshape کرنا
         output = self.host_outputs[0].reshape(self.output_shape)
 
         return output
@@ -1432,13 +1432,13 @@ class RobotControlInterface:
         self.control_period = 1.0 / control_frequency
 
         # Initialize sensor interfaces
-        # Sensor interfaces initialize karna
+        # Sensor interfaces initialize کرنا
         self.camera = self._init_camera(sensor_config["camera"])
         self.imu = self._init_imu(sensor_config["imu"])
         self.joint_encoder = self._init_joint_encoders(sensor_config["joints"])
 
         # Initialize actuator interface
-        # Actuator interface initialize karna
+        # Actuator interface initialize کرنا
         self.actuators = self._init_actuators()
 
         # State observation buffer
@@ -1448,14 +1448,14 @@ class RobotControlInterface:
 
     def _init_camera(self, config):
         """Initialize camera sensor interface."""
-        # Camera sensor interface initialize karna
+        # Camera sensor interface initialize کرنا
         # Implementation depends on specific camera hardware
         # Common interfaces: ROS 2 image transport, DirectShow, V4L2
         pass
 
     def _init_imu(self, config):
         """Initialize IMU sensor interface."""
-        # IMU sensor interface initialize karna
+        # IMU sensor interface initialize کرنا
         # Implementation depends on IMU hardware
         # Common interfaces: serial, I2C, SPI
         pass
@@ -1475,7 +1475,7 @@ class RobotControlInterface:
         Returns:
             observation: Flattened observation vector for policy input
         """
-        # Sensor data collect karna aur observation vector construct karna
+        # Sensor data collect کرنا اور observation vector construct کرنا
         observations = []
 
         # Camera observation
@@ -1498,11 +1498,11 @@ class RobotControlInterface:
         observations.append(joint_velocities)
 
         # Concatenate all observations
-        # Saare observations concatenate karna
+        # Saare observations concatenate کرنا
         observation = np.concatenate(observations)
 
         # Store in history
-        # History mein store karna
+        # History میں store کرنا
         self.observation_history.append(observation)
         if len(self.observation_history) > self.max_history:
             self.observation_history.pop(0)
@@ -1517,29 +1517,29 @@ class RobotControlInterface:
             observation: Current observation
             done: Whether episode should terminate
         """
-        # Ek control step execute karna
+        # Ek control step execute کرنا
         import time
 
         start_time = time.time()
 
         # Get observation
-        # Observation get karna
+        # Observation get کرنا
         obs = self.get_observation()
 
         # Run policy inference
-        # Policy inference run karna
+        # Policy inference run کرنا
         action = self.deployer.infer(obs)
 
         # Apply low-level control
-        # Low-level control apply karna
+        # Low-level control apply کرنا
         self._apply_joint_commands(action)
 
         # Check safety conditions
-        # Safety conditions check karna
+        # Safety conditions check کرنا
         done = self._check_safety_conditions()
 
         # Wait to maintain control frequency
-        # Control frequency maintain karne ke liye wait karna
+        # Control frequency برقرار رکھنے کے لیے انتظار
         elapsed = time.time() - start_time
         if elapsed < self.control_period:
             time.sleep(self.control_period - elapsed)
@@ -1548,14 +1548,14 @@ class RobotControlInterface:
 
     def _apply_joint_commands(self, commands: np.ndarray):
         """Apply joint position/velocity/torque commands to actuators."""
-        # Actuators par joint position/velocity/torque commands apply karna
+        # Actuators پر joint position/velocity/torque commands apply کرنا
         # Implementation depends on actuator interface
         # May involve CAN bus communication, EtherCAT, or custom protocols
         pass
 
     def _check_safety_conditions(self) -> bool:
         """Check for safety violations requiring emergency stop."""
-        # Safety violations check karna jo emergency stop require karti hain
+        # Safety violations کی جانچ جو emergency stop کی ضرورت رکھتی ہیں
         # Joint limit checking
         # Joint limit checking
         joint_positions = self.joint_encoder.read_positions()
@@ -1577,14 +1577,15 @@ class RobotControlInterface:
         return False
 ```
 
-## 4.6 Summary aur Part 5 se Connection
+## 4.6 خلاصہ اور حصہ 5 سے تعلق
 
-Is chapter ne physical AI development ke liye NVIDIA Isaac platform par comprehensive overview provide kiya hai. Aap ne seekha hai kaise Isaac Sim photorealistic rendering aur accurate physics ke saath high-fidelity simulation enable karta hai. Perception pipelines demonstrate karti hain kaise AI-powered computer vision robot systems mein integrate kiya ja sakta hai. Manipulation aur reinforcement learning sections ne dikha hai kaise Isaac Gym massive parallelization ke through policy learning accelerate karta hai. Finally, sim-to-real transfer techniques simulation se physical deployment tak bridge provide karti hain.
+اس باب نے فزیکل AI ڈیولپمنٹ کے لیے NVIDIA Isaac پلیٹ فارم پر جامع جائزہ فراہم کیا ہے۔ آپ نے سیکھا ہے کہ کیسے Isaac Sim photorealistic رینڈرنگ اور درست physics کے ساتھ اعلیٰ معیار کی simulation کو ممکن بناتا ہے۔ Perception پائپ لائنز یہ ظاہر کرتی ہیں کہ کیسے AI پر مبنی کمپیوٹر ویژن کو روبوٹ سسٹمز میں مربوط کیا جا سکتا ہے۔ ہیرا پھیری اور reinforcement learning کے حصوں نے دکھایا ہے کہ کیسے Isaac Gym بڑے پیمانے پر parallelization کے ذریعے policy learning کو تیز کرتا ہے۔ آخر میں، sim-to-real منتقلی کی تکنیکیں simulation سے جسمانی تعیناتی تک پل فراہم کرتی ہیں۔
 
-Part 5 - Humanoid Robot Design ki taraf badhte hue, aap in Isaac capabilities ko specific humanoid platforms ke liye perception aur control systems develop karne ke liye apply karenge. Yahan simulation setup, policy training, aur deployment mein developed skills directly support karenge subsequent chapters mein covered implementation challenges. Isaac ka humanoid kinematics ke saath integration aapko complete behavioral systems develop aur test karne dega physical deployment se pehle.
+حصہ 5 - ہیومینائڈ روبوٹ ڈیزائن کی طرف بڑھتے ہوئے، آپ ان Isaac صلاحیتوں کو مخصوص ہیومینائڈ پلیٹ فارمز کے لیے ادراک اور کنٹرول سسٹمز تیار کرنے کے لیے لاگو کریں گے۔ یہاں simulation سیٹ اپ، policy تربیت، اور تعیناتی میں تیار کردہ مہارتیں براہ راست بعد کے ابواب میں شامل implementation چیلنجز کی حمایت کریں گی۔ Isaac کا ہیومینائڈ kinematics کے ساتھ انضمام آپ کو مکمل رویاتی نظام تیار اور جانچنے دے گا جسمانی تعیناتی سے پہلے۔
 
 ---
 
-**Next Chapter:** Part 5 - Humanoid Robot Design
+**اگلا باب:** حصہ 5 - ہیومینائڈ روبوٹ ڈیزائن
 
-Part 5 mein, aap is chapter se simulation aur learning foundations ko apply karenge humanoid robots ke liye control systems design aur implement karne mein. Topics include bipedal locomotion planning, whole-body control architectures, aur human-robot interaction interfaces.
+حصہ 5 میں، آپ اس باب سے simulation اور learning کی بنیادوں کو ہیومینائڈ روبوٹس کے لیے کنٹرول سسٹمز ڈیزائن اور لاگو کرنے میں استعمال کریں گے۔ موضوعات میں دو پیروں پر چلنے کی منصوبہ بندی، پورے جسم کے کنٹرول کی تعمیر، اور انسان-روبوٹ تعامل کے انٹرفیس شامل ہیں۔
+

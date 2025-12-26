@@ -1,10 +1,10 @@
 ---
-title: "Appendix B: Simulation Setup Guide"
+title: "ضمیمہ B: سمیولیشن سیٹ اپ گائیڈ"
 sidebar_position: 71
-description: "Gazebo، NVIDIA Isaac Sim، Unity، اور container-based simulation environments کے لیے جامع سیٹ اپ گائیڈ"
+description: "Gazebo، NVIDIA Isaac Sim، Unity، اور کنٹینر پر مبنی سمیولیشن ماحول کے لیے جامع سیٹ اپ گائیڈ"
 ---
 
-# Appendix B: Simulation Setup Guide (سیمولیشن سیٹ اپ گائیڈ)
+# ضمیمہ B: سمیولیشن سیٹ اپ گائیڈ
 
 یہ ایپینڈکس اس کتاب میں استعمال ہونے والے primary simulation tools کے لیے تفصیلی سیٹ اپ instructions فراہم کرتا ہے۔ proper simulation environment configuration physical hardware پر deploy کرنے سے پہلے humanoid robotics algorithms تیار اور test کرنے کے لیے essential ہے۔
 

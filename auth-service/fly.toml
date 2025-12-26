@@ -1,0 +1,48 @@
+# Fly.io configuration for Better Auth Service
+# Optimized for cookie-based session management
+
+app = "fubuni-auth"
+primary_region = "iad" # US East (change to your preferred region)
+
+[build]
+
+[http_service]
+  internal_port = 4000
+  force_https = true
+  auto_stop_machines = false  # CRITICAL: Keep always-on for sessions
+  auto_start_machines = true
+  min_machines_running = 1    # Always keep at least 1 instance running
+  processes = ["app"]
+
+  # Cookie-friendly timeout settings
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  # Health check using your /health endpoint
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/health"
+
+# VM Configuration - Free tier eligible
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
+
+# Environment variables (set secrets via: fly secrets set KEY=value)
+[env]
+  NODE_ENV = "production"
+  AUTH_PORT = "4000"
+
+# CORS and cookie handling
+# Set these via fly CLI:
+# fly secrets set BETTER_AUTH_SECRET="your-secret"
+# fly secrets set NEON_DATABASE_URL="your-db-url"
+# fly secrets set JWT_SECRET="your-jwt-secret"
+# fly secrets set BETTER_AUTH_URL="https://fubuni-auth.fly.dev"
+# fly secrets set CORS_ORIGINS="https://your-frontend-domain.vercel.app,https://another-domain.com"
