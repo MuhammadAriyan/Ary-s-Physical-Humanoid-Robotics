@@ -17,23 +17,23 @@ sidebar_position: 4
 
 ## 4.1 NVIDIA Isaac ایکوسسٹم کا تعارف
 
-NVIDIA Isaac platform physical AI applications develop karne, test karne, aur deploy karne ke liye ek comprehensive ecosystem hai. Traditional robot development tools jo simulation, perception, aur learning ko alag concerns ke tor par treat karte hain, Isaac ek integrated workflow provide karta hai jo concept se deployment tak poore development cycle ko accelerate karta hai.
+NVIDIA Isaac پلیٹ فارم فزیکل AI ایپلیکیشنز تیار کرنے، ٹیسٹ کرنے، اور تعینات کرنے کے لیے ایک جامع ایکوسسٹم ہے۔ روایتی روبوٹ ڈیولپمنٹ ٹولز جو simulation، perception، اور learning کو الگ concerns کے طور پر ٹریٹ کرتے ہیں، Isaac ایک مربوط ورک فلو فراہم کرتا ہے جو concept سے deployment تک پورے ڈیولپمنٹ سائیکل کو تیز کرتا ہے۔
 
 ### NVIDIA Isaac کیا ہے؟
 
-NVIDIA Isaac do primary components comprise karta hai jo saath mein kaam karte hain: Isaac SDK aur Isaac Sim. Isaac SDK robot navigation, manipulation, aur perception algorithms ke liye APIs ke saath software development kit provide karta hai. Isaac Sim NVIDIA Omniverse par built simulation environment hai jo photorealistic rendering, accurate physics, aur physical robot deployments ke saath seamless data exchange deliver karta hai.
+NVIDIA Isaac دو بنیادی components پر مشتمل ہے جو ساتھ مل کر کام کرتے ہیں: Isaac SDK اور Isaac Sim۔ Isaac SDK روبوٹ navigation، manipulation، اور perception algorithms کے لیے APIs کے ساتھ software development kit فراہم کرتا ہے۔ Isaac Sim NVIDIA Omniverse پر بنایا گیا simulation environment ہے جو photorealistic rendering، accurate physics، اور physical robot deployments کے ساتھ seamless data exchange فراہم کرتا ہے۔
 
-Platform NVIDIA ki GPU computing, deep learning, aur real-time simulation ki strengths leverage karta hai humanoid robot development ki unique challenges address karne ke liye. Humanoid robots ko sophisticated perception ki zarurat hoti hai human environments ko samajhne ke liye, precise manipulation diverse objects ke saath interact karne ke liye, aur robust locomotion complex terrain navigate karne ke liye. Isaac har challenge ke liye purpose-built tools provide karta hai while maintaining consistency across the development workflow.
+پلیٹ فارم NVIDIA کی GPU computing، deep learning، اور real-time simulation کی طاقتوں کا فائدہ اٹھاتا ہے humanoid robot development کے منفرد چیلنجز کو حل کرنے کے لیے۔ Humanoid robots کو sophisticated perception کی ضرورت ہوتی ہے انسانی ماحول کو سمجھنے کے لیے، precise manipulation مختلف اشیاء کے ساتھ تعامل کرنے کے لیے، اور robust locomotion پیچیدہ علاقوں کو navigate کرنے کے لیے۔ Isaac ہر چیلنج کے لیے مخصوص ٹولز فراہم کرتا ہے جبکہ پوری development workflow میں مستقل مزاجی برقرار رکھتا ہے۔
 
-Isaac Sim khud ko dusre simulation platforms se alag karta hai kai key capabilities se. RTX GPU architecture real-time ray tracing enable karta hai jo photorealistic sensor data produce karta hai, yeh perception models train karne ke liye critical hai jo real-world conditions par generalize honge. Physics simulation PhysX 5 use karta hai accurate contact dynamics ke liye, yeh humanoid walking aur manipulation ke liye essential hai. Omniverse streaming capabilities simulations ko data center infrastructure par remotely operate karne deti hai, enabling large-scale parallel training scenarios.
+Isaac Sim خود کو دوسرے simulation platforms سے الگ کرتا ہے کئی اہم صلاحیتوں سے۔ RTX GPU architecture real-time ray tracing ممکن بناتا ہے جو photorealistic sensor data پیدا کرتا ہے، یہ perception models کی تربیت کے لیے بہت اہم ہے جو حقیقی دنیا کی صورتحال پر عمومی بنیں گے۔ Physics simulation PhysX 5 استعمال کرتا ہے درست contact dynamics کے لیے، یہ humanoid walking اور manipulation کے لیے ضروری ہے۔ Omniverse streaming capabilities simulations کو data center infrastructure پر دور سے چلانے کی اجازت دیتی ہے، بڑے پیمانے پر متوازی تربیتی منظرناموں کو ممکن بناتے ہوئے۔
 
 ### Isaac پلیٹ فارم کی تعمیر
 
-Isaac architecture ek layered design follow karta hai jo concerns separate karta hai while maintaining tight integration. Foundation mein Omniverse hai, NVIDIA's open platform 3D workflows aur applications banana ke liye. Omniverse real-time rendering engine, physics simulation backbone, aur data exchange protocols provide karta hai jo Isaac Sim build karta hai.
+Isaac architecture ایک layered ڈیزائن کی پیروی کرتا ہے جو concerns کو الگ کرتا ہے جبکہ مضبوط انضمام برقرار رکھتا ہے۔ بنیاد میں Omniverse ہے، NVIDIA کا کھلا پلیٹ فارم 3D workflows اور applications بنانے کے لیے۔ Omniverse real-time rendering engine، physics simulation backbone، اور data exchange protocols فراہم کرتا ہے جن پر Isaac Sim تعمیر ہوتا ہے۔
 
-Omniverse ke upar, Isaac Sim robotics ke liye domain-specific abstractions provide karta hai. Isaac Gym module GPU-accelerated reinforcement learning provide karta hai with support for thousands of parallel environments. Isaac Perception module computer vision algorithms provide karta hai jo GPU execution ke liye optimized hain. Isaac Manipulation module grasp planning aur motion generation deliver karta hai robotic arms aur hands ke liye.
+Omniverse کے اوپر، Isaac Sim robotics کے لیے domain-specific abstractions فراہم کرتا ہے۔ Isaac Gym module GPU-accelerated reinforcement learning فراہم کرتا ہے ہزاروں متوازی ماحول کی سہولت کے ساتھ۔ Isaac Perception module computer vision algorithms فراہم کرتا ہے جو GPU execution کے لیے بہتر بنائے گئے ہیں۔ Isaac Manipulation module grasp planning اور motion generation فراہم کرتا ہے robotic arms اور hands کے لیے۔
 
-Application layer Isaac ko ROS 2 interfaces aur custom controller bindings ke through real robot hardware se connect karta hai. Simulation mein trained policies ko TensorRT-optimized inference engines export kiya ja sakta hai deployment ke liye NVIDIA Jetson ya NVIDIA AGX platforms par. Yeh end-to-end workflow ensure karta hai simulation mein developments directly physical robot capabilities mein translate hon.
+Application layer Isaac کو ROS 2 interfaces اور custom controller bindings کے ذریعے حقیقی روبوٹ ہارڈویئر سے جوڑتا ہے۔ Simulation میں تربیت یافتہ policies کو TensorRT-optimized inference engines میں export کیا جا سکتا ہے deployment کے لیے NVIDIA Jetson یا NVIDIA AGX platforms پر۔ یہ end-to-end workflow یقینی بناتا ہے کہ simulation میں ڈیولپمنٹس براہ راست physical robot capabilities میں تبدیل ہوں۔
 
 ```python
 # Example: Isaac Sim initialization and robot loading
@@ -72,11 +72,11 @@ robot = create_prim_from_usd(
 )
 ```
 
-### Hardware Requirements aur Setup
+### Hardware Requirements اور Setup
 
-Effective Isaac development ke liye appropriate hardware ki zarurat hai platform ki capabilities leverage karne ke liye. GPU requirements substantial hain due to real-time rendering aur physics simulation demands. Development workstations ke liye, NVIDIA RTX 3090 ya RTX 4090 interactive simulation ke liye necessary performance provide karta hai. Large-scale training scenarios ke liye, NVIDIA A100 ya H100 GPUs parallel environment execution ke liye memory aur compute capacity provide karte hain.
+مؤثر Isaac development کے لیے مناسب hardware کی ضرورت ہے پلیٹ فارم کی صلاحیتوں کا فائدہ اٹھانے کے لیے۔ GPU requirements کافی ہیں real-time rendering اور physics simulation کے تقاضوں کی وجہ سے۔ Development workstations کے لیے، NVIDIA RTX 3090 یا RTX 4090 interactive simulation کے لیے ضروری کارکردگی فراہم کرتا ہے۔ بڑے پیمانے پر تربیتی منظرناموں کے لیے، NVIDIA A100 یا H100 GPUs متوازی environment execution کے لیے memory اور compute capacity فراہم کرتے ہیں۔
 
-Niche table different development scenarios ke liye hardware recommendations summarize karti hai:
+نیچے دی گئی table مختلف development scenarios کے لیے hardware سفارشات کا خلاصہ پیش کرتی ہے:
 
 | Scenario | GPU | Memory | Storage | Use Case |
 |----------|-----|--------|---------|----------|
@@ -85,25 +85,25 @@ Niche table different development scenarios ke liye hardware recommendations sum
 | Production Training | A100 80GB | 80GB | 4TB NVME | Large-scale RL training, dataset generation |
 | Edge Deployment | Jetson AGX Orin | 64GB | 1TB NVME | Robot onboard inference |
 
-Memory requirements simulation complexity ke saath scale karti hain. Single humanoid robot simulation with full sensor suite typically 4-8GB GPU memory require karta hai rendering aur physics ke liye. Reinforcement learning ke liye parallel environments add karne se requirement multiply hoti hai. Memory allocation carefully plan karne se development ke dauran bottlenecks prevent hoti hain.
+Memory requirements simulation کی پیچیدگی کے ساتھ بڑھتی ہیں۔ مکمل sensor suite کے ساتھ ایک humanoid robot simulation عام طور پر 4-8GB GPU memory کی ضرورت ہوتی ہے rendering اور physics کے لیے۔ Reinforcement learning کے لیے متوازی environments شامل کرنے سے requirement کئی گنا ہو جاتی ہے۔ Memory allocation کی محتاط منصوبہ بندی development کے دوران رکاوٹوں کو روکتی ہے۔
 
-## 4.2 AI-Powered Perception
+## 4.2 AI پر مبنی ادراک
 
-Perception humanoid robot autonomy ke liye foundation banata hai. Environment ko samajhna, objects detect karna, motion track karna, aur scenes recognize karna sab sophisticated computer vision capabilities require karta hai. Isaac Perception GPU-accelerated implementations provide karta hai state-of-the-art algorithms ki jo simulation mein efficiently run hoti hain aur physical robots par deploy hoti hain.
+ادراک ہیومینائڈ روبوٹ کی خودمختاری کے لیے بنیاد بناتا ہے۔ ماحول کو سمجھنا، اشیاء کا پتہ لگانا، حرکت کو ٹریک کرنا، اور مناظر کو پہچاننا سب پیچیدہ کمپیوٹر ویژن صلاحیتوں کی ضرورت ہے۔ Isaac Perception GPU تیز رفتار implementations فراہم کرتا ہے جدید ترین الگورتھم کی جو simulation میں مؤثر طریقے سے چلتے ہیں اور جسمانی روبوٹس پر تعینات ہوتے ہیں۔
 
-### Computer Vision Foundation
+### کمپیوٹر ویژن کی بنیاد
 
-Traditional computer vision approaches par depend karte the hand-crafted features aur algorithmic pipelines par. Modern perception systems instead use karte hain deep neural networks jo hierarchical representations directly data se seekhte hain. Isaac in networks ko simulation pipeline ke saath integrate karta hai, enabling training on synthetic data aur deployment on physical hardware.
+روایتی کمپیوٹر ویژن طریقے ہاتھ سے بنائی گئی خصوصیات اور الگورتھمک پائپ لائنز پر انحصار کرتے تھے۔ جدید ادراک کے نظام اس کے بجائے گہرے neural networks استعمال کرتے ہیں جو hierarchical نمائندگی براہ راست ڈیٹا سے سیکھتے ہیں۔ Isaac ان networks کو simulation پائپ لائن کے ساتھ مربوط کرتا ہے، مصنوعی ڈیٹا پر تربیت اور جسمانی ہارڈویئر پر تعیناتی کو ممکن بناتے ہوئے۔
 
-Isaac mein perception pipeline modular design follow karta hai. Sensor interfaces cameras, depth sensors, aur LIDAR se raw data capture karti hain. Preprocessing stages data normalize karti hain aur neural network inference ke liye inputs prepare karti hain. Detection aur segmentation networks objects aur unki boundaries identify karti hain. Tracking algorithms identity across frames maintain karti hain. Higher-level modules multiple sensors se information fuse karti hain aur scene understanding build karti hain.
+Isaac میں ادراک پائپ لائن ماڈیولر ڈیزائن کی پیروی کرتی ہے۔ سینسر انٹرفیس کیمروں، ڈیپتھ سینسرز، اور LIDAR سے خام ڈیٹا حاصل کرتے ہیں۔ پری پروسیسنگ مراحل ڈیٹا کو معمول بناتے ہیں اور neural network inference کے لیے ان پٹس تیار کرتے ہیں۔ Detection اور segmentation networks اشیاء اور ان کی حدود کی شناخت کرتے ہیں۔ ٹریکنگ الگورتھم فریمز میں شناخت برقرار رکھتے ہیں۔ اعلیٰ سطح کے ماڈیولز متعدد سینسرز سے معلومات کو یکجا کرتے ہیں اور منظر کی سمجھ بوجھ بناتے ہیں۔
 
-GPU acceleration real-time perception ke liye essential hai. Modern neural networks billions of operations require karte hain per inference. In networks ko CPU par run karke robot control ke liye required frame rates achieve nahi ho sakti. Isaac TensorRT optimization leverage karta hai 100+ FPS inference speeds achieve karne ke liye RTX GPUs par, enabling perception at control frequencies.
+GPU تیز رفتار حقیقی وقت کے ادراک کے لیے ضروری ہے۔ جدید neural networks ہر inference کے لیے اربوں آپریشنز کی ضرورت رکھتے ہیں۔ ان networks کو CPU پر چلانے سے روبوٹ کنٹرول کے لیے درکار فریم ریٹس حاصل نہیں کیے جا سکتے۔ Isaac TensorRT optimization کا فائدہ اٹھاتا ہے RTX GPUs پر 100+ FPS inference speeds حاصل کرنے کے لیے، کنٹرول فریکوئنسیز پر ادراک کو ممکن بناتے ہوئے۔
 
-### Object Detection aur Segmentation
+### Object Detection اور Segmentation
 
-Object detection sensor data mein instances of interest identify karti hain aur unhe bounding boxes ya segmentation masks ke saath localize karti hai. Humanoid robots ke liye, cups, tools, aur obstacles jaise common objects detect karna manipulation aur navigation enable karta hai. Isaac popular detection architectures ke implementations provide karta hai jo robotics applications ke liye optimized hain.
+Object detection سینسر ڈیٹا میں دلچسپی کی مثالوں کی شناخت کرتی ہے اور انہیں bounding boxes یا segmentation masks کے ساتھ مقامی بناتی ہے۔ ہیومینائڈ روبوٹس کے لیے، کپ، ٹولز، اور رکاوٹوں جیسی عام اشیاء کا پتہ لگانا ہیرا پھیری اور نیویگیشن کو ممکن بناتا ہے۔ Isaac مقبول detection architectures کی implementations فراہم کرتا ہے جو robotics ایپلیکیشنز کے لیے بہتر بنائی گئی ہیں۔
 
-Niche example object detection ke liye complete perception pipeline demonstrate karta hai:
+نیچے دی گئی مثال object detection کے لیے مکمل ادراک پائپ لائن کا مظاہرہ کرتی ہے:
 
 ```python
 # Example: Isaac Perception pipeline for object detection
