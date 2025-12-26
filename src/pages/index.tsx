@@ -1,36 +1,205 @@
 import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import LanguageToggle from '../components/Language/LanguageToggle';
+import { LanguageProvider } from '../components/Language/LanguageContext';
 
-// Navigation Component
-function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
+// Translations
+const translations = {
+  en: {
+    title: "Ary's Physical & Humanoid Robotics",
+    subtitle: "A comprehensive guide to the fascinating world of Physical AI and humanoid robotics, from fundamental concepts to advanced applications in embodied intelligence.",
+    startLearning: "Start Learning",
+    viewChapters: "View Chapters",
+    featuresTitle: "Why Choose This Robotics Book?",
+    featuresSubtitle: "Experience a revolutionary approach to learning Physical AI and humanoid robotics",
+    chaptersTitle: "13-Week Complete Course",
+    chaptersSubtitle: "Master Physical AI and humanoid robotics from foundations to advanced applications",
+    features: [
+      {
+        icon: '🧠',
+        title: 'Physical AI & Embodied Intelligence',
+        description: 'Learn how AI systems interact with the physical world through sensors, actuators, and real-time decision making.'
+      },
+      {
+        icon: '🤖',
+        title: 'ROS 2 Robot Operating System',
+        description: 'Master the industry-standard framework for building robot applications with modern tools and best practices.'
+      },
+      {
+        icon: '🎮',
+        title: 'Robot Simulation',
+        description: 'Develop and test algorithms in Gazebo and NVIDIA Isaac Sim before deploying to real hardware.'
+      },
+      {
+        icon: '🦿',
+        title: 'Humanoid Development',
+        description: 'Explore bipedal locomotion, manipulation, and human-robot interaction with Unitree and other platforms.'
+      },
+      {
+        icon: '🗣️',
+        title: 'Conversational AI',
+        description: 'Integrate GPT models and speech systems for natural human-robot communication.'
+      },
+      {
+        icon: '🔧',
+        title: 'Hands-On Examples',
+        description: 'Practical code examples with ROS 2, Python, and real hardware integration patterns.'
+      }
+    ],
+    chapters: [
+      {
+        icon: '🧠',
+        title: 'Physical AI Foundations',
+        description: 'Introduction to embodied intelligence, sensors, and the transition from digital AI to physical systems.',
+        link: '/docs/part-1-foundations/introduction-to-physical-ai',
+        level: 'Week 1-2',
+        duration: '20 hours'
+      },
+      {
+        icon: '🔧',
+        title: 'ROS 2 Fundamentals',
+        description: 'Master robot operating system concepts including nodes, topics, services, and actions.',
+        link: '/docs/part-2-ros2/ros2-fundamentals',
+        level: 'Week 3-5',
+        duration: '40 hours'
+      },
+      {
+        icon: '🎮',
+        title: 'Robot Simulation',
+        description: 'Build and test robots in Gazebo and Unity with realistic physics and sensor simulation.',
+        link: '/docs/part-3-simulation/gazebo-unity-simulation',
+        level: 'Week 6-7',
+        duration: '35 hours'
+      },
+      {
+        icon: '🎯',
+        title: 'NVIDIA Isaac Platform',
+        description: 'GPU-accelerated simulation, AI perception, and reinforcement learning for robots.',
+        link: '/docs/part-4-isaac/nvidia-isaac-platform',
+        level: 'Week 8-10',
+        duration: '45 hours'
+      },
+      {
+        icon: '🦿',
+        title: 'Humanoid Development',
+        description: 'Kinematics, bipedal locomotion, manipulation, and natural human-robot interaction.',
+        link: '/docs/part-5-humanoid/humanoid-robot-development',
+        level: 'Week 11-12',
+        duration: '40 hours'
+      },
+      {
+        icon: '🗣️',
+        title: 'Conversational Robotics',
+        description: 'Integrate GPT models, speech recognition, and multi-modal interaction for natural dialogue.',
+        link: '/docs/part-6-conversational/conversational-robotics',
+        level: 'Week 13',
+        duration: '20 hours'
+      }
+    ]
+  },
+  ur: {
+    title: "آریہ کی فزیکل اور ہیومینائڈ روبوٹکس",
+    subtitle: "فزیکل AI اور ہیومینائڈ روبوٹکس کی دلچسپ دنیا کے لیے ایک جامع گائیڈ، بنیادی تصورات سے لے کر مجسم ذہانت میں جدید ایپلی کیشنز تک۔",
+    startLearning: "سیکھنا شروع کریں",
+    viewChapters: "ابواب دیکھیں",
+    featuresTitle: "اس روبوٹکس کتاب کو کیوں منتخب کریں؟",
+    featuresSubtitle: "فزیکل AI اور ہیومینائڈ روبوٹکس سیکھنے کے لیے ایک انقلابی طریقہ کا تجربہ کریں",
+    chaptersTitle: "13 ہفتوں کا مکمل کورس",
+    chaptersSubtitle: "بنیادی سے لے کر جدید ایپلی کیشنز تک فزیکل AI اور ہیومینائڈ روبوٹکس میں مہارت حاصل کریں",
+    features: [
+      {
+        icon: '🧠',
+        title: 'فزیکل AI اور مجسم ذہانت',
+        description: 'سینسرز، ایکچویٹرز اور حقیقی وقت کے فیصلہ سازی کے ذریعے AI سسٹم کس طرح جسمانی دنیا کے ساتھ تعامل کرتے ہیں سیکھیں۔'
+      },
+      {
+        icon: '🤖',
+        title: 'ROS 2 روبوٹ آپریٹنگ سسٹم',
+        description: 'جدید ٹولز اور بہترین طریقوں کے ساتھ روبوٹ ایپلیکیشنز بنانے کے لیے صنعت کے معیاری فریم ورک میں مہارت حاصل کریں۔'
+      },
+      {
+        icon: '🎮',
+        title: 'روبوٹ سمیولیشن',
+        description: 'حقیقی ہارڈویئر پر تعینات کرنے سے پہلے Gazebo اور NVIDIA Isaac Sim میں الگورتھم تیار اور جانچیں۔'
+      },
+      {
+        icon: '🦿',
+        title: 'ہیومینائڈ ڈیولپمنٹ',
+        description: 'Unitree اور دیگر پلیٹ فارمز کے ساتھ دو پیروں پر چلنا، ہیرا پھیری، اور انسان-روبوٹ تعامل کو دریافت کریں۔'
+      },
+      {
+        icon: '🗣️',
+        title: 'گفتگو کی AI',
+        description: 'قدرتی انسان-روبوٹ مواصلات کے لیے GPT ماڈلز اور تقریر سسٹم کو مربوط کریں۔'
+      },
+      {
+        icon: '🔧',
+        title: 'عملی مثالیں',
+        description: 'ROS 2، Python، اور حقیقی ہارڈویئر انضمام کے نمونوں کے ساتھ عملی کوڈ کی مثالیں۔'
+      }
+    ],
+    chapters: [
+      {
+        icon: '🧠',
+        title: 'فزیکل AI کی بنیادیں',
+        description: 'مجسم ذہانت، سینسرز، اور ڈیجیٹل AI سے جسمانی نظام میں منتقلی کا تعارف۔',
+        link: '/docs/part-1-foundations/introduction-to-physical-ai',
+        level: 'ہفتہ 1-2',
+        duration: '20 گھنٹے'
+      },
+      {
+        icon: '🔧',
+        title: 'ROS 2 بنیادیں',
+        description: 'نوڈز، ٹاپکس، سروسز، اور ایکشنز سمیت روبوٹ آپریٹنگ سسٹم کے تصورات میں مہارت حاصل کریں۔',
+        link: '/docs/part-2-ros2/ros2-fundamentals',
+        level: 'ہفتہ 3-5',
+        duration: '40 گھنٹے'
+      },
+      {
+        icon: '🎮',
+        title: 'روبوٹ سمیولیشن',
+        description: 'حقیقت پسندانہ طبیعیات اور سینسر سمیولیشن کے ساتھ Gazebo اور Unity میں روبوٹ بنائیں اور جانچیں۔',
+        link: '/docs/part-3-simulation/gazebo-unity-simulation',
+        level: 'ہفتہ 6-7',
+        duration: '35 گھنٹے'
+      },
+      {
+        icon: '🎯',
+        title: 'NVIDIA Isaac پلیٹ فارم',
+        description: 'روبوٹس کے لیے GPU-تیز شدہ سمیولیشن، AI ادراک، اور تقویتی سیکھنا۔',
+        link: '/docs/part-4-isaac/nvidia-isaac-platform',
+        level: 'ہفتہ 8-10',
+        duration: '45 گھنٹے'
+      },
+      {
+        icon: '🦿',
+        title: 'ہیومینائڈ ڈیولپمنٹ',
+        description: 'کائنیمیٹکس، دو پیروں پر چلنا، ہیرا پھیری، اور قدرتی انسان-روبوٹ تعامل۔',
+        link: '/docs/part-5-humanoid/humanoid-robot-development',
+        level: 'ہفتہ 11-12',
+        duration: '40 گھنٹے'
+      },
+      {
+        icon: '🗣️',
+        title: 'گفتگو کی روبوٹکس',
+        description: 'قدرتی مکالمے کے لیے GPT ماڈلز، تقریر کی شناخت، اور کثیر موڈل تعامل کو مربوط کریں۔',
+        link: '/docs/part-6-conversational/conversational-robotics',
+        level: 'ہفتہ 13',
+        duration: '20 گھنٹے'
+      }
+    ]
+  }
+};
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
+// Floating Controls Component (Language + Theme)
+function FloatingControls() {
   return (
-    <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
-      <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
-          Ary's Robotics
-        </Link>
-        <div className="navbar-menu">
-        <Link to="/docs" className="navbar-link">
-          Book
-        </Link>
-          <Link to="#features" className="navbar-link">
-            Features
-          </Link>
-          <ThemeToggle />
-        </div>
-      </div>
-    </nav>
+    <div className="floating-controls">
+      <LanguageToggle />
+      <ThemeToggle />
+    </div>
   );
 }
 
@@ -69,29 +238,32 @@ function ThemeToggle() {
 
 // Hero Section
 function Hero() {
+  const {i18n} = useDocusaurusContext();
+  const locale = i18n.currentLocale;
+  const t = translations[locale] || translations.en;
+
   return (
     <section className="hero">
       <div className="container">
         <div className="hero-content animate-fade-in-up">
           <h1 className="hero-title">
-            Ary's Physical & Humanoid Robotics
+            {t.title}
           </h1>
           <p className="hero-subtitle">
-            A comprehensive guide to the fascinating world of Physical AI and humanoid robotics,
-            from fundamental concepts to advanced applications in embodied intelligence.
+            {t.subtitle}
           </p>
           <div className="hero-actions">
             <Link
               to="/docs"
               className="btn btn-primary"
             >
-              <span>Start Learning</span>
+              <span>{t.startLearning}</span>
             </Link>
             <Link
               to="#chapters"
               className="btn btn-secondary"
             >
-              <span>View Chapters</span>
+              <span>{t.viewChapters}</span>
             </Link>
           </div>
         </div>
@@ -102,50 +274,21 @@ function Hero() {
 
 // Features Section
 function Features() {
-  const features = [
-    {
-      icon: '🧠',
-      title: 'Physical AI & Embodied Intelligence',
-      description: 'Learn how AI systems interact with the physical world through sensors, actuators, and real-time decision making.'
-    },
-    {
-      icon: '🤖',
-      title: 'ROS 2 Robot Operating System',
-      description: 'Master the industry-standard framework for building robot applications with modern tools and best practices.'
-    },
-    {
-      icon: '🎮',
-      title: 'Robot Simulation',
-      description: 'Develop and test algorithms in Gazebo and NVIDIA Isaac Sim before deploying to real hardware.'
-    },
-    {
-      icon: '🦿',
-      title: 'Humanoid Development',
-      description: 'Explore bipedal locomotion, manipulation, and human-robot interaction with Unitree and other platforms.'
-    },
-    {
-      icon: '🗣️',
-      title: 'Conversational AI',
-      description: 'Integrate GPT models and speech systems for natural human-robot communication.'
-    },
-    {
-      icon: '🔧',
-      title: 'Hands-On Examples',
-      description: 'Practical code examples with ROS 2, Python, and real hardware integration patterns.'
-    }
-  ];
+  const {i18n} = useDocusaurusContext();
+  const locale = i18n.currentLocale;
+  const t = translations[locale] || translations.en;
 
   return (
     <section id="features" className="features">
       <div className="container">
         <div className="features-header">
-          <h2 className="features-title">Why Choose This Robotics Book?</h2>
+          <h2 className="features-title">{t.featuresTitle}</h2>
           <p className="features-subtitle">
-            Experience a revolutionary approach to learning Physical AI and humanoid robotics
+            {t.featuresSubtitle}
           </p>
         </div>
         <div className="features-grid">
-          {features.map((feature, index) => (
+          {t.features.map((feature, index) => (
             <div key={index} className={`feature-card animate-fade-in-up animate-stagger-${index + 1}`}>
               <div className="feature-icon">{feature.icon}</div>
               <h3 className="feature-title">{feature.title}</h3>
@@ -160,68 +303,21 @@ function Features() {
 
 // Chapters Section
 function Chapters() {
-  const chapters = [
-    {
-      icon: '🧠',
-      title: 'Physical AI Foundations',
-      description: 'Introduction to embodied intelligence, sensors, and the transition from digital AI to physical systems.',
-      link: '/docs/part-1-foundations/introduction-to-physical-ai',
-      level: 'Week 1-2',
-      duration: '20 hours'
-    },
-    {
-      icon: '🔧',
-      title: 'ROS 2 Fundamentals',
-      description: 'Master robot operating system concepts including nodes, topics, services, and actions.',
-      link: '/docs/part-2-ros2/ros2-fundamentals',
-      level: 'Week 3-5',
-      duration: '40 hours'
-    },
-    {
-      icon: '🎮',
-      title: 'Robot Simulation',
-      description: 'Build and test robots in Gazebo and Unity with realistic physics and sensor simulation.',
-      link: '/docs/part-3-simulation/gazebo-unity-simulation',
-      level: 'Week 6-7',
-      duration: '35 hours'
-    },
-    {
-      icon: '🎯',
-      title: 'NVIDIA Isaac Platform',
-      description: 'GPU-accelerated simulation, AI perception, and reinforcement learning for robots.',
-      link: '/docs/part-4-isaac/nvidia-isaac-platform',
-      level: 'Week 8-10',
-      duration: '45 hours'
-    },
-    {
-      icon: '🦿',
-      title: 'Humanoid Development',
-      description: 'Kinematics, bipedal locomotion, manipulation, and natural human-robot interaction.',
-      link: '/docs/part-5-humanoid/humanoid-robot-development',
-      level: 'Week 11-12',
-      duration: '40 hours'
-    },
-    {
-      icon: '🗣️',
-      title: 'Conversational Robotics',
-      description: 'Integrate GPT models, speech recognition, and multi-modal interaction for natural dialogue.',
-      link: '/docs/part-6-conversational/conversational-robotics',
-      level: 'Week 13',
-      duration: '20 hours'
-    }
-  ];
+  const {i18n} = useDocusaurusContext();
+  const locale = i18n.currentLocale;
+  const t = translations[locale] || translations.en;
 
   return (
     <section id="chapters" className="chapters">
       <div className="container">
         <div className="chapters-header">
-          <h2 className="chapters-title">13-Week Complete Course</h2>
+          <h2 className="chapters-title">{t.chaptersTitle}</h2>
           <p className="chapters-subtitle">
-            Master Physical AI and humanoid robotics from foundations to advanced applications
+            {t.chaptersSubtitle}
           </p>
         </div>
         <div className="chapters-grid">
-          {chapters.map((chapter, index) => (
+          {t.chapters.map((chapter, index) => (
             <Link key={index} to={chapter.link} className={`chapter-card animate-fade-in-up animate-stagger-${index + 1}`}>
               <div className="chapter-header">
                 <div className="chapter-icon">{chapter.icon}</div>
@@ -273,19 +369,21 @@ function SocialLinks() {
 // Main Component
 export default function Home(): React.ReactNode {
   return (
-    <Layout
-      title="Ary's Physical & Humanoid Robotics"
-      description="A comprehensive guide to Physical AI and Humanoid Robotics">
-      <a href="#main-content" className="skip-to-main">
-        Skip to main content
-      </a>
-      <Navbar />
-      <main id="main-content">
-        <Hero />
-        <Features />
-        <Chapters />
-      </main>
-      <SocialLinks />
-    </Layout>
+    <LanguageProvider>
+      <Layout
+        title="Ary's Physical & Humanoid Robotics"
+        description="A comprehensive guide to Physical AI and Humanoid Robotics">
+        <a href="#main-content" className="skip-to-main">
+          Skip to main content
+        </a>
+        <main id="main-content">
+          <Hero />
+          <Features />
+          <Chapters />
+        </main>
+        <SocialLinks />
+        <FloatingControls />
+      </Layout>
+    </LanguageProvider>
   );
 }
