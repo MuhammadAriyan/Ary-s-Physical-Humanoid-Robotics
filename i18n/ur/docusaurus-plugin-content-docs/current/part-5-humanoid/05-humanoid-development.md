@@ -1,21 +1,21 @@
 ---
-title: "Humanoid Robot Development"
+title: "ہیومینائڈ روبوٹ ڈیولپمنٹ"
 sidebar_position: 5
 ---
 
-# Chapter 5: Humanoid Robot Development (انسان نما روبوٹ کی ترقی)
+# باب 5: ہیومینائڈ روبوٹ ڈیولپمنٹ
 
-## Learning Objectives (سیکھنے کے مقاصد)
+## سیکھنے کے مقاصد
 
-By the end of this chapter, you will be able to:
-- Understand humanoid robot kinematics including forward and inverse kinematics (انسان نما روبوٹ کی kinematics کو سمجھنا جیسے forward اور inverse kinematics)
-- Implement bipedal locomotion control and balance strategies (bipedal locomotion control اور balance strategies لاگو کرنا)
-- Design manipulation systems for humanoid hands with grasping algorithms (manipulation systems ڈیزائن کرنا humanoid hands کے لیے grasping algorithms کے ساتھ)
-- Create natural human-robot interaction paradigms (قدرتی human-robot interaction paradigms بنانا)
-- Develop working code examples for kinematics calculations and walking controllers (kinematics calculations اور walking controllers کے لیے کوڈ examples بنانا)
-- Reference Unitree robot hardware specifications for real-world applications (real-world applications کے لیے Unitree robot hardware specifications کا حوالہ دینا)
+اس باب کے اختتام پر، آپ یہ کر سکیں گے:
+- ہیومینائڈ روبوٹ کی کائنیمیٹکس کو سمجھنا بشمول فارورڈ اور انورس کائنیمیٹکس
+- دو پائی چلنے کا کنٹرول اور توازن کی حکمت عملی لاگو کرنا
+- ہیومینائڈ ہاتھوں کے لیے گرفت کے الگورتھم کے ساتھ ہیرا پھیری کے نظام ڈیزائن کرنا
+- قدرتی انسان-روبوٹ تعامل کے نمونے بنانا
+- کائنیمیٹکس کے حسابات اور چلنے کے کنٹرولرز کے لیے کام کرنے والی کوڈ کی مثالیں تیار کرنا
+- حقیقی دنیا کی ایپلی کیشنز کے لیے Unitree روبوٹ ہارڈویئر کی تفصیلات کا حوالہ دینا
 
-## 5.1 Introduction to Humanoid Robot Kinematics (انسان نما روبوٹ Kinematics کا تعارف)
+## 5.1 ہیومینائڈ روبوٹ کائنیمیٹکس کا تعارف
 
 Humanoid robot kinematics forms the mathematical foundation for all motion planning, control, and manipulation tasks. Unlike industrial robots with fixed bases, humanoid robots must contend with dynamic base conditions, self-collision avoidance, and balance constraints. This chapter builds upon the simulation and control foundations established in previous chapters to address the unique challenges of humanoid robot development.
 
@@ -25,7 +25,7 @@ Humanoid robots typically possess 30 or more degrees of freedom distributed acro
 
 انسان نما روبوٹس میں عام طور پر 30 یا اس سے زیادہ degrees of freedom ہوتے ہیں جو legs، torso، arms اور head میں تقسیم ہوتے ہیں۔ مثال کے طور پر، Unitree H1 robot میں 19 degrees of freedom ہیں: ہر leg میں hip، knee اور ankle کے لیے 3، ہر arm میں shoulder اور elbow کے لیے 2، اور waist اور head orientation کے لیے اضافی joints ہیں۔ اس پیچیدگی کو kinematics، dynamics اور control کے systematic approaches درکار ہیں۔
 
-### Kinematic Chain Structure (Kinematic Chain ساخت)
+### کائنیمیٹک چین کی ساخت
 
 A humanoid robot's kinematic structure follows an anthropomorphic design mirroring human body organization. The base of the kinematic tree is typically the pelvis or torso, with limbs branching outward to the extremities. Understanding this hierarchical structure is essential for implementing forward and inverse kinematics algorithms.
 

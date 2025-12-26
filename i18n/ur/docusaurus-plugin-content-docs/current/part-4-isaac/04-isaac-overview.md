@@ -1,25 +1,25 @@
 ---
-title: "NVIDIA Isaac Platform"
+title: "NVIDIA Isaac پلیٹ فارم"
 sidebar_position: 4
 ---
 
-# Chapter 4: Physical AI ke liye NVIDIA Isaac Platform
+# باب 4: فزیکل AI کے لیے NVIDIA Isaac پلیٹ فارم
 
-## Learning Objectives
+## سیکھنے کے مقاصد
 
-Is chapter ke ant mein, aap kar payenge:
-- NVIDIA Isaac ecosystem ki architecture aur components ko samajhna
-- Isaac Sim ko high-fidelity robot simulation ke liye configure karna RTX-powered rendering ke saath
-- GPU-accelerated computer vision use karke AI-powered perception pipelines implement karna
-- Isaac Gym use karke GPU-based reinforcement learning se manipulation policies train karna
-- Trained policies ko physical robots par deploy karne ke liye sim-to-real transfer techniques apply karna
-- Humanoid robot control ke liye complete perception-to-action pipelines banana
+اس باب کے اختتام پر، آپ یہ کر سکیں گے:
+- NVIDIA Isaac ایکوسسٹم کی تعمیر اور اجزاء کو سمجھنا
+- Isaac Sim کو اعلیٰ معیار کی روبوٹ سمیولیشن کے لیے RTX پاورڈ رینڈرنگ کے ساتھ کانفیگر کرنا
+- GPU تیز رفتار کمپیوٹر ویژن استعمال کرتے ہوئے AI پر مبنی ادراک پائپ لائنز لاگو کرنا
+- Isaac Gym استعمال کرتے ہوئے GPU پر مبنی تقویتی سیکھنے سے ہیرا پھیری کی پالیسیاں تربیت دینا
+- تربیت یافتہ پالیسیوں کو جسمانی روبوٹس پر تعینات کرنے کے لیے sim-to-real منتقلی کی تکنیکیں لاگو کرنا
+- ہیومینائڈ روبوٹ کنٹرول کے لیے مکمل ادراک سے عمل تک کی پائپ لائنز بنانا
 
-## 4.1 NVIDIA Isaac Ecosystem ka Parichay
+## 4.1 NVIDIA Isaac ایکوسسٹم کا تعارف
 
 NVIDIA Isaac platform physical AI applications develop karne, test karne, aur deploy karne ke liye ek comprehensive ecosystem hai. Traditional robot development tools jo simulation, perception, aur learning ko alag concerns ke tor par treat karte hain, Isaac ek integrated workflow provide karta hai jo concept se deployment tak poore development cycle ko accelerate karta hai.
 
-### NVIDIA Isaac kya hai?
+### NVIDIA Isaac کیا ہے؟
 
 NVIDIA Isaac do primary components comprise karta hai jo saath mein kaam karte hain: Isaac SDK aur Isaac Sim. Isaac SDK robot navigation, manipulation, aur perception algorithms ke liye APIs ke saath software development kit provide karta hai. Isaac Sim NVIDIA Omniverse par built simulation environment hai jo photorealistic rendering, accurate physics, aur physical robot deployments ke saath seamless data exchange deliver karta hai.
 
@@ -27,7 +27,7 @@ Platform NVIDIA ki GPU computing, deep learning, aur real-time simulation ki str
 
 Isaac Sim khud ko dusre simulation platforms se alag karta hai kai key capabilities se. RTX GPU architecture real-time ray tracing enable karta hai jo photorealistic sensor data produce karta hai, yeh perception models train karne ke liye critical hai jo real-world conditions par generalize honge. Physics simulation PhysX 5 use karta hai accurate contact dynamics ke liye, yeh humanoid walking aur manipulation ke liye essential hai. Omniverse streaming capabilities simulations ko data center infrastructure par remotely operate karne deti hai, enabling large-scale parallel training scenarios.
 
-### Isaac Platform Architecture
+### Isaac پلیٹ فارم کی تعمیر
 
 Isaac architecture ek layered design follow karta hai jo concerns separate karta hai while maintaining tight integration. Foundation mein Omniverse hai, NVIDIA's open platform 3D workflows aur applications banana ke liye. Omniverse real-time rendering engine, physics simulation backbone, aur data exchange protocols provide karta hai jo Isaac Sim build karta hai.
 
