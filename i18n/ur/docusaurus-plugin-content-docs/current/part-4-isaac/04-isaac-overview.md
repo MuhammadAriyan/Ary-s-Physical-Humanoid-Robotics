@@ -37,32 +37,32 @@ Application layer Isaac کو ROS 2 interfaces اور custom controller bindings 
 
 ```python
 # Example: Isaac Sim initialization and robot loading
-# Udaharan: Isaac Sim initialization aur robot loading
+# Udaharan: Isaac Sim initialization اور robot loading
 import omni.isaac.core
 from omni.isaac.core import SimulationContext
 from omni.isaac.core.objects import DynamicCuboid
 
-# Simulation context initialize karna
-# Simulation context ko initialize karna
+# Simulation context initialize کرنا
+# Simulation context کو initialize کرنا
 simulation_context = SimulationContext(
     stage_units_in_meters=1.0,
     physics_dt=1.0 / 60.0,
     rendering_dt=1.0 / 60.0
 )
 
-# GPU physics simulation set up karna
-# GPU physics simulation ko setup karna
+# GPU physics simulation set up کرنا
+# GPU physics simulation کو setup کرنا
 omni.isaac.core.utils.physx.set_physics_gpu_device(0)
 
-# USD se humanoid robot load karna
-# USD se humanoid robot ko load karna
+# USD سے humanoid robot load کرنا
+# USD سے humanoid robot کو load کرنا
 from pxr import Usd, UsdGeom
 stage = simulation_context.stage
 UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
 UsdGeom.SetStageMetersPerUnit(stage, 1.0)
 
-# Robot ko USD file se load karna
-# Robot ko USD file se load karna
+# Robot کو USD file سے load کرنا
+# Robot کو USD file سے load کرنا
 robot_prim_path = "/World/HumanoidRobot"
 from omni.isaac.core.utils.prims import create_prim_from_usd
 robot = create_prim_from_usd(
@@ -129,7 +129,7 @@ class IsaacPerceptionPipeline:
         self.device = device
 
         # Initialize camera sensor from USD
-        # USD se camera sensor initialize karna
+        # USD سے camera sensor initialize کرنا
         self.camera = CameraSensor(
             prim_path=camera_prim_path,
             width=1280,
@@ -138,11 +138,11 @@ class IsaacPerceptionPipeline:
         )
 
         # Load TensorRT optimized detection model
-        # TensorRT optimized detection model load karna
+        # TensorRT optimized detection model load کرنا
         self.detector = self._load_trt_model(detection_model_path, "detection")
 
         # Load TensorRT optimized segmentation model
-        # TensorRT optimized segmentation model load karna
+        # TensorRT optimized segmentation model load کرنا
         self.segmenter = self._load_trt_model(segmentation_model_path, "segmentation")
 
         # Detection confidence threshold
@@ -168,7 +168,7 @@ class IsaacPerceptionPipeline:
         logger = trt.Logger(trt.Logger.WARNING)
 
         # Load engine from serialized plan
-        # Serialized plan se engine load karna
+        # Serialized plan سے engine load کرنا
         with open(model_path, "rb") as f:
             engine_data = f.read()
 
@@ -176,7 +176,7 @@ class IsaacPerceptionPipeline:
         engine = runtime.deserialize_cuda_engine(engine_data)
 
         # Create execution context
-        # Execution context create karna
+        # Execution context create کرنا
         context = engine.create_execution_context()
 
         return {
@@ -194,7 +194,7 @@ class IsaacPerceptionPipeline:
             detections: List of detection dictionaries with bbox, class, confidence
         """
         # Capture RGB image from simulation camera
-        # Simulation camera se RGB image capture karna
+        # Simulation camera سے RGB image capture کرنا
         rgb_image = self.camera.get_rgb()
 
         # Preprocess for neural network input
@@ -202,7 +202,7 @@ class IsaacPerceptionPipeline:
         input_tensor = self._preprocess_image(rgb_image)
 
         # Run detection inference
-        # Detection inference run karna
+        # Detection inference run کرنا
         detections = self._run_detection_inference(input_tensor)
 
         return rgb_image, detections
@@ -213,19 +213,19 @@ class IsaacPerceptionPipeline:
         Includes normalization, resizing, and tensor conversion.
         """
         # Resize to model input size (e.g., 640 x 640)
-        # Model input size par resize karna (e.g., 640 x 640)
+        # Model input size پر resize کرنا (e.g., 640 x 640)
         resized = np.resize(image, (640, 640, 3))
 
         # Normalize to [0, 1]
-        # [0, 1] par normalize karna
+        # [0, 1] پر normalize کرنا
         normalized = resized.astype(np.float32) / 255.0
 
         # Convert HWC to CHW format
-        # HWC format se CHW mein convert karna
+        # HWC format سے CHW میں convert کرنا
         transposed = np.transpose(normalized, (2, 0, 1))
 
         # Add batch dimension
-        # Batch dimension add karna
+        # Batch dimension add کرنا
         batched = np.expand_dims(transposed, axis=0)
 
         return batched
@@ -241,16 +241,16 @@ class IsaacPerceptionPipeline:
         import cupy as cp
 
         # Move input to GPU
-        # Input ko GPU par move karna
+        # Input کو GPU پر move کرنا
         gpu_input = cp.asarray(input_tensor)
 
         # Allocate output buffers
-        # Output buffers allocate karna
+        # Output buffers allocate کرنا
         num_detections = 100
         detection_output = cp.zeros((1, num_detections, 6), dtype=cp.float32)
 
         # Run inference
-        # Inference run karna
+        # Inference run کرنا
         context = self.detector["context"]
         context.execute_v2(
             bindings=[
@@ -260,11 +260,11 @@ class IsaacPerceptionPipeline:
         )
 
         # Transfer results to CPU
-        # Results ko CPU par transfer karna
+        # Results کو CPU پر transfer کرنا
         output_cpu = cp.asnumpy(detection_output)
 
         # Parse detections
-        # Detectations parse karna
+        # Detectations parse کرنا
         detections = []
         for i in range(num_detections):
             confidence = output_cpu[0, i, 4]
@@ -294,7 +294,7 @@ class IsaacPerceptionPipeline:
         input_tensor = self._preprocess_image(rgb_image)
 
         # Run segmentation inference
-        # Segmentation inference run karna
+        # Segmentation inference run کرنا
         import cupy as cp
 
         gpu_input = cp.asarray(input_tensor)
@@ -323,7 +323,7 @@ Monocular کیمروں سے depth estimation neural networks استعمال کر
 
 ```python
 # Example: Depth estimation from RGB using neural network
-# Udaharan: RGB se neural network use karke depth estimation
+# Udaharan: RGB سے neural network use کر کے depth estimation
 class DepthEstimationPipeline:
     """
     Monocular depth estimation using a neural network.
@@ -340,7 +340,7 @@ class DepthEstimationPipeline:
         self.max_depth = max_depth
 
         # Load depth estimation model
-        # Depth estimation model load karna
+        # Depth estimation model load کرنا
         self.model = self._load_depth_model(model_path)
         self.model.eval()
 
@@ -354,7 +354,7 @@ class DepthEstimationPipeline:
         model = torch.hub.load("intel-isl/MiDaS", "MiDaS_small")
 
         # Load trained weights
-        # Trained weights load karna
+        # Trained weights load کرنا
         state_dict = torch.load(model_path)
         model.load_state_dict(state_dict)
 
@@ -384,17 +384,17 @@ class DepthEstimationPipeline:
         import cupy as cp
 
         # Preprocess
-        # Preprocess karna
+        # Preprocess کرنا
         input_tensor = self._preprocess_depth(rgb_image)
 
         # Move to GPU and run inference
-        # GPU par move karna aur inference run karna
+        # GPU پر move کرنا اور inference run کرنا
         with torch.no_grad():
             gpu_input = torch.tensor(input_tensor, device="cuda")
             depth_raw = self.model(gpu_input)
 
         # Postprocess to metric depth
-        # Metric depth mein postprocess karna
+        # Metric depth میں postprocess کرنا
         depth_metric = self._postprocess_depth(depth_raw)
 
         return depth_metric
@@ -404,21 +404,21 @@ class DepthEstimationPipeline:
         import cv2
 
         # Resize to model input size
-        # Model input size par resize karna
+        # Model input size پر resize کرنا
         resized = cv2.resize(image, (384, 384))
 
         # Convert to tensor and normalize
-        # Tensor mein convert karna aur normalize karna
+        # Tensor میں convert کرنا اور normalize کرنا
         tensor = torch.from_numpy(resized).float().permute(2, 0, 1) / 255.0
 
         # Apply ImageNet normalization
-        # ImageNet normalization apply karna
+        # ImageNet normalization apply کرنا
         mean = torch.tensor([0.485, 0.456, 0.406]).view(3, 1, 1)
         std = torch.tensor([0.229, 0.224, 0.225]).view(3, 1, 1)
         normalized = (tensor - mean) / std
 
         # Add batch dimension
-        # Batch dimension add karna
+        # Batch dimension add کرنا
         batched = normalized.unsqueeze(0)
 
         return batched.numpy()
@@ -428,14 +428,14 @@ class DepthEstimationPipeline:
         import cv2
 
         # Remove batch dimension
-        # Batch dimension hata karna
+        # Batch dimension hata کرنا
         depth_squeezed = depth_raw.squeeze().cpu().numpy()
 
         # Resize to original image size
         # (Assume original size is stored or passed as parameter)
 
         # Apply depth scaling from relative to metric
-        # Relative se metric mein depth scaling apply karna
+        # Relative سے metric میں depth scaling apply کرنا
         # یہ training dataset اور model پر منحصر ہے
         depth_scaled = depth_squeezed * (self.max_depth - self.min_depth)
         depth_scaled = np.clip(depth_scaled, self.min_depth, self.max_depth)
@@ -486,16 +486,16 @@ class IsaacGymManipulationEnv(gym.Env):
         self.headless = headless
 
         # Initialize Isaac Gym
-        # Isaac Gym initialize karna
+        # Isaac Gym initialize کرنا
         import isaacgym
         from isaacgym import gymapi, gymtorch
 
         # Create the simulation
-        # Simulation create karna
+        # Simulation create کرنا
         self.gym = gymapi.acquire_gym()
 
         # Create simulation configuration
-        # Simulation configuration create karna
+        # Simulation configuration create کرنا
         sim_params = gymapi.SimParams()
         sim_params.dt = 1.0 / 60.0  # 60 Hz control
         sim_params.num_client_threads = 0
@@ -503,13 +503,13 @@ class IsaacGymManipulationEnv(gym.Env):
         sim_params.device_id = 0 if device == "cuda" else -1
 
         # Configure physics
-        # Physics configure karna
+        # Physics configure کرنا
         sim_params.physx.solver_type = 1  # PGS solver
         sim_params.physx.num_position_iterations = 4
         sim_params.physx.num_velocity_iterations = 1
 
         # Create simulation
-        # Simulation create karna
+        # Simulation create کرنا
         self.sim = self.gym.create_sim(
             device_id=sim_params.device_id,
             graphics_device_id=sim_params.device_id,
@@ -518,15 +518,15 @@ class IsaacGymManipulationEnv(gym.Env):
         )
 
         # Create environments
-        # Environments create karna
+        # Environments create کرنا
         self._create_environments()
 
         # Define observation and action spaces
-        # Observation aur action spaces define karna
+        # Observation اور action spaces define کرنا
         self._setup_spaces()
 
         # Track episode progress
-        # Episode progress track karna
+        # Episode progress track کرنا
         self.reset_buf = torch.ones(num_envs, dtype=torch.bool, device=device)
         self.progress_buf = torch.zeros(num_envs, dtype=torch.int32, device=device)
         self.max_episode_length = 500
@@ -547,7 +547,7 @@ class IsaacGymManipulationEnv(gym.Env):
         object_asset_path = "assets/cube.urdf"
 
         # Load assets
-        # Assets load karna
+        # Assets load کرنا
         hand_asset = self.gym.load_asset(
             self.sim,
             "assets",
@@ -562,7 +562,7 @@ class IsaacGymManipulationEnv(gym.Env):
         )
 
         # Create environments
-        # Environments create karna
+        # Environments create کرنا
         self.envs = []
         self.hand_handles = []
         self.object_handles = []
@@ -578,7 +578,7 @@ class IsaacGymManipulationEnv(gym.Env):
             self.envs.append(env)
 
             # Create robot hand
-            # Robot hand create karna
+            # Robot hand create کرنا
             hand_pose = gymapi.Transform()
             hand_pose.p = gymapi.Vec3(0, 0, 0.5)
             hand_handle = self.gym.create_actor(
@@ -632,10 +632,10 @@ class IsaacGymManipulationEnv(gym.Env):
     ) -> Tuple[torch.Tensor, dict]:
         """Reset environments to initial state."""
         # Reset object positions
-        # Object positions reset karna
+        # Object positions reset کرنا
         for i, env in enumerate(self.envs):
             # Randomize object position
-            # Object position randomize karna
+            # Object position randomize کرنا
             pose = gymapi.Transform()
             pose.p = gymapi.Vec3(
                 (np.random.rand() - 0.5) * 0.2,
@@ -650,7 +650,7 @@ class IsaacGymManipulationEnv(gym.Env):
             )
 
         # Reset hand to starting position
-        # Hand ko starting position par reset karna
+        # Hand کو starting position پر reset کرنا
         for i, env in enumerate(self.envs):
             pose = gymapi.Transform()
             pose.p = gymapi.Vec3(0, 0, 0.5)
@@ -662,7 +662,7 @@ class IsaacGymManipulationEnv(gym.Env):
             )
 
         # Get observation after reset
-        # Reset ke baad observation get karna
+        # Reset کے بعد observation get کرنا
         obs = self._get_observation()
 
         return obs, {}
@@ -684,45 +684,45 @@ class IsaacGymManipulationEnv(gym.Env):
             info: Additional information
         """
         # Apply actions as joint position targets
-        # Actions ko joint position targets ke tor par apply karna
+        # Actions کو joint position targets کے طور پر apply کرنا
         self._apply_actions(actions)
 
         # Step physics simulation
-        # Physics simulation step karna
+        # Physics simulation step کرنا
         for _ in range(4):  # Sub-stepping for stability
             self.gym.simulate(self.sim)
 
         # Step visual update
-        # Visual update step karna
+        # Visual update step کرنا
         self.gym.fetch_results(self.sim, True)
 
         # Get new observations
-        # Naye observations get karna
+        # Naye observations get کرنا
         obs = self._get_observation()
 
         # Calculate rewards
-        # Rewards calculate karna
+        # Rewards calculate کرنا
         rewards = self._compute_reward()
 
         # Check episode termination
-        # Episode termination check karna
+        # Episode termination check کرنا
         dones = self._check_termination()
 
         # Update episode progress
-        # Episode progress update karna
+        # Episode progress update کرنا
         self.progress_buf += 1
 
         return obs, rewards, dones, {}
 
     def _apply_actions(self, actions: torch.Tensor):
         """Apply joint position targets to robot hands."""
-        # Robot hands par joint position targets apply karna
+        # Robot hands پر joint position targets apply کرنا
         for i, env in enumerate(self.envs):
             # Apply PD control for smooth tracking
             # Smooth tracking کے لیے PD control apply کرنا
             joint_positions = actions[i].cpu().numpy()
             # In practice, use joint controller interface
-            # Practice mein, joint controller interface use karna
+            # Practice میں, joint controller interface use کرنا
             self.gym.set_actor_dof_position_targets(
                 env,
                 self.hand_handles[i],
@@ -731,16 +731,16 @@ class IsaacGymManipulationEnv(gym.Env):
 
     def _get_observation(self) -> torch.Tensor:
         """Collect observations from all environments."""
-        # Saare environments se observations collect karna
+        # Saare environments سے observations collect کرنا
         import torch
         from isaacgym import gymtorch
 
         # Stack observations from multiple sources
-        # Multiple sources se observations stack karna
+        # Multiple sources سے observations stack کرنا
         observations = []
 
         # Get hand states
-        # Hand states get karna
+        # Hand states get کرنا
         hand_states = self.gym.get_actor_dof_states(
             self.envs,
             self.hand_handles,
@@ -750,7 +750,7 @@ class IsaacGymManipulationEnv(gym.Env):
         observations.append(hand_states["velocity"])
 
         # Get object states
-        # Object states get karna
+        # Object states get کرنا
         object_states = self.gym.get_actor_rigid_body_states(
             self.envs,
             self.object_handles,
@@ -759,7 +759,7 @@ class IsaacGymManipulationEnv(gym.Env):
         observations.append(object_states["pose"])
 
         # Concatenate and return
-        # Concatenate karna aur return karna
+        # Concatenate کرنا اور return کرنا
         return torch.cat(observations, dim=-1)
 
     def _compute_reward(self) -> torch.Tensor:
@@ -805,15 +805,15 @@ class IsaacGymManipulationEnv(gym.Env):
 
     def _check_termination(self) -> torch.Tensor:
         """Check if episodes should terminate."""
-        # Check karna ki episodes terminate honi chahiye ya nahi
+        # Check کرنا کہ episodes terminate ہونی چاہیے یا نہیں
         import torch
 
         # Max episode length exceeded
-        # Max episode length exceed ho gayi
+        # Max episode length exceed ہو گئی
         maxed_out = self.progress_buf >= self.max_episode_length
 
         # Object fell off table (y position too low)
-        # Object table se gir gayi (y position too low)
+        # Object table سے گر گئی (y position too low)
         object_states = self.gym.get_actor_rigid_body_states(
             self.envs,
             self.object_handles,
@@ -879,7 +879,7 @@ class PPOPolicyNetwork(nn.Module):
             in_dim = h_dim
 
         # Policy head (mean of action distribution)
-        # Policy head (action distribution ka mean)
+        # Policy head (action distribution کا mean)
         self.policy_mean = nn.Linear(hidden_dims[-1], action_dim)
         self.policy_log_std = nn.Parameter(torch.zeros(action_dim))
 
@@ -915,13 +915,13 @@ class PPOPolicyNetwork(nn.Module):
         features = self.feature_net(observations)
 
         # Get action distribution parameters
-        # Action distribution parameters get karna
+        # Action distribution parameters get کرنا
         mean = self.policy_mean(features)
         log_std = self.policy_log_std.expand_as(mean)
         std = torch.exp(log_std)
 
         # Sample action
-        # Action sample karna
+        # Action sample کرنا
         if deterministic:
             actions = mean
             log_probs = torch.zeros_like(mean)
@@ -931,7 +931,7 @@ class PPOPolicyNetwork(nn.Module):
             log_probs = dist.log_prob(actions)
 
         # Clip actions to valid range
-        # Actions ko valid range mein clip karna
+        # Actions کو valid range میں clip کرنا
         actions = torch.tanh(actions)
 
         # Value estimate
@@ -1020,7 +1020,7 @@ class PPOAgent:
         value: torch.Tensor
     ):
         """Store transition in replay buffer."""
-        # Replay buffer mein transition store karna
+        # Replay buffer میں transition store کرنا
         self.buffer["observations"].append(observation)
         self.buffer["actions"].append(action)
         self.buffer["rewards"].append(reward)
@@ -1033,7 +1033,7 @@ class PPOAgent:
         Compute discounted returns and GAE advantages.
         """
         # Convert buffer to tensors
-        # Buffer ko tensors mein convert karna
+        # Buffer کو tensors میں convert کرنا
         observations = torch.stack(self.buffer["observations"])
         rewards = torch.tensor(self.buffer["rewards"])
         dones = torch.tensor(self.buffer["dones"])
@@ -1041,7 +1041,7 @@ class PPOAgent:
         values = torch.stack(self.buffer["values"])
 
         # Compute discounted returns
-        # Discounted returns compute karna
+        # Discounted returns compute کرنا
         returns = torch.zeros_like(rewards)
         R = 0
         for t in reversed(range(len(rewards))):
@@ -1051,7 +1051,7 @@ class PPOAgent:
             returns[t] = R
 
         # Compute advantages using GAE
-        # GAE use karke advantages compute karna
+        # GAE use کر کے advantages compute کرنا
         advantages = torch.zeros_like(rewards)
         gae = 0
         lam = 0.95  # GAE lambda
@@ -1064,16 +1064,16 @@ class PPOAgent:
             advantages[t] = gae
 
         # Normalize advantages
-        # Advantages normalize karna
+        # Advantages normalize کرنا
         advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
 
         return observations, returns, advantages, old_log_probs
 
     def update(self):
         """Perform PPO update step."""
-        # PPO update step perform karna
+        # PPO update step perform کرنا
         # Compute returns and advantages
-        # Returns aur advantages compute karna
+        # Returns اور advantages compute کرنا
         obs, returns, advantages, old_log_probs = self.compute_returns_and_advantages()
 
         # Flatten for minibatch sampling
@@ -1084,7 +1084,7 @@ class PPOAgent:
         flat_old_log_probs = old_log_probs.reshape(-1)
 
         # Calculate number of minibatches
-        # Minibatches ki ginti karna
+        # Minibatches کی گنتی کرنا
         num_samples = flat_obs.shape[0]
         num_batches = num_samples // self.minibatch_size
 
@@ -1103,11 +1103,11 @@ class PPOAgent:
             batch_old_log_probs = flat_old_log_probs[indices]
 
             # Get new log probs and values
-            # Naye log probs aur values get karna
+            # Naye log probs اور values get کرنا
             new_log_probs, entropy = self._get_log_probs_and_entropy(batch_obs, batch_actions)
 
             # Compute PPO clipped objective
-            # PPO clipped objective compute karna
+            # PPO clipped objective compute کرنا
             ratio = torch.exp(new_log_probs - batch_old_log_probs)
             surr1 = ratio * batch_advantages
             surr2 = torch.clamp(ratio, 1 - self.clip_epsilon, 1 + self.clip_epsilon) * batch_advantages
@@ -1137,7 +1137,7 @@ class PPOAgent:
             total_entropy += entropy.item()
 
         # Clear buffer
-        # Buffer clear karna
+        # Buffer clear کرنا
         self.buffer = {
             "observations": [],
             "actions": [],
@@ -1148,7 +1148,7 @@ class PPOAgent:
         }
 
         # Log metrics
-        # Metrics log karna
+        # Metrics log کرنا
         return {
             "policy_loss": total_policy_loss / self.update_epochs,
             "value_loss": total_value_loss / self.update_epochs,
@@ -1169,7 +1169,7 @@ class PPOAgent:
         std = torch.exp(log_std)
 
         # Compute log prob of actions
-        # Actions ka log prob compute karna
+        # Actions کا log prob compute کرنا
         dist = Normal(mean, std)
         log_probs = dist.log_prob(actions)
 
@@ -1178,7 +1178,7 @@ class PPOAgent:
         log_probs = torch.clamp(log_probs, -20, 20)
 
         # Compute entropy
-        # Entropy compute karna
+        # Entropy compute کرنا
         entropy = 0.5 + 0.5 * np.log(2 * np.pi) + torch.log(std)
         entropy = entropy.sum(dim=-1)
 
@@ -1252,7 +1252,7 @@ class PolicyDeployer:
         self.engine_path = engine_path
 
         # Set model to evaluation mode
-        # Model ko evaluation mode par set karna
+        # Model کو evaluation mode پر set کرنا
         self.model.eval()
 
         # TensorRT logger
@@ -1276,7 +1276,7 @@ class PolicyDeployer:
         import torch_tensorrt
 
         # Determine precision
-        # Precision determine karna
+        # Precision determine کرنا
         if precision == "fp16":
             enabled_precisions = {torch.float, torch.half}
         elif precision == "int8":
@@ -1300,14 +1300,14 @@ class PolicyDeployer:
         )
 
         # Save engine
-        # Engine save karna
+        # Engine save کرنا
         self.save_engine()
 
     def save_engine(self):
         """Save TensorRT engine to file."""
-        # TensorRT engine ko file mein save karna
+        # TensorRT engine کو file میں save کرنا
         # Get serialized engine
-        # Serialized engine get karna
+        # Serialized engine get کرنا
         engine = self.trt_module._engine
 
         with open(self.engine_path, "wb") as f:
@@ -1315,7 +1315,7 @@ class PolicyDeployer:
 
     def load_engine(self) -> trt.ICudaEngine:
         """Load TensorRT engine from file."""
-        # TensorRT engine ko file se load karna
+        # TensorRT engine کو file سے load کرنا
         with open(self.engine_path, "rb") as f:
             engine_data = f.read()
 
@@ -1336,7 +1336,7 @@ class PolicyDeployer:
         self.context = engine.create_execution_context()
 
         # Allocate buffers
-        # Buffers allocate karna
+        # Buffers allocate کرنا
         self.host_inputs = []
         self.gpu_inputs = []
         self.host_outputs = []
@@ -1348,13 +1348,13 @@ class PolicyDeployer:
             dtype = trt.nptype(engine.get_binding_dtype(i))
 
             # Allocate host and device memory
-            # Host aur device memory allocate karna
+            # Host اور device memory allocate کرنا
             size = trt.volume(shape)
             host_mem = np.empty(size, dtype=dtype)
             gpu_mem = torch.cuda.mem_alloc(size * dtype().itemsize)
 
             # Store bindings
-            # Bindings store karna
+            # Bindings store کرنا
             if engine.binding_is_input(binding_name):
                 self.host_inputs.append(host_mem)
                 self.gpu_inputs.append(gpu_mem)
@@ -1363,7 +1363,7 @@ class PolicyDeployer:
                 self.gpu_outputs.append(gpu_mem)
 
         # Create CUDA stream
-        # CUDA stream create karna
+        # CUDA stream create کرنا
         self.stream = torch.cuda.current_stream().cuda_stream
 
     def infer(self, input_data: np.ndarray) -> np.ndarray:
@@ -1377,7 +1377,7 @@ class PolicyDeployer:
             output_data: numpy array of shape output_shape
         """
         # Copy input to GPU
-        # Input ko GPU par copy karna
+        # Input کو GPU پر copy کرنا
         np.copyto(self.host_inputs[0], input_data.flatten())
         torch.cuda.memcpy_async(
             self.gpu_inputs[0],
@@ -1386,18 +1386,18 @@ class PolicyDeployer:
         )
 
         # Bind buffers
-        # Buffers bind karna
+        # Buffers bind کرنا
         bindings = [int(self.gpu_inputs[0]), int(self.gpu_outputs[0])]
 
         # Execute inference
-        # Inference execute karna
+        # Inference execute کرنا
         self.context.execute_async(
             bindings=bindings,
             stream_handle=self.stream
         )
 
         # Copy output from GPU
-        # Output ko GPU se copy karna
+        # Output کو GPU سے copy کرنا
         torch.cuda.memcpy_async(
             torch.from_numpy(self.host_outputs[0]).cuda(),
             self.gpu_outputs[0],
@@ -1405,11 +1405,11 @@ class PolicyDeployer:
         )
 
         # Synchronize
-        # Synchronize karna
+        # Synchronize کرنا
         torch.cuda.synchronize()
 
         # Reshape output
-        # Output reshape karna
+        # Output reshape کرنا
         output = self.host_outputs[0].reshape(self.output_shape)
 
         return output
@@ -1432,13 +1432,13 @@ class RobotControlInterface:
         self.control_period = 1.0 / control_frequency
 
         # Initialize sensor interfaces
-        # Sensor interfaces initialize karna
+        # Sensor interfaces initialize کرنا
         self.camera = self._init_camera(sensor_config["camera"])
         self.imu = self._init_imu(sensor_config["imu"])
         self.joint_encoder = self._init_joint_encoders(sensor_config["joints"])
 
         # Initialize actuator interface
-        # Actuator interface initialize karna
+        # Actuator interface initialize کرنا
         self.actuators = self._init_actuators()
 
         # State observation buffer
@@ -1448,14 +1448,14 @@ class RobotControlInterface:
 
     def _init_camera(self, config):
         """Initialize camera sensor interface."""
-        # Camera sensor interface initialize karna
+        # Camera sensor interface initialize کرنا
         # Implementation depends on specific camera hardware
         # Common interfaces: ROS 2 image transport, DirectShow, V4L2
         pass
 
     def _init_imu(self, config):
         """Initialize IMU sensor interface."""
-        # IMU sensor interface initialize karna
+        # IMU sensor interface initialize کرنا
         # Implementation depends on IMU hardware
         # Common interfaces: serial, I2C, SPI
         pass
@@ -1475,7 +1475,7 @@ class RobotControlInterface:
         Returns:
             observation: Flattened observation vector for policy input
         """
-        # Sensor data collect karna aur observation vector construct karna
+        # Sensor data collect کرنا اور observation vector construct کرنا
         observations = []
 
         # Camera observation
@@ -1498,11 +1498,11 @@ class RobotControlInterface:
         observations.append(joint_velocities)
 
         # Concatenate all observations
-        # Saare observations concatenate karna
+        # Saare observations concatenate کرنا
         observation = np.concatenate(observations)
 
         # Store in history
-        # History mein store karna
+        # History میں store کرنا
         self.observation_history.append(observation)
         if len(self.observation_history) > self.max_history:
             self.observation_history.pop(0)
@@ -1517,25 +1517,25 @@ class RobotControlInterface:
             observation: Current observation
             done: Whether episode should terminate
         """
-        # Ek control step execute karna
+        # Ek control step execute کرنا
         import time
 
         start_time = time.time()
 
         # Get observation
-        # Observation get karna
+        # Observation get کرنا
         obs = self.get_observation()
 
         # Run policy inference
-        # Policy inference run karna
+        # Policy inference run کرنا
         action = self.deployer.infer(obs)
 
         # Apply low-level control
-        # Low-level control apply karna
+        # Low-level control apply کرنا
         self._apply_joint_commands(action)
 
         # Check safety conditions
-        # Safety conditions check karna
+        # Safety conditions check کرنا
         done = self._check_safety_conditions()
 
         # Wait to maintain control frequency
@@ -1548,7 +1548,7 @@ class RobotControlInterface:
 
     def _apply_joint_commands(self, commands: np.ndarray):
         """Apply joint position/velocity/torque commands to actuators."""
-        # Actuators par joint position/velocity/torque commands apply karna
+        # Actuators پر joint position/velocity/torque commands apply کرنا
         # Implementation depends on actuator interface
         # May involve CAN bus communication, EtherCAT, or custom protocols
         pass
