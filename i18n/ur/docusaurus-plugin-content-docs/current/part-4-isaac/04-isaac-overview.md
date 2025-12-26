@@ -825,23 +825,23 @@ class IsaacGymManipulationEnv(gym.Env):
         return torch.logical_or(maxed_out, fallen)
 ```
 
-### Grasp Planning aur Execution
+### گرفت کی منصوبہ بندی اور عملدرآمد
 
-Successful manipulation ke liye sirf motor control nahi, balki intelligent decision-making bhi zaruri hai ki objects ko kaise approach kiya jaye aur grasp kiya jaye. Grasp planning algorithms potential grasps evaluate karti hain aur unhe select karti hain jo success hone ke sabse zyada likely hain. Isaac grasp sampling algorithms provide karta hai jo diverse objects ke liye candidate grasps generate karti hain.
+کامیاب ہیرا پھیری کے لیے صرف موٹر کنٹرول نہیں، بلکہ ذہین فیصلہ سازی بھی ضروری ہے کہ اشیاء کو کیسے approach کیا جائے اور پکڑا جائے۔ Grasp planning الگورتھم ممکنہ grasps کا جائزہ لیتے ہیں اور ان کو منتخب کرتے ہیں جو کامیاب ہونے کے سب سے زیادہ امکان رکھتے ہیں۔ Isaac grasp sampling الگورتھم فراہم کرتا ہے جو متنوع اشیاء کے لیے امیدوار grasps پیدا کرتے ہیں۔
 
-Learning-based grasp planning ne analytical approaches se superior performance dikhai hai novel objects ke liye. Neural networks grasp quality seekh sakti hain experience se, unseen objects aur challenging configurations par generalizing. Aise networks train karne ke liye large datasets of grasp attempts ki zarurat hoti hai, jo simulation efficiently generate kar sakta hai.
+Learning پر مبنی grasp planning نے تجزیاتی طریقوں سے بہتر کارکردگی دکھائی ہے نئی اشیاء کے لیے۔ Neural networks grasp کے معیار کو تجربے سے سیکھ سکتے ہیں، نادیدہ اشیاء اور مشکل configurations پر عمومی بنتے ہوئے۔ ایسے networks کی تربیت کے لیے grasp attempts کے بڑے datasets کی ضرورت ہوتی ہے، جو simulation مؤثر طریقے سے پیدا کر سکتا ہے۔
 
-## 4.4 Robot Control ke liye Reinforcement Learning
+## 4.4 روبوٹ کنٹرول کے لیے Reinforcement Learning
 
-Reinforcement learning complex robot behaviors ke liye ek path offer karta hai jo hand-engineering se resist karte hain. Har movement explicitly program karne ki bajaye, RL robots ko trial and error se seekhne deta hai. Isaac Gym policies at scale train karne ke liye computational substrate provide karta hai.
+Reinforcement learning پیچیدہ روبوٹ رویوں کے لیے ایک راستہ پیش کرتا ہے جو ہاتھ سے engineering سے مزاحمت کرتے ہیں۔ ہر حرکت کو واضح طور پر پروگرام کرنے کے بجائے، RL روبوٹس کو آزمائش اور غلطی سے سیکھنے دیتا ہے۔ Isaac Gym بڑے پیمانے پر policies کی تربیت کے لیے computational substrate فراہم کرتا ہے۔
 
-### Robotics ke liye RL Fundamentals
+### Robotics کے لیے RL بنیادیں
 
-Reinforcement learning us problem ko address karta hai jismein agent environment ke saath interaction se cumulative reward maximize karna seekhta hai. Agent environment state observe karta hai, actions leta hai, rewards receive karta hai, aur experience ke based par apna policy update karta hai. Robotics ke liye, yeh paradigm intricate sensorimotor behaviors learning enable karta hai jo manually design karna difficult hai.
+Reinforcement learning اس مسئلے کو حل کرتا ہے جس میں agent ماحول کے ساتھ تعامل سے مجموعی reward کو زیادہ سے زیادہ کرنا سیکھتا ہے۔ Agent ماحول کی حالت کا مشاہدہ کرتا ہے، actions لیتا ہے، rewards حاصل کرتا ہے، اور تجربے کی بنیاد پر اپنی policy کو update کرتا ہے۔ Robotics کے لیے، یہ نمونہ پیچیدہ sensorimotor رویوں کی learning کو ممکن بناتا ہے جو دستی طور پر design کرنا مشکل ہے۔
 
-Robotics RL mein challenge sample efficiency aur safety mein hai. Physical robots wo millions of episodes execute nahi kar sakte jo simulation-based RL often require karta hai. Hardware par directly train karne se damage ka risk hota hai aur careful safety constraints ki zarurat hoti hai. Isaac Sim in challenges ko address karta hai fast, parallel simulation provide karke jahan policies billions of simulated interactions se seekh sakti hain deployment se pehle.
+Robotics RL میں چیلنج نمونے کی کارکردگی اور حفاظت میں ہے۔ جسمانی روبوٹس وہ لاکھوں episodes execute نہیں کر سکتے جو simulation پر مبنی RL اکثر ضرورت رکھتا ہے۔ ہارڈویئر پر براہ راست تربیت سے نقصان کا خطرہ ہوتا ہے اور محتاط حفاظتی پابندیوں کی ضرورت ہوتی ہے۔ Isaac Sim ان چیلنجز کو حل کرتا ہے تیز، متوازی simulation فراہم کرکے جہاں policies اربوں simulated تعاملات سے سیکھ سکتی ہیں تعیناتی سے پہلے۔
 
-Isaac Gym popular RL algorithms ke saath integrate hoti hai jaise PPO (Proximal Policy Optimization), SAC (Soft Actor-Critic), aur TD3 (Twin Delayed DDPG). Niche example Isaac Gym ke saath PPO training dikhata hai:
+Isaac Gym مقبول RL الگورتھم کے ساتھ مربوط ہوتا ہے جیسے PPO (Proximal Policy Optimization)، SAC (Soft Actor-Critic)، اور TD3 (Twin Delayed DDPG)۔ نیچے دی گئی مثال Isaac Gym کے ساتھ PPO تربیت دکھاتی ہے:
 
 ```python
 # Example: PPO training for robot manipulation
@@ -1187,41 +1187,41 @@ class PPOAgent:
 
 ### Domain Randomization
 
-Real world mein transfer karne wali policies train karne ke liye unhe simulation ke dauran variation expose karne ki zarurat hai. Domain randomization systematically simulation parameters vary karta hai jaise lighting, object colors, friction coefficients, aur physics dynamics. Yeh variation policies ko robust teach karta hai distribution shift ke against jiska wo encounter karenge when deployed.
+حقیقی دنیا میں منتقل ہونے والی policies کی تربیت کے لیے انہیں simulation کے دوران تبدیلی سے آشنا کرنے کی ضرورت ہے۔ Domain randomization منظم طریقے سے simulation parameters میں تبدیلی کرتا ہے جیسے lighting، object کے رنگ، friction coefficients، اور physics dynamics۔ یہ تبدیلی policies کو مضبوط سکھاتی ہے distribution shift کے خلاف جس کا وہ سامنا کریں گے جب تعینات ہوں۔
 
-Effective domain randomization realism aur variation ke beech balance karta hai. Kam variation se policies simulation artifacts par overfit hoti hain. Zyada variation se learning unnecessarily difficult ho jati hai. Research suggest karti hai ki randomization par focus karna chahiye parameters par jo task performance aur simulation aur reality ke beech distribution gap ko sabse zyada affect karte hain.
+مؤثر domain randomization حقیقت پسندی اور تبدیلی کے درمیان توازن رکھتا ہے۔ کم تبدیلی سے policies simulation artifacts پر overfit ہوتی ہیں۔ زیادہ تبدیلی سے learning غیر ضروری طور پر مشکل ہو جاتی ہے۔ تحقیق تجویز کرتی ہے کہ randomization کو ان parameters پر مرکوز رکھنا چاہیے جو task کی کارکردگی اور simulation اور حقیقت کے درمیان distribution gap کو سب سے زیادہ متاثر کرتے ہیں۔
 
-## 4.5 Sim-to-Real Transfer Techniques
+## 4.5 Sim-to-Real منتقلی کی تکنیکیں
 
-Simulation mein trained policies ko physical robots par deploy karna ek significant challenge hai. Sim-to-real gap physics dynamics, sensor characteristics, aur environmental conditions mein differences comprise karta hai. Successful transfer in gaps ko address karna require karta hai careful system design aur training ke through.
+Simulation میں تربیت یافتہ policies کو جسمانی روبوٹس پر تعینات کرنا ایک اہم چیلنج ہے۔ Sim-to-real gap physics dynamics، sensor خصوصیات، اور ماحولیاتی حالات میں فرق پر مشتمل ہے۔ کامیاب منتقلی کے لیے ان gaps کو حل کرنا محتاط نظام کی تشکیل اور تربیت کی ضرورت ہے۔
 
-### Sim-to-Real Gap ko samajhna
+### Sim-to-Real Gap کو سمجھنا
 
-Fundamental challenge yeh hai ki simulations approximate models of physical reality hain. Physics engines contact dynamics, friction, aur actuator behavior ke baare mein simplifying assumptions karte hain. Rendering engines light transport aur material appearance approximate karti hain. Yeh approximations compound hokar policies create karte hain jo simulation artifacts exploit karti hain, robust behaviors seekhne ki bajaye.
+بنیادی چیلنج یہ ہے کہ simulations جسمانی حقیقت کے تخمینہ ماڈل ہیں۔ Physics engines contact dynamics، friction، اور actuator رویے کے بارے میں آسان فرضیات کرتے ہیں۔ Rendering engines روشنی کی منتقلی اور مواد کی ظاہری شکل کا تخمینہ لگاتے ہیں۔ یہ تخمینے مل کر policies بناتے ہیں جو simulation artifacts کا فائدہ اٹھاتی ہیں، مضبوط رویے سیکھنے کے بجائے۔
 
-Physics gaps kai tariko se manifest hoti hain. Contact models in simulators collisions ko penalty forces ya impulse-based resolution ke through handle karte hain, dono actual physical contact ke approximations hain. Simulated contacts ki stiffness, damping, aur friction rarely real materials se precisely match karti hain. Robot dynamics models perfect torque transmission assume karte hain, gearbox compliance, joint friction, aur calibration errors ignore karke.
+Physics gaps کئی طریقوں سے ظاہر ہوتے ہیں۔ Simulators میں contact models collisions کو penalty forces یا impulse پر مبنی resolution کے ذریعے handle کرتے ہیں، دونوں حقیقی جسمانی contact کے تخمینے ہیں۔ Simulated contacts کی stiffness، damping، اور friction شاذ و نادر ہی حقیقی مواد سے بالکل میچ کرتے ہیں۔ Robot dynamics ماڈل کامل torque transmission فرض کرتے ہیں، gearbox compliance، joint friction، اور calibration errors کو نظر انداز کرتے ہوئے۔
 
-Perception gaps simulated aur real sensor data ke beech differences se arise hoti hain. Simulation se camera images ke pass idealized noise profiles, perfect white balance, aur consistent lens characteristics hote hain. Real cameras ke pass lens aberrations, rolling shutter effects, aur exposure variations hote hain. Simulation mein depth sensors material properties aur lighting conditions ke baare mein simplifying assumptions karte hain.
+Perception gaps simulated اور حقیقی sensor ڈیٹا کے درمیان فرق سے پیدا ہوتے ہیں۔ Simulation سے کیمرا تصاویر کے پاس مثالی noise profiles، کامل white balance، اور مستقل lens خصوصیات ہوتی ہیں۔ حقیقی کیمروں کے پاس lens aberrations، rolling shutter effects، اور exposure میں تبدیلیاں ہوتی ہیں۔ Simulation میں depth sensors مواد کی خصوصیات اور lighting conditions کے بارے میں آسان فرضیات کرتے ہیں۔
 
-### System Identification aur Calibration
+### System Identification اور Calibration
 
-System identification techniques physical systems ke characteristics measure karte hain aur simulation parameters ko match karne ke liye tune karti hain. Yeh calibration process sim-to-real gap ko reduce karta hai simulation fidelity improve karke. Humanoid robots ke liye, system identification joint dynamics, sensor characteristics, aur contact properties par focus karta hai.
+System identification تکنیکیں جسمانی نظاموں کی خصوصیات کی پیمائش کرتی ہیں اور simulation parameters کو میچ کرنے کے لیے ٹیون کرتی ہیں۔ یہ calibration عمل sim-to-real gap کو کم کرتا ہے simulation کی وفاداری بہتر بناکر۔ ہیومینائڈ روبوٹس کے لیے، system identification joint dynamics، sensor خصوصیات، اور contact خصوصیات پر مرکوز ہوتی ہے۔
 
-Actuator characterization commanded signals aur actual motion ke beech relationship measure karta hai. Isme motor resistance, gearbox ratios, friction profiles, aur torque limits identify karna shamil hai. Identified parameters simulation joint models configure karne ke liye use hoti hain, dynamic accuracy improve karke.
+Actuator characterization کمانڈ شدہ signals اور حقیقی حرکت کے درمیان تعلق کی پیمائش کرتا ہے۔ اس میں motor resistance، gearbox ratios، friction profiles، اور torque کی حدود کی شناخت شامل ہے۔ شناخت شدہ parameters simulation joint ماڈلز کی تشکیل کے لیے استعمال ہوتے ہیں، dynamic درستگی بہتر بناکر۔
 
-Sensor calibration noise characteristics, biases, aur scale factors measure karta hai. IMU calibration accelerometer aur gyroscope biases, scale factors, aur axis alignments determine karta hai. Camera calibration intrinsics, distortion coefficients, aur robot base frames ke relative extrinsics measure karta hai.
+Sensor calibration noise خصوصیات، biases، اور scale factors کی پیمائش کرتا ہے۔ IMU calibration accelerometer اور gyroscope biases، scale factors، اور axis alignments کا تعین کرتا ہے۔ Camera calibration intrinsics، distortion coefficients، اور robot base frames کے متعلقہ extrinsics کی پیمائش کرتا ہے۔
 
 ### Domain Adaptation
 
-Domain adaptation techniques simulation aur real data ke beech distribution shift reduce karti hain bina exact system identification require kiye. Yeh approaches synthetic data par models train karte hain jabki real distributions par various mechanisms ke through generalize karti hain.
+Domain adaptation تکنیکیں simulation اور حقیقی ڈیٹا کے درمیان distribution shift کو کم کرتی ہیں بغیر exact system identification کی ضرورت کے۔ یہ approaches synthetic ڈیٹا پر models کی تربیت کرتے ہیں جبکہ حقیقی distributions پر مختلف طریقہ کار کے ذریعے عمومی بنتے ہیں۔
 
-Domain randomization varied synthetic data par train karta hai policies ko distribution shift ke against robust banana ke liye. Key insight yeh hai ki agar real distribution training distribution ke andar contained hai, to transfer succeed hoti hai. Real variation effective hone ke liye randomization ko span karna chahiye.
+Domain randomization متنوع synthetic ڈیٹا پر تربیت دیتا ہے policies کو distribution shift کے خلاف مضبوط بنانے کے لیے۔ اہم بصیرت یہ ہے کہ اگر حقیقی distribution تربیتی distribution کے اندر موجود ہے، تو منتقلی کامیاب ہوتی ہے۔ حقیقی تبدیلی مؤثر ہونے کے لیے randomization کو پھیلانا چاہیے۔
 
-Domain adaptation networks domains ke beech map seekhne ke liye learn karti hain. Ek encoder network real images ko synthetic images jaisa dikhane ke liye transform karta hai, ya vice versa. Policy training phir domain-adapted representations use karti hai, distribution gap reduce karke.
+Domain adaptation networks domains کے درمیان نقشہ سیکھنے کے لیے سیکھتے ہیں۔ ایک encoder network حقیقی تصاویر کو synthetic تصاویر جیسا دکھانے کے لیے تبدیل کرتا ہے، یا اس کے برعکس۔ Policy تربیت پھر domain-adapted representations استعمال کرتی ہے، distribution gap کو کم کرتے ہوئے۔
 
-Online adaptation deployment ke dauran learning continue karta hai. Real-world interactions new training data provide karte hain jo distribution shift ke liye correct karta hai. Yeh careful safety constraints aur stable learning rates require karta hai policy degradation prevent karne ke liye.
+Online adaptation تعیناتی کے دوران learning جاری رکھتا ہے۔ حقیقی دنیا کے تعاملات نیا تربیتی ڈیٹا فراہم کرتے ہیں جو distribution shift کے لیے درست کرتا ہے۔ اس کے لیے محتاط حفاظتی پابندیاں اور مستحکم learning rates کی ضرورت ہے policy کی خرابی کو روکنے کے لیے۔
 
-### Deployment Pipeline
+### تعیناتی پائپ لائن
 
 Trained policies ko physical robots par deploy karne ke liye trained networks export aur optimize karne ki zarurat hai. Isaac PyTorch models ko TensorRT engines mein convert karne ke liye tools provide karta hai efficient GPU inference ke liye. Deployment pipeline ko sensor input processing, policy inference, aur actuator command execution real time mein handle karna chahiye.
 
