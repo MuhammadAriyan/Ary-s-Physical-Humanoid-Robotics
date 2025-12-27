@@ -123,6 +123,7 @@ function ChatContent() {
 
   // Auth modal state
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
+  const [initialAuthCheck, setInitialAuthCheck] = useState<boolean>(true);
 
   // Chat state
   const [currentChapter, setCurrentChapter] = useState<string>(DEFAULT_CHAPTER);
@@ -143,12 +144,35 @@ function ChatContent() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  // Mark initial auth check complete after first render
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setInitialAuthCheck(false);
+    }, 500); // Wait for session validation
+    return () => clearTimeout(timer);
+  }, []);
+
   // Show auth modal when not authenticated
   useEffect(() => {
-    if (!authLoading && !isAuthenticated && !user) {
-      setShowAuthModal(true);
+    // Don't show modal during initial auth check
+    if (initialAuthCheck) {
+      return;
     }
-  }, [authLoading, isAuthenticated, user]);
+
+    // Add delay to prevent flash during OAuth callback
+    const timer = setTimeout(() => {
+      // Check if persisted auth exists in localStorage
+      const hasPersistedAuth = typeof window !== 'undefined' &&
+        localStorage.getItem('fubuni_auth_user') !== null;
+
+      // Only show modal if truly not authenticated
+      if (!authLoading && !isAuthenticated && !user && !hasPersistedAuth) {
+        setShowAuthModal(true);
+      }
+    }, 200); // Additional delay to allow session validation
+
+    return () => clearTimeout(timer);
+  }, [authLoading, isAuthenticated, user, initialAuthCheck]);
 
   // Auto-close modal when authentication succeeds
   useEffect(() => {
