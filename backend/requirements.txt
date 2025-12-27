@@ -9,6 +9,7 @@ python-dotenv==1.0.1
 openai>=1.66.2
 httpx==0.28.1
 python-jose[cryptography]==3.3.0
+PyJWT==2.8.0
 openai-agents==0.0.4
 mangum==0.17.0
 pytest==8.3.3
