@@ -123,7 +123,6 @@ function ChatContent() {
 
   // Auth modal state
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
-  const [initialAuthCheck, setInitialAuthCheck] = useState<boolean>(true);
 
   // Chat state
   const [currentChapter, setCurrentChapter] = useState<string>(DEFAULT_CHAPTER);
@@ -144,35 +143,39 @@ function ChatContent() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Mark initial auth check complete after first render
+  // Show auth modal only when definitively not authenticated
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setInitialAuthCheck(false);
-    }, 500); // Wait for session validation
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Show auth modal when not authenticated
-  useEffect(() => {
-    // Don't show modal during initial auth check
-    if (initialAuthCheck) {
+    // Wait for auth to finish loading
+    if (authLoading) {
       return;
     }
 
-    // Add delay to prevent flash during OAuth callback
+    // If authenticated, ensure modal is closed
+    if (isAuthenticated) {
+      if (showAuthModal) {
+        setShowAuthModal(false);
+      }
+      return;
+    }
+
+    // Check multiple indicators before showing modal
     const timer = setTimeout(() => {
-      // Check if persisted auth exists in localStorage
-      const hasPersistedAuth = typeof window !== 'undefined' &&
+      // Check localStorage for any auth data
+      const hasLocalStorage = typeof window !== 'undefined' &&
         localStorage.getItem('fubuni_auth_user') !== null;
 
-      // Only show modal if truly not authenticated
-      if (!authLoading && !isAuthenticated && !user && !hasPersistedAuth) {
+      // Check for Better Auth session cookie
+      const hasCookie = typeof document !== 'undefined' &&
+        document.cookie.includes('better-auth.session');
+
+      // Only show if NO authentication indicators exist
+      if (!isAuthenticated && !user && !hasLocalStorage && !hasCookie && !showAuthModal) {
         setShowAuthModal(true);
       }
-    }, 200); // Additional delay to allow session validation
+    }, 1000); // 1 second delay to ensure all checks complete
 
     return () => clearTimeout(timer);
-  }, [authLoading, isAuthenticated, user, initialAuthCheck]);
+  }, [authLoading, isAuthenticated, user, showAuthModal]);
 
   // Auto-close modal when authentication succeeds
   useEffect(() => {
