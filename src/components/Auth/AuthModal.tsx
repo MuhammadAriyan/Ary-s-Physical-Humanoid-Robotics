@@ -41,7 +41,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
 
               // Wait for session to be fully established
-              await new Promise(resolve => setTimeout(resolve, 500));
+              await new Promise(resolve => setTimeout(resolve, 1000));
 
               // Force fresh session fetch from server (bypass cache)
               const session = await getSession({ query: { disableCookieCache: true } });
@@ -80,7 +80,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
 
               // Wait for session to be fully established
-              await new Promise(resolve => setTimeout(resolve, 500));
+              await new Promise(resolve => setTimeout(resolve, 1000));
 
               // Force fresh session fetch from server (bypass cache)
               const session = await getSession({ query: { disableCookieCache: true } });
