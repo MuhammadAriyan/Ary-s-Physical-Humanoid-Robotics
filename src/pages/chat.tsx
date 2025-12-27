@@ -158,21 +158,20 @@ function ChatContent() {
       return;
     }
 
-    // Check multiple indicators before showing modal
+    // Increase delay for cross-origin cookie propagation
     const timer = setTimeout(() => {
-      // Check localStorage for any auth data
+      // Primary check: localStorage (reliable across domains)
       const hasLocalStorage = typeof window !== 'undefined' &&
         localStorage.getItem('fubuni_auth_user') !== null;
 
-      // Check for Better Auth session cookie
-      const hasCookie = typeof document !== 'undefined' &&
-        document.cookie.includes('better-auth.session');
+      // Secondary check: Better Auth session state
+      const hasSession = isAuthenticated || user;
 
-      // Only show if NO authentication indicators exist
-      if (!isAuthenticated && !user && !hasLocalStorage && !hasCookie && !showAuthModal) {
+      // Only show modal if NO authentication indicators exist
+      if (!hasSession && !hasLocalStorage && !showAuthModal) {
         setShowAuthModal(true);
       }
-    }, 1000); // 1 second delay to ensure all checks complete
+    }, 2000); // Increased to 2 seconds for cross-origin scenarios
 
     return () => clearTimeout(timer);
   }, [authLoading, isAuthenticated, user, showAuthModal]);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signIn, signUp, signInWithGoogle } from '../../lib/auth-client';
+import { signIn, signUp, signInWithGoogle, getSession } from '../../lib/auth-client';
 import styles from './AuthModal.module.css';
 
 interface AuthModalProps {
@@ -36,7 +36,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           },
           {
             // Prevent automatic redirect after sign-up
-            onSuccess: () => {
+            onSuccess: async () => {
+              // Immediately fetch and store session data in localStorage
+              const session = await getSession();
+              if (session.data?.user) {
+                localStorage.setItem('fubuni_auth_user', JSON.stringify(session.data.user));
+                localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
+              }
+
               // Close modal on success
               onSuccess?.();
               onClose();
@@ -56,7 +63,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           },
           {
             // Prevent automatic redirect after sign-in
-            onSuccess: () => {
+            onSuccess: async () => {
+              // Immediately fetch and store session data in localStorage
+              const session = await getSession();
+              if (session.data?.user) {
+                localStorage.setItem('fubuni_auth_user', JSON.stringify(session.data.user));
+                localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
+              }
+
               // Close modal on success
               onSuccess?.();
               onClose();

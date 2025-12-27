@@ -64,10 +64,22 @@ export const auth = betterAuth({
   } : {},
 
   // Trusted origins for CORS
-  trustedOrigins: corsOrigins,
+  trustedOrigins: [
+    ...corsOrigins,
+    "https://muhammadariyan.github.io", // Production frontend (GitHub Pages)
+  ],
 
-  // Advanced configuration
-  advanced: {},
+  // Advanced configuration for cross-origin cookies
+  advanced: {
+    defaultCookieAttributes: {
+      // For cross-origin: use "none" with secure in production
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      // MUST be true in production for sameSite: "none"
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      path: "/",
+    },
+  },
 });
 
 export type Auth = typeof auth;

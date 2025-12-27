@@ -18,6 +18,11 @@ const corsOrigins = process.env.CORS_ORIGINS?.split(",").map((o) => o.trim()) ||
   "http://localhost:3001",
 ];
 
+// Add GitHub Pages origin for production (if not already in env)
+if (!corsOrigins.includes("https://muhammadariyan.github.io")) {
+  corsOrigins.push("https://muhammadariyan.github.io");
+}
+
 // CORS configuration
 app.use(
   cors({

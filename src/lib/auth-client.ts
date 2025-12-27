@@ -14,6 +14,9 @@ const getAuthUrl = () => {
 
 export const authClient = createAuthClient({
   baseURL: getAuthUrl(),
+  fetchOptions: {
+    credentials: "include", // Send cookies cross-origin
+  },
 });
 
 // Export typed hooks and functions
