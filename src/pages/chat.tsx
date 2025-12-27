@@ -121,8 +121,15 @@ function ChatContent() {
   const baseUrl = useBaseUrl('/');
   const { isAuthenticated, isLoading: authLoading, user } = useAuth();
 
-  // Auth modal state
-  const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
+  // Auth modal state - initialize based on localStorage to prevent flash
+  const [showAuthModal, setShowAuthModal] = useState<boolean>(() => {
+    // Check localStorage immediately on mount
+    if (typeof window !== 'undefined') {
+      const hasAuthUser = localStorage.getItem('fubuni_auth_user') !== null;
+      return !hasAuthUser; // Show modal only if no auth user in localStorage
+    }
+    return false; // Default to hidden during SSR
+  });
 
   // Chat state
   const [currentChapter, setCurrentChapter] = useState<string>(DEFAULT_CHAPTER);
@@ -150,30 +157,37 @@ function ChatContent() {
       return;
     }
 
-    // If authenticated, ensure modal is closed
-    if (isAuthenticated) {
+    // If authenticated via Better Auth, ensure modal is closed and localStorage is set
+    if (isAuthenticated && user) {
       if (showAuthModal) {
         setShowAuthModal(false);
+      }
+      // Ensure localStorage is synced
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('fubuni_auth_user');
+        if (!stored) {
+          localStorage.setItem('fubuni_auth_user', JSON.stringify(user));
+          localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
+        }
       }
       return;
     }
 
-    // Increase delay for cross-origin cookie propagation
-    const timer = setTimeout(() => {
-      // Primary check: localStorage (reliable across domains)
-      const hasLocalStorage = typeof window !== 'undefined' &&
-        localStorage.getItem('fubuni_auth_user') !== null;
+    // Check localStorage as primary source of truth
+    const hasLocalStorage = typeof window !== 'undefined' &&
+      localStorage.getItem('fubuni_auth_user') !== null;
 
-      // Secondary check: Better Auth session state
-      const hasSession = isAuthenticated || user;
-
-      // Only show modal if NO authentication indicators exist
-      if (!hasSession && !hasLocalStorage && !showAuthModal) {
+    if (hasLocalStorage) {
+      // Have auth data in localStorage, hide modal
+      if (showAuthModal) {
+        setShowAuthModal(false);
+      }
+    } else {
+      // No auth data anywhere, show modal
+      if (!showAuthModal && !isAuthenticated && !user) {
         setShowAuthModal(true);
       }
-    }, 2000); // Increased to 2 seconds for cross-origin scenarios
-
-    return () => clearTimeout(timer);
+    }
   }, [authLoading, isAuthenticated, user, showAuthModal]);
 
   // Auto-close modal when authentication succeeds
