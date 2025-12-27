@@ -36,14 +36,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           },
           {
             // Prevent automatic redirect after sign-up
-            onRequest: (ctx) => {
-              return ctx;
-            },
-            onSuccess: (ctx) => {
+            onSuccess: () => {
               // Close modal on success
               onSuccess?.();
               onClose();
-              return ctx;
             },
           }
         );
@@ -60,14 +56,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           },
           {
             // Prevent automatic redirect after sign-in
-            onRequest: (ctx) => {
-              return ctx;
-            },
-            onSuccess: (ctx) => {
+            onSuccess: () => {
               // Close modal on success
               onSuccess?.();
               onClose();
-              return ctx;
             },
           }
         );
