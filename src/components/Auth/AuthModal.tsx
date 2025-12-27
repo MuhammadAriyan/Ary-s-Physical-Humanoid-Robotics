@@ -28,31 +28,55 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 
     try {
       if (mode === 'signup') {
-        const result = await signUp.email({
-          email,
-          password,
-          name: name || email.split('@')[0],
-        });
+        const result = await signUp.email(
+          {
+            email,
+            password,
+            name: name || email.split('@')[0],
+          },
+          {
+            // Prevent automatic redirect after sign-up
+            onRequest: (ctx) => {
+              return ctx;
+            },
+            onSuccess: (ctx) => {
+              // Close modal on success
+              onSuccess?.();
+              onClose();
+              return ctx;
+            },
+          }
+        );
 
         if (result.error) {
           setError(result.error.message || 'Signup failed');
           return;
         }
       } else {
-        const result = await signIn.email({
-          email,
-          password,
-        });
+        const result = await signIn.email(
+          {
+            email,
+            password,
+          },
+          {
+            // Prevent automatic redirect after sign-in
+            onRequest: (ctx) => {
+              return ctx;
+            },
+            onSuccess: (ctx) => {
+              // Close modal on success
+              onSuccess?.();
+              onClose();
+              return ctx;
+            },
+          }
+        );
 
         if (result.error) {
           setError(result.error.message || 'Login failed');
           return;
         }
       }
-
-      // Success - close modal and notify parent
-      onSuccess?.();
-      onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
