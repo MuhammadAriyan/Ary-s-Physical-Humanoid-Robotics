@@ -145,10 +145,10 @@ function ChatContent() {
 
   // Show auth modal when not authenticated
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
+    if (!authLoading && !isAuthenticated && !user) {
       setShowAuthModal(true);
     }
-  }, [authLoading, isAuthenticated]);
+  }, [authLoading, isAuthenticated, user]);
 
   // Auto-close modal when authentication succeeds
   useEffect(() => {
