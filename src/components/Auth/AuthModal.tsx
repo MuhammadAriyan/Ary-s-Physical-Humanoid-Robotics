@@ -37,8 +37,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           {
             // Prevent automatic redirect after sign-up
             onSuccess: async () => {
-              // Immediately fetch and store session data in localStorage
-              const session = await getSession();
+              // Wait for session to be fully established
+              await new Promise(resolve => setTimeout(resolve, 500));
+
+              // Force fresh session fetch from server (bypass cache)
+              const session = await getSession({ query: { disableCookieCache: true } });
               if (session.data?.user) {
                 localStorage.setItem('fubuni_auth_user', JSON.stringify(session.data.user));
                 localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
@@ -64,8 +67,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           {
             // Prevent automatic redirect after sign-in
             onSuccess: async () => {
-              // Immediately fetch and store session data in localStorage
-              const session = await getSession();
+              // Wait for session to be fully established
+              await new Promise(resolve => setTimeout(resolve, 500));
+
+              // Force fresh session fetch from server (bypass cache)
+              const session = await getSession({ query: { disableCookieCache: true } });
               if (session.data?.user) {
                 localStorage.setItem('fubuni_auth_user', JSON.stringify(session.data.user));
                 localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
