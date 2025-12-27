@@ -37,6 +37,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           {
             // Prevent automatic redirect after sign-up
             onSuccess: async () => {
+              // IMMEDIATELY mark as authenticated to prevent modal from showing again
+              localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
+
               // Wait for session to be fully established
               await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -44,7 +47,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               const session = await getSession({ query: { disableCookieCache: true } });
               if (session.data?.user) {
                 localStorage.setItem('fubuni_auth_user', JSON.stringify(session.data.user));
-                localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
+              } else {
+                // Fallback: store minimal auth indicator if session fetch fails
+                localStorage.setItem('fubuni_auth_user', JSON.stringify({
+                  email,
+                  name: name || email.split('@')[0],
+                  authenticated: true
+                }));
               }
 
               // Close modal on success
@@ -67,6 +76,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           {
             // Prevent automatic redirect after sign-in
             onSuccess: async () => {
+              // IMMEDIATELY mark as authenticated to prevent modal from showing again
+              localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
+
               // Wait for session to be fully established
               await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -74,7 +86,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               const session = await getSession({ query: { disableCookieCache: true } });
               if (session.data?.user) {
                 localStorage.setItem('fubuni_auth_user', JSON.stringify(session.data.user));
-                localStorage.setItem('fubuni_auth_timestamp', Date.now().toString());
+              } else {
+                // Fallback: store minimal auth indicator if session fetch fails
+                localStorage.setItem('fubuni_auth_user', JSON.stringify({
+                  email,
+                  authenticated: true
+                }));
               }
 
               // Close modal on success
