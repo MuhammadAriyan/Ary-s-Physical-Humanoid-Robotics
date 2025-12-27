@@ -28,15 +28,56 @@ export const {
   getSession,
 } = authClient;
 
+// New function: Fetch JWT token and store it in localStorage
+export async function fetchAndStoreJWT(): Promise<string | null> {
+  try {
+    const response = await fetch(`${getAuthUrl()}/api/auth/token`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      console.warn('Failed to fetch JWT token:', response.status);
+      return null;
+    }
+
+    const data = await response.json();
+    if (data.token) {
+      // Store JWT in localStorage
+      localStorage.setItem('fubuni_jwt_token', data.token);
+      localStorage.setItem('fubuni_jwt_timestamp', Date.now().toString());
+      return data.token;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching JWT:', error);
+    return null;
+  }
+}
+
 // Helper function to get the current session token for API calls
-// We call the auth service to generate a JWT token from the Better Auth session
+// Uses stored JWT from localStorage (set during authentication)
 export async function getSessionToken(): Promise<string | null> {
   try {
-    // First check if we have localStorage auth (cross-domain fallback)
+    // Check if we have a stored JWT token
+    if (typeof window !== 'undefined') {
+      const storedToken = localStorage.getItem('fubuni_jwt_token');
+      const timestamp = localStorage.getItem('fubuni_jwt_timestamp');
+
+      // Check if token exists and is less than 6 days old (7 day expiry with 1 day buffer)
+      if (storedToken && timestamp) {
+        const age = Date.now() - parseInt(timestamp);
+        const sixDays = 6 * 24 * 60 * 60 * 1000;
+
+        if (age < sixDays) {
+          return storedToken;
+        }
+      }
+    }
+
+    // Try to fetch new token (will likely fail cross-domain, but worth trying)
     const hasLocalStorageAuth = typeof window !== 'undefined' &&
       localStorage.getItem('fubuni_auth_user') !== null;
 
-    // If no localStorage auth, check Better Auth session
     if (!hasLocalStorageAuth) {
       const session = await getSession();
       if (!session?.data?.user) {
@@ -44,21 +85,24 @@ export async function getSessionToken(): Promise<string | null> {
       }
     }
 
-    // Try to get JWT token from auth service
-    // This works if the Better Auth session cookie is accessible
     const response = await fetch(`${getAuthUrl()}/api/auth/token`, {
-      credentials: 'include', // Include cookies for Better Auth session
+      credentials: 'include',
     });
 
     if (!response.ok) {
-      // If token fetch fails but we have localStorage auth,
-      // the session cookie might not be accessible cross-domain
       console.warn('Failed to fetch JWT token from auth service');
       return null;
     }
 
     const data = await response.json();
-    return data.token || null;
+    if (data.token) {
+      // Store for future use
+      localStorage.setItem('fubuni_jwt_token', data.token);
+      localStorage.setItem('fubuni_jwt_timestamp', Date.now().toString());
+      return data.token;
+    }
+
+    return null;
   } catch (error) {
     console.error('Error getting session token:', error);
     return null;

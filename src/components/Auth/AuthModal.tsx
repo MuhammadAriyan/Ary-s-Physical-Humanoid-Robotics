@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signIn, signUp, signInWithGoogle, getSession } from '../../lib/auth-client';
+import { signIn, signUp, signInWithGoogle, getSession, fetchAndStoreJWT } from '../../lib/auth-client';
 import styles from './AuthModal.module.css';
 
 interface AuthModalProps {
@@ -43,6 +43,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               // Wait for session to be fully established
               await new Promise(resolve => setTimeout(resolve, 1000));
 
+              // Fetch JWT token and store it - THIS IS THE CRITICAL FIX
+              const jwtToken = await fetchAndStoreJWT();
+
               // Force fresh session fetch from server (bypass cache)
               const session = await getSession({ query: { disableCookieCache: true } });
               if (session.data?.user) {
@@ -52,7 +55,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 localStorage.setItem('fubuni_auth_user', JSON.stringify({
                   email,
                   name: name || email.split('@')[0],
-                  authenticated: true
+                  authenticated: true,
+                  hasJWT: !!jwtToken
                 }));
               }
 
@@ -82,6 +86,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               // Wait for session to be fully established
               await new Promise(resolve => setTimeout(resolve, 1000));
 
+              // Fetch JWT token and store it - THIS IS THE CRITICAL FIX
+              const jwtToken = await fetchAndStoreJWT();
+
               // Force fresh session fetch from server (bypass cache)
               const session = await getSession({ query: { disableCookieCache: true } });
               if (session.data?.user) {
@@ -90,7 +97,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                 // Fallback: store minimal auth indicator if session fetch fails
                 localStorage.setItem('fubuni_auth_user', JSON.stringify({
                   email,
-                  authenticated: true
+                  authenticated: true,
+                  hasJWT: !!jwtToken
                 }));
               }
 

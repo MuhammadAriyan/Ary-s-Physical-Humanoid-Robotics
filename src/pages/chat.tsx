@@ -288,9 +288,12 @@ function ChatContent() {
    */
   const handleSignOut = useCallback(async () => {
     try {
-      // Clear persisted auth first (localStorage)
+      // Clear all persisted auth data
       if (typeof window !== 'undefined') {
         localStorage.removeItem('fubuni_auth_user');
+        localStorage.removeItem('fubuni_jwt_token');
+        localStorage.removeItem('fubuni_jwt_timestamp');
+        localStorage.removeItem('fubuni_auth_timestamp');
       }
       await signOut();
       setMessages([]);
