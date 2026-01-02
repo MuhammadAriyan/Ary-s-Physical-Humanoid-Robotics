@@ -31,7 +31,13 @@ app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
-      if (corsOrigins.includes(origin)) return callback(null, true);
+      console.log(`[CORS] Checking origin: ${origin}`);
+      console.log(`[CORS] Allowed origins: ${JSON.stringify(corsOrigins)}`);
+      if (corsOrigins.includes(origin)) {
+        console.log(`[CORS] Origin ${origin} is allowed`);
+        return callback(null, true);
+      }
+      console.log(`[CORS] Origin ${origin} is NOT allowed`);
       callback(null, false);
     },
     credentials: true,
