@@ -58,6 +58,17 @@ app.get("/health", (_req, res) => {
   });
 });
 
+// Debug endpoint to check CORS configuration
+app.get("/debug/cors", (_req, res) => {
+  res.json({
+    corsOrigins,
+    envCorsOrigins: process.env.CORS_ORIGINS,
+    envCorsOrigins2: process.env.CORS_ORIGINS2,
+    nodeEnv: process.env.NODE_ENV,
+    betterAuthUrl: process.env.BETTER_AUTH_URL,
+  });
+});
+
 // Custom endpoint to generate JWT token for authenticated sessions
 // Frontend calls this to get a JWT that can be sent to FastAPI backend
 app.get("/api/auth/token", async (req, res) => {
