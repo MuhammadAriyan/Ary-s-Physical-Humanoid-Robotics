@@ -122,11 +122,21 @@ function ChatContent() {
   const { isAuthenticated, isLoading: authLoading, user } = useAuth();
 
   // Auth modal state - initialize based on localStorage to prevent flash
+  // NOTE: We use localStorage initially to prevent showing modal while useSession() is loading
   const [showAuthModal, setShowAuthModal] = useState<boolean>(() => {
     // Check localStorage immediately on mount
     if (typeof window !== 'undefined') {
       const hasAuthUser = localStorage.getItem('fubuni_auth_user') !== null;
-      return !hasAuthUser; // Show modal only if no auth user in localStorage
+      const authTimestamp = localStorage.getItem('fubuni_auth_timestamp');
+      // If user exists and timestamp is recent (within 7 days), consider authenticated
+      if (hasAuthUser && authTimestamp) {
+        const age = Date.now() - parseInt(authTimestamp);
+        const sevenDays = 7 * 24 * 60 * 60 * 1000;
+        if (age < sevenDays) {
+          return false; // User has recent auth - don't show modal initially
+        }
+      }
+      return !hasAuthUser; // Show modal if no auth user
     }
     return false; // Default to hidden during SSR
   });
@@ -173,12 +183,23 @@ function ChatContent() {
       return;
     }
 
-    // Check localStorage as primary source of truth
+    // Check localStorage as primary source of truth, but also verify timestamp validity
     const hasLocalStorage = typeof window !== 'undefined' &&
       localStorage.getItem('fubuni_auth_user') !== null;
 
-    if (!hasLocalStorage && !showAuthModal && !isAuthenticated && !user) {
-      // No auth data anywhere, show modal (only if not manually closed by user)
+    if (hasLocalStorage) {
+      // Check if timestamp is still valid (within 7 days)
+      const authTimestamp = localStorage.getItem('fubuni_auth_timestamp');
+      if (authTimestamp) {
+        const age = Date.now() - parseInt(authTimestamp);
+        const sevenDays = 7 * 24 * 60 * 60 * 1000;
+        // If auth data is old (expired), show modal for re-auth
+        if (age >= sevenDays && !isAuthenticated) {
+          setShowAuthModal(true);
+        }
+      }
+    } else if (!showAuthModal && !isAuthenticated && !user) {
+      // No auth data anywhere, show modal
       setShowAuthModal(true);
     }
   }, [authLoading, isAuthenticated, user]);
@@ -580,11 +601,28 @@ function ChatContent() {
                   className={styles.signOutButton}
                   onClick={handleSignOut}
                   aria-label="Sign out"
+                  title="Sign out"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                     <polyline points="16 17 21 12 16 7" />
                     <line x1="21" y1="12" x2="9" y2="12" />
+                  </svg>
+                </button>
+              )}
+              {/* Sign up button (for new users) */}
+              {!isAuthenticated && (
+                <button
+                  type="button"
+                  className={styles.signOutButton}
+                  onClick={() => setShowAuthModal(true)}
+                  aria-label="Sign up"
+                  title="Sign up"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M16 21v-2a4 4 0 0 0 0-4H5a4 4 0 0 0 0 4v16a4 4 0 0 0 0 4h11a4 4 0 0 0 0 0-4z" />
+                    <path d="M11.5 14.5L7.5 10.5 3 6V2.5A2.5 2.5 0 0 1 0.5 0h6a2.5 2.5 0 0 1 2.5 2.5V6" />
+                    <line x1="9" y1="18" x2="15" y2="12" />
                   </svg>
                 </button>
               )}
