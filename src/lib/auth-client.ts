@@ -33,10 +33,13 @@ export async function fetchAndStoreJWT(): Promise<string | null> {
   try {
     const response = await fetch(`${getAuthUrl()}/api/auth/token`, {
       credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
-      console.warn('Failed to fetch JWT token:', response.status);
+      console.warn('Failed to fetch JWT token:', response.status, response.statusText);
       return null;
     }
 
@@ -74,32 +77,52 @@ export async function getSessionToken(): Promise<string | null> {
       }
     }
 
-    // Try to fetch new token (will likely fail cross-domain, but worth trying)
-    const hasLocalStorageAuth = typeof window !== 'undefined' &&
-      localStorage.getItem('fubuni_auth_user') !== null;
+    // Check if user is authenticated by trying to get the session from auth service
+    // We'll try to get the session without relying on Better Auth's client getSession
+    try {
+      const sessionResponse = await fetch(`${getAuthUrl()}/api/auth/session`, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    if (!hasLocalStorageAuth) {
-      const session = await getSession();
-      if (!session?.data?.user) {
-        return null;
+      if (!sessionResponse.ok) {
+        // If session endpoint returns 401, user is not authenticated
+        if (sessionResponse.status === 401) {
+          console.log('User not authenticated, clearing stored token');
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('fubuni_jwt_token');
+            localStorage.removeItem('fubuni_jwt_timestamp');
+          }
+          return null;
+        }
+        // If other error, continue to try to get JWT token anyway
+        console.warn('Session check failed:', sessionResponse.status);
+      } else {
+        // If session exists, try to get JWT token
+        const jwtResponse = await fetch(`${getAuthUrl()}/api/auth/token`, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (jwtResponse.ok) {
+          const data = await jwtResponse.json();
+          if (data.token) {
+            // Store for future use
+            localStorage.setItem('fubuni_jwt_token', data.token);
+            localStorage.setItem('fubuni_jwt_timestamp', Date.now().toString());
+            return data.token;
+          }
+        } else {
+          console.warn('Failed to get JWT token:', jwtResponse.status, jwtResponse.statusText);
+        }
       }
-    }
-
-    const response = await fetch(`${getAuthUrl()}/api/auth/token`, {
-      credentials: 'include',
-    });
-
-    if (!response.ok) {
-      console.warn('Failed to fetch JWT token from auth service');
-      return null;
-    }
-
-    const data = await response.json();
-    if (data.token) {
-      // Store for future use
-      localStorage.setItem('fubuni_jwt_token', data.token);
-      localStorage.setItem('fubuni_jwt_timestamp', Date.now().toString());
-      return data.token;
+    } catch (sessionError) {
+      console.error('Error checking session:', sessionError);
+      // Continue to try getting JWT token directly
     }
 
     return null;
@@ -122,6 +145,44 @@ export const signInWithGoogle = () => {
   // Note: Code after this may or may not execute before redirect
   // Don't rely on any code here running to completion
 };
+
+// Debug function to check session status
+export async function checkSessionStatus(): Promise<{ authenticated: boolean; hasJwt: boolean; jwtAge?: number }> {
+  try {
+    // Check if we have a stored JWT token
+    const storedToken = localStorage.getItem('fubuni_jwt_token');
+    const timestamp = localStorage.getItem('fubuni_jwt_timestamp');
+
+    let hasJwt = false;
+    let jwtAge = 0;
+    if (storedToken && timestamp) {
+      hasJwt = true;
+      jwtAge = Date.now() - parseInt(timestamp);
+    }
+
+    // Try to check session with auth service
+    const sessionResponse = await fetch(`${getAuthUrl()}/api/auth/session`, {
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const isAuthenticated = sessionResponse.ok && sessionResponse.status !== 401;
+
+    return {
+      authenticated: isAuthenticated,
+      hasJwt,
+      jwtAge
+    };
+  } catch (error) {
+    console.error('Error checking session status:', error);
+    return {
+      authenticated: false,
+      hasJwt: false
+    };
+  }
+}
 
 // Types for auth state
 export interface AuthUser {

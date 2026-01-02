@@ -5,6 +5,7 @@ import ChatDrawer from './ChatDrawer';
 import ChatModal from './ChatModal';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
+import { sendMessage } from '../../lib/chat-sessions';
 
 interface Message {
   id: string;
@@ -13,11 +14,9 @@ interface Message {
   timestamp: Date;
 }
 
-interface FubuniChatProps {
-  backendUrl?: string;
-}
+interface FubuniChatProps {}
 
-const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:8000' }) => {
+const FubuniChat: React.FC<FubuniChatProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -65,24 +64,8 @@ const FubuniChat: React.FC<FubuniChatProps> = ({ backendUrl = 'http://localhost:
     setIsLoading(true);
 
     try {
-      // Send message to backend
-      const response = await fetch(`${backendUrl}/api/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-        body: JSON.stringify({
-          message: userMessageContent,
-          stream: false,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
+      // Send message using the authenticated chat-sessions API
+      const data = await sendMessage(userMessageContent);
 
       // Create a new Fubuni message
       const fubuniMessage: Message = {

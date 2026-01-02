@@ -8,11 +8,11 @@ import { getSessionToken } from './auth-client';
 // Get the API base URL based on environment
 function getApiBaseUrl(): string {
   if (typeof window === 'undefined') {
-    return 'https://maryanrar-fubuni-chat-api.hf.space';
+    return 'https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app';
   }
   return window.location.hostname === 'localhost'
     ? 'http://localhost:8000'
-    : 'https://maryanrar-fubuni-chat-api.hf.space';
+    : 'https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app';
 }
 
 // Types for chat sessions
