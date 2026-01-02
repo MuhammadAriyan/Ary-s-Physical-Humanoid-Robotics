@@ -9,17 +9,28 @@ const corsOrigins = process.env.CORS_ORIGINS?.split(",").map((o) => o.trim()) ||
   "http://localhost:3000",
   "http://localhost:3001",
 ];
+// Add CORS_ORIGINS2 if exists (for Koyeb workaround)
+if (process.env.CORS_ORIGINS2) {
+  corsOrigins.push(process.env.CORS_ORIGINS2);
+}
 
 // Check if Google OAuth is configured
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const isGoogleConfigured = googleClientId && googleClientSecret;
 
+// Base URL for auth service
+const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:4000";
+
+// Detect production: NODE_ENV=production OR base URL is not localhost
+const isProduction = process.env.NODE_ENV === "production" ||
+                    !baseURL.includes("localhost");
+
 export const auth = betterAuth({
   database: pool,
 
   // Base URL for auth service
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:4000",
+  baseURL,
 
   // Secret for signing tokens
   secret: process.env.BETTER_AUTH_SECRET,
@@ -67,15 +78,16 @@ export const auth = betterAuth({
   trustedOrigins: [
     ...corsOrigins,
     "https://muhammadariyan.github.io", // Production frontend (GitHub Pages)
+    "https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics", // Full path for GitHub Pages
   ],
 
   // Advanced configuration for cross-origin cookies
   advanced: {
     defaultCookieAttributes: {
       // For cross-origin: use "none" with secure in production
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      sameSite: isProduction ? "none" : "lax",
       // MUST be true in production for sameSite: "none"
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       httpOnly: true,
       path: "/",
     },

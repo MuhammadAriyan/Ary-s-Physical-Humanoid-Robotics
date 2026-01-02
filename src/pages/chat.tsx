@@ -177,18 +177,11 @@ function ChatContent() {
     const hasLocalStorage = typeof window !== 'undefined' &&
       localStorage.getItem('fubuni_auth_user') !== null;
 
-    if (hasLocalStorage) {
-      // Have auth data in localStorage, hide modal
-      if (showAuthModal) {
-        setShowAuthModal(false);
-      }
-    } else {
-      // No auth data anywhere, show modal
-      if (!showAuthModal && !isAuthenticated && !user) {
-        setShowAuthModal(true);
-      }
+    if (!hasLocalStorage && !showAuthModal && !isAuthenticated && !user) {
+      // No auth data anywhere, show modal (only if not manually closed by user)
+      setShowAuthModal(true);
     }
-  }, [authLoading, isAuthenticated, user, showAuthModal]);
+  }, [authLoading, isAuthenticated, user]);
 
   // Auto-close modal when authentication succeeds
   useEffect(() => {

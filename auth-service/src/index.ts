@@ -22,6 +22,9 @@ const corsOrigins = process.env.CORS_ORIGINS?.split(",").map((o) => o.trim()) ||
 if (!corsOrigins.includes("https://muhammadariyan.github.io")) {
   corsOrigins.push("https://muhammadariyan.github.io");
 }
+if (!corsOrigins.includes("https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics")) {
+  corsOrigins.push("https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics");
+}
 
 // CORS configuration
 app.use(
