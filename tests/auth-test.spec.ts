@@ -26,7 +26,7 @@ test.describe('Authentication Flow - Production', () => {
 
     // Wait for modal to appear
     const modal = page.locator('div[class*="modal"]').first();
-    await expect(modal).toBeVisible({ timeout: 10000 }).catch(e => {
+    await expect(modal).toBeVisible({ timeout: 10000 }).catch(async (e) => {
       console.log('Modal not visible:', e);
       await page.screenshot({ path: 'test-results/auth-modal-not-visible.png' });
       throw e;
