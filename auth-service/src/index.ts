@@ -26,10 +26,14 @@ if (!corsOrigins.includes("https://muhammadariyan.github.io/Ary-s-Physical-Human
   corsOrigins.push("https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics");
 }
 
-// CORS configuration
+// CORS configuration - use function to allow both base and full path
 app.use(
   cors({
-    origin: corsOrigins,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (corsOrigins.includes(origin)) return callback(null, true);
+      callback(null, false);
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
