@@ -29,6 +29,25 @@ if (!corsOrigins.includes("https://muhammadariyan.github.io/Ary-s-Physical-Human
 // Parse JSON bodies first
 app.use(express.json());
 
+// Handle preflight CORS requests specifically for auth endpoints
+app.options('/api/auth/*', cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    console.log(`[CORS OPTIONS] Checking origin: ${origin}`);
+    console.log(`[CORS OPTIONS] Allowed origins: ${JSON.stringify(corsOrigins)}`);
+    if (corsOrigins.includes(origin)) {
+      console.log(`[CORS OPTIONS] Origin ${origin} is allowed`);
+      return callback(null, true);
+    }
+    console.log(`[CORS OPTIONS] Origin ${origin} is NOT allowed`);
+    callback(null, false);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  optionsSuccessStatus: 200,
+}));
+
 // CORS configuration - use function to allow both base and full path
 app.use(
   cors({
