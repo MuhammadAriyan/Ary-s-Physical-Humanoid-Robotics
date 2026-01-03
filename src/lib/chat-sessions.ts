@@ -3,7 +3,7 @@
  * Uses Better Auth session tokens for authentication
  */
 
-import { getSessionToken } from './auth-client';
+import { getSessionToken, fetchAndStoreJWT } from './auth-client';
 
 // Get the API base URL based on environment
 function getApiBaseUrl(): string {
