@@ -61,10 +61,14 @@ async function authenticatedFetch(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<Response> {
-  const token = await getSessionToken();
+  let token = await getSessionToken();
 
+  // If no token, try to fetch a new one (might have valid Better Auth session but no JWT)
   if (!token) {
-    throw new ChatSessionError('Not authenticated', 401, 'UNAUTHORIZED');
+    token = await fetchAndStoreJWT(); // This will attempt to get a new JWT if session exists
+    if (!token) {
+      throw new ChatSessionError('Not authenticated', 401, 'UNAUTHORIZED');
+    }
   }
 
   const apiUrl = getApiBaseUrl();
@@ -76,6 +80,15 @@ async function authenticatedFetch(
       ...options.headers,
     },
   });
+
+  // If we get a 401, the token might have expired, so clear it and throw error
+  if (response.status === 401) {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('fubuni_jwt_token');
+      localStorage.removeItem('fubuni_jwt_timestamp');
+    }
+    throw new ChatSessionError('Authentication token expired', 401, 'TOKEN_EXPIRED');
+  }
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));

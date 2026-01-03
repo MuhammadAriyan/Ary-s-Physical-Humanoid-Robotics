@@ -39,7 +39,10 @@ export async function fetchAndStoreJWT(): Promise<string | null> {
     });
 
     if (!response.ok) {
-      console.warn('Failed to fetch JWT token:', response.status, response.statusText);
+      // Only warn for errors other than 401, since 401 is expected when not authenticated
+      if (response.status !== 401) {
+        console.warn('Failed to fetch JWT token:', response.status, response.statusText);
+      }
       return null;
     }
 
@@ -52,7 +55,7 @@ export async function fetchAndStoreJWT(): Promise<string | null> {
     }
     return null;
   } catch (error) {
-    console.error('Error fetching JWT:', error);
+    console.warn('Network error fetching JWT:', error);
     return null;
   }
 }
@@ -78,7 +81,6 @@ export async function getSessionToken(): Promise<string | null> {
     }
 
     // Check if user is authenticated by trying to get the session from auth service
-    // We'll try to get the session without relying on Better Auth's client getSession
     try {
       const sessionResponse = await fetch(`${getAuthUrl()}/api/auth/session`, {
         credentials: 'include',
@@ -90,15 +92,15 @@ export async function getSessionToken(): Promise<string | null> {
       if (!sessionResponse.ok) {
         // If session endpoint returns 401, user is not authenticated
         if (sessionResponse.status === 401) {
-          console.log('User not authenticated, clearing stored token');
           if (typeof window !== 'undefined') {
             localStorage.removeItem('fubuni_jwt_token');
             localStorage.removeItem('fubuni_jwt_timestamp');
           }
           return null;
         }
-        // If other error, continue to try to get JWT token anyway
+        // If other error, return null to avoid using invalid tokens
         console.warn('Session check failed:', sessionResponse.status);
+        return null;
       } else {
         // If session exists, try to get JWT token
         const jwtResponse = await fetch(`${getAuthUrl()}/api/auth/token`, {
@@ -117,17 +119,21 @@ export async function getSessionToken(): Promise<string | null> {
             return data.token;
           }
         } else {
-          console.warn('Failed to get JWT token:', jwtResponse.status, jwtResponse.statusText);
+          // Don't warn about 401 here since it's expected when session exists but JWT generation fails
+          if (jwtResponse.status !== 401) {
+            console.warn('Failed to get JWT token:', jwtResponse.status, jwtResponse.statusText);
+          }
+          return null;
         }
       }
     } catch (sessionError) {
-      console.error('Error checking session:', sessionError);
-      // Continue to try getting JWT token directly
+      console.warn('Network error checking session:', sessionError);
+      return null;
     }
 
     return null;
   } catch (error) {
-    console.error('Error getting session token:', error);
+    console.warn('Error getting session token:', error);
     return null;
   }
 }

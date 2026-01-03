@@ -74,7 +74,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (
         errorMessage.toLowerCase().includes('expired') ||
         errorMessage.toLowerCase().includes('invalid session') ||
-        errorMessage.toLowerCase().includes('unauthorized')
+        errorMessage.toLowerCase().includes('unauthorized') ||
+        errorMessage.toLowerCase().includes('jwt')
       ) {
         setSessionExpired(true);
       }
