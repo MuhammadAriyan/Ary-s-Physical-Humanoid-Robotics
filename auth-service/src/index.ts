@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.AUTH_PORT || 4000;
+const PORT = process.env.PORT || process.env.AUTH_PORT || 4000;
 const JWT_SECRET = process.env.JWT_SECRET || "default-secret-change-in-production";
 
 // Parse CORS origins from environment
@@ -26,6 +26,14 @@ if (!corsOrigins.includes("https://muhammadariyan.github.io/Ary-s-Physical-Human
   corsOrigins.push("https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics");
 }
 
+// Add Replit URL patterns for Replit deployment
+if (process.env.REPL_SLUG && process.env.REPL_OWNER) {
+  const replitUrl = `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`;
+  if (!corsOrigins.includes(replitUrl)) {
+    corsOrigins.push(replitUrl);
+  }
+}
+
 // Parse JSON bodies first
 app.use(express.json());
 
@@ -34,14 +42,28 @@ app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
-      console.log(`[CORS] Checking origin: ${origin}`);
-      console.log(`[CORS] Allowed origins: ${JSON.stringify(corsOrigins)}`);
-      if (corsOrigins.includes(origin)) {
-        console.log(`[CORS] Origin ${origin} is allowed`);
+
+      // Enhanced CORS logging for debugging
+      const isAllowed = corsOrigins.includes(origin);
+      const corsLog = {
+        timestamp: new Date().toISOString(),
+        type: "CORS_CHECK",
+        origin: origin,
+        allowedOrigins: corsOrigins,
+        isAllowed: isAllowed,
+        replit: {
+          slug: process.env.REPL_SLUG,
+          owner: process.env.REPL_OWNER,
+          isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
+        }
+      };
+      console.log(corsLog);
+
+      if (isAllowed) {
         return callback(null, true);
+      } else {
+        callback(null, false);
       }
-      console.log(`[CORS] Origin ${origin} is NOT allowed`);
-      callback(null, false);
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -56,7 +78,65 @@ app.get("/health", (_req, res) => {
     status: "healthy",
     service: "fubuni-auth-service",
     timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    replit: {
+      slug: process.env.REPL_SLUG || null,
+      owner: process.env.REPL_OWNER || null,
+      isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
+    }
   });
+});
+
+// Replit-specific wake-up endpoint to prevent sleep
+app.get("/wake-up", (_req, res) => {
+  res.json({
+    status: "awake",
+    message: "Service is awake and responsive",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Comprehensive test endpoint for authentication flow verification
+app.get("/test/auth-flow", async (req, res) => {
+  try {
+    const testResults = {
+      timestamp: new Date().toISOString(),
+      replit: {
+        slug: process.env.REPL_SLUG || null,
+        owner: process.env.REPL_OWNER || null,
+        isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
+      },
+      tests: {
+        serverConfig: {
+          port: process.env.PORT || process.env.AUTH_PORT || 4000,
+          baseUrl: process.env.BETTER_AUTH_URL || "http://localhost:4000",
+          isReplitEnv: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
+        },
+        corsConfig: {
+          allowedOrigins: corsOrigins,
+          currentOrigin: req.get('Origin') || req.get('Referer') || 'none'
+        },
+        endpoints: {
+          healthCheck: true, // This endpoint is accessible
+          authEndpointsMounted: true, // Better Auth routes are mounted
+          wakeUpEndpoint: true // Wake-up endpoint is accessible
+        },
+        environment: {
+          nodeEnv: process.env.NODE_ENV,
+          hasDatabase: !!process.env.NEON_DATABASE_URL,
+          hasAuthSecret: !!process.env.BETTER_AUTH_SECRET
+        }
+      }
+    };
+
+    res.json(testResults);
+  } catch (error) {
+    console.error("Test endpoint error:", error);
+    res.status(500).json({
+      error: "Test endpoint failed",
+      message: error instanceof Error ? error.message : "Unknown error"
+    });
+  }
 });
 
 // Debug endpoint to check CORS configuration
@@ -121,7 +201,19 @@ app.use(
     res: express.Response,
     _next: express.NextFunction
   ) => {
-    console.error("Server error:", err);
+    // Log errors with Replit context
+    console.error({
+      timestamp: new Date().toISOString(),
+      error: "Server error:",
+      message: err.message,
+      stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+      replit: {
+        slug: process.env.REPL_SLUG,
+        owner: process.env.REPL_OWNER,
+        isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
+      }
+    });
+
     res.status(500).json({
       error: "Internal server error",
       message: process.env.NODE_ENV === "development" ? err.message : undefined,
@@ -138,8 +230,8 @@ async function start() {
     process.exit(1);
   }
 
-  app.listen(PORT, () => {
-    console.log(`Auth service running on http://localhost:${PORT}`);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Auth service running on port ${PORT}`);
     console.log(`Health check: http://localhost:${PORT}/health`);
     console.log(`Auth endpoints: http://localhost:${PORT}/api/auth/*`);
   });

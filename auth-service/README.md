@@ -2,6 +2,28 @@
 
 Better Auth authentication service for Fubuni Chat.
 
+## Deployment Options
+
+### Replit Deployment (Recommended for Development)
+
+To deploy this service on Replit:
+
+1. Create a new Repl on [Replit](https://replit.com)
+2. Choose "Import from GitHub" and enter the repository URL
+3. Select "Node.js" as the environment
+4. In the "Secrets" tab, add the following environment variables:
+   - `BETTER_AUTH_SECRET`: A secret key (at least 32 characters)
+   - `DATABASE_URL`: Your PostgreSQL database connection string
+   - `JWT_SECRET`: Secret for JWT token generation
+   - `CORS_ORIGINS`: Comma-separated list of allowed origins (include your Replit URL)
+5. Update the `.replit` file if needed
+6. Click "Run" to start the service
+7. The service will be available at `https://your-repl-name.your-username.repl.co`
+
+### Local Development
+
+Follow the instructions below for local development setup.
+
 ## Features
 
 - Email/Password authentication
@@ -124,3 +146,32 @@ auth-service/
 - CORS is configured for specific origins
 - Database connections use SSL
 - Secrets should never be committed to version control
+
+## Replit-specific Limitations and Workarounds
+
+### Sleep/Wake Cycles
+- Free Replit accounts have services that may sleep after inactivity
+- First request after sleep may take longer than usual (cold start)
+- Use the `/wake-up` endpoint to keep the service responsive
+
+### Resource Constraints
+- Free tier has limited memory and CPU allocation
+- Performance may vary based on Replit's current load
+- Not suitable for production traffic
+
+### CORS Considerations
+- Make sure to include your Replit URL in CORS_ORIGINS
+- SameSite cookie attributes are set based on environment detection
+- Local development URLs are automatically included
+
+## Troubleshooting
+
+### Service Not Starting
+- Check that all required environment variables are set
+- Verify database connection string format
+- Review console logs for specific error messages
+
+### CORS Issues
+- Ensure your frontend domain is included in CORS_ORIGINS
+- Check that BETTER_AUTH_URL matches your Replit URL
+- Verify trusted origins in Better Auth configuration

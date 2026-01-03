@@ -8,6 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "repl": "node --experimental-modules --es-module-specifier-resolution=node src/index.ts",
     "db:migrate": "npx @better-auth/cli migrate"
   },
   "dependencies": {

@@ -217,6 +217,8 @@ See `.specify/memory/constitution.md` for code quality, testing, performance, se
 - Neon PostgreSQL (shared, `ba_` prefix for auth tables) (008-better-auth)
 - Python 3.11 (backend), TypeScript 5.6 (frontend) (009-chat-page-chatkit)
 - N/A (session-based state, existing chat session DB) (009-chat-page-chatkit)
+- Node.js, Express framework, Better Auth library + Express.js, Better Auth, and related auth dependencies (012-migrate-auth-replit)
+- External database (likely Neon PostgreSQL) - existing from current setup (012-migrate-auth-replit)
 
 ## Recent Changes
 - 007-fubuni-chat-bubble: Added Python 3.11, TypeScript/JavaScript, React 18 + FastAPI, OpenAI Agents SDK (agents package), Docusaurus 3, React, TypeScript
