@@ -89,11 +89,44 @@ async function authenticatedFetch(
   return response;
 }
 
+// Helper to make anonymous requests (for RAG functionality)
+async function anonymousFetch(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<Response> {
+  const apiUrl = getApiBaseUrl();
+  const response = await fetch(`${apiUrl}${endpoint}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new ChatSessionError(
+      errorData.detail || `Request failed with status ${response.status}`,
+      response.status,
+      errorData.code
+    );
+  }
+
+  return response;
+}
+
 /**
  * List all chat sessions for the current user
  * Sessions are ordered by last_interaction DESC (most recent first)
  */
 export async function listSessions(): Promise<SessionListResponse> {
+  // Only authenticated users can list their sessions
+  const token = await getSessionToken();
+  if (!token) {
+    // Return empty response for unauthenticated users
+    return { sessions: [], total: 0 };
+  }
+
   const response = await authenticatedFetch('/api/chat/sessions');
   return response.json();
 }
@@ -102,7 +135,13 @@ export async function listSessions(): Promise<SessionListResponse> {
  * Create a new empty chat session
  */
 export async function createSession(): Promise<ChatSession> {
-  const response = await authenticatedFetch('/api/chat/sessions', {
+  // Check if user is authenticated
+  const token = await getSessionToken();
+
+  // Use authenticated fetch if token exists, otherwise use anonymous fetch
+  const fetchFunction = token ? authenticatedFetch : anonymousFetch;
+
+  const response = await fetchFunction('/api/chat/sessions', {
     method: 'POST',
   });
   return response.json();
@@ -112,7 +151,13 @@ export async function createSession(): Promise<ChatSession> {
  * Get a chat session with all its messages
  */
 export async function getSessionMessages(sessionId: string): Promise<SessionWithMessages> {
-  const response = await authenticatedFetch(`/api/chat/history/${sessionId}`);
+  // Check if user is authenticated
+  const token = await getSessionToken();
+
+  // Use authenticated fetch if token exists, otherwise use anonymous fetch
+  const fetchFunction = token ? authenticatedFetch : anonymousFetch;
+
+  const response = await fetchFunction(`/api/chat/history/${sessionId}`);
   return response.json();
 }
 
@@ -120,6 +165,13 @@ export async function getSessionMessages(sessionId: string): Promise<SessionWith
  * Delete a chat session and all its messages
  */
 export async function deleteSession(sessionId: string): Promise<{ success: boolean }> {
+  // Only authenticated users can delete their sessions
+  const token = await getSessionToken();
+  if (!token) {
+    // Return false for unauthenticated users
+    return { success: false };
+  }
+
   const response = await authenticatedFetch(`/api/chat/sessions/${sessionId}`, {
     method: 'DELETE',
   });
@@ -140,7 +192,13 @@ export async function sendMessage(
   section?: string;
   should_navigate?: boolean;
 }> {
-  const response = await authenticatedFetch('/api/chat', {
+  // Check if user is authenticated
+  const token = await getSessionToken();
+
+  // Use authenticated fetch if token exists, otherwise use anonymous fetch
+  const fetchFunction = token ? authenticatedFetch : anonymousFetch;
+
+  const response = await fetchFunction('/api/chat', {
     method: 'POST',
     body: JSON.stringify({
       message,

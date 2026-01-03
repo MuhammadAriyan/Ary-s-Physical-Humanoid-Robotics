@@ -363,12 +363,8 @@ function ChatContent() {
     async (messageText: string) => {
       if (!messageText.trim() || isLoading) return;
 
-      // Check authentication - preserve message if auth required
-      if (!isAuthenticated) {
-        setPendingMessage(messageText.trim());
-        setShowAuthModal(true);
-        return;
-      }
+      // Allow sending messages even when not authenticated for RAG functionality
+      // The backend should handle unauthenticated requests appropriately
 
       // Clear any previous error and pending message
       setError(null);
@@ -386,7 +382,7 @@ function ChatContent() {
       setIsLoading(true);
 
       try {
-        // Use the authenticated chat API
+        // Use the chat API (will work for both authenticated and anonymous users)
         const data = await sendChatMessage(messageText.trim(), activeSessionId || undefined);
 
         // Update session ID if a new one was created
