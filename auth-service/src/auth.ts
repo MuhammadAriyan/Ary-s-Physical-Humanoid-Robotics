@@ -6,6 +6,7 @@ dotenv.config();
 
 // Parse CORS origins from environment
 const corsOrigins = process.env.CORS_ORIGINS?.split(",").map((o) => o.trim()) || [
+  "http://localhost:5000",
   "http://localhost:3000",
   "http://localhost:3001",
 ];
@@ -23,7 +24,7 @@ const isGoogleConfigured = googleClientId && googleClientSecret;
 const baseURL = process.env.BETTER_AUTH_URL ||
                 (process.env.REPL_SLUG && process.env.REPL_OWNER ?
                  `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co` :
-                 "http://localhost:4000");
+                 "http://localhost:5000");
 
 // Detect production: NODE_ENV=production OR base URL is not localhost
 const isProduction = process.env.NODE_ENV === "production" ||

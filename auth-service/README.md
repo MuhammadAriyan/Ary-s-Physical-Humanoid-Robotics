@@ -56,7 +56,7 @@ Configure your environment variables:
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `AUTH_PORT` | Server port (default: 4000) | No |
+| `AUTH_PORT` | Server port (default: 5000) | No |
 | `NODE_ENV` | Environment (development/production) | No |
 | `NEON_DATABASE_URL` | PostgreSQL connection string | Yes |
 | `BETTER_AUTH_SECRET` | Secret key (min 32 chars) | Yes |
@@ -96,7 +96,7 @@ npm start
 
 ```bash
 docker build -t fubuni-auth-service .
-docker run -p 4000:4000 --env-file .env fubuni-auth-service
+docker run -p 5000:5000 --env-file .env fubuni-auth-service
 ```
 
 ## API Endpoints
@@ -115,7 +115,7 @@ All auth endpoints are mounted at `/api/auth/*`:
 ### Health Check
 
 ```bash
-curl http://localhost:4000/health
+curl http://localhost:5000/health
 ```
 
 ## Google OAuth Setup
@@ -124,7 +124,7 @@ curl http://localhost:4000/health
 2. Create or select a project
 3. Navigate to APIs & Services > Credentials
 4. Create OAuth 2.0 Client ID
-5. Add authorized redirect URI: `http://localhost:4000/api/auth/callback/google`
+5. Add authorized redirect URI: `http://localhost:5000/api/auth/callback/google`
 6. Copy Client ID and Secret to `.env`
 
 ## Architecture

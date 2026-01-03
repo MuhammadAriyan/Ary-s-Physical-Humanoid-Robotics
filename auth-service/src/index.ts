@@ -9,11 +9,12 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || process.env.AUTH_PORT || 4000;
+const PORT = process.env.PORT || process.env.AUTH_PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || "default-secret-change-in-production";
 
 // Parse CORS origins from environment
 const corsOrigins = process.env.CORS_ORIGINS?.split(",").map((o) => o.trim()) || [
+  "http://localhost:5000",
   "http://localhost:3000",
   "http://localhost:3001",
 ];
@@ -108,8 +109,8 @@ app.get("/test/auth-flow", async (req, res) => {
       },
       tests: {
         serverConfig: {
-          port: process.env.PORT || process.env.AUTH_PORT || 4000,
-          baseUrl: process.env.BETTER_AUTH_URL || "http://localhost:4000",
+          port: process.env.PORT || process.env.AUTH_PORT || 5000,
+          baseUrl: process.env.BETTER_AUTH_URL || "http://localhost:5000",
           isReplitEnv: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
         },
         corsConfig: {
