@@ -174,47 +174,56 @@ async def get_chat_history(
 async def chat_endpoint(
     chat_request: ChatRequest,
     session: Session = Depends(get_session),
-    current_user: AuthUser = Depends(require_auth),
+    current_user: AuthUser = Depends(get_current_user),
 ):
     """
     Chat endpoint that processes user messages and returns Fubuni's response.
-    Requires authentication.
+    Supports both authenticated and anonymous users.
+    Authenticated users have their conversations saved to the database.
+    Anonymous users can use the RAG functionality without saving.
     """
-    # Use authenticated user ID
-    user_id = current_user.id
+    # Use authenticated user ID if available, otherwise generate a temporary ID for anonymous users
+    user_id = current_user.id if current_user else f"anon_{uuid.uuid4()}"
 
     # Get or create a chat session
     chat_session: Optional[ChatSession] = None
-    if chat_request.session_id:
-        # Try to find existing session owned by this user
+    if chat_request.session_id and current_user:
+        # Only try to find existing session if user is authenticated (prevent unauthorized access to others' sessions)
         chat_session = session.exec(
             select(ChatSession).where(
                 ChatSession.id == chat_request.session_id,
-                ChatSession.user_id == user_id,
+                ChatSession.user_id == current_user.id,  # Use actual user ID for auth check
             )
         ).first()
 
     # If no session provided or found, create a new one
     if not chat_session:
+        # For anonymous users, create temporary session (won't be saved to DB permanently)
         chat_session = ChatSession(
             user_id=user_id,
             title=chat_request.message[:50]
             if len(chat_request.message) > 50
             else chat_request.message,
         )
-        session.add(chat_session)
-        session.commit()
-        session.refresh(chat_session)
+        # Only add to session if user is authenticated (to save to DB)
+        if current_user:
+            session.add(chat_session)
+            session.commit()
+            session.refresh(chat_session)
+        else:
+            # For anonymous users, generate ID but don't save to DB
+            chat_session.id = str(uuid.uuid4())
 
-    # Save user message
-    user_message = ChatMessage(
-        sender="user",
-        content=chat_request.message,
-        chat_session_id=chat_session.id,
-        sequence_number=1,  # Will need to implement proper sequencing in a full implementation
-    )
-    session.add(user_message)
-    session.commit()
+    # Save user message only if user is authenticated
+    if current_user:
+        user_message = ChatMessage(
+            sender="user",
+            content=chat_request.message,
+            chat_session_id=chat_session.id,
+            sequence_number=1,  # Will need to implement proper sequencing in a full implementation
+        )
+        session.add(user_message)
+        session.commit()
 
     # Process the message with the Fubuni agent (T009: Structured output)
     try:
@@ -226,20 +235,21 @@ async def chat_endpoint(
         # Extract response text from AgentResponse
         response_text = agent_response.response if hasattr(agent_response, 'response') else str(agent_response)
 
-        # Save Fubuni's response
-        fubuni_message = ChatMessage(
-            sender="fubuni",
-            content=response_text,
-            chat_session_id=chat_session.id,
-            sequence_number=2,  # Will need to implement proper sequencing in a full implementation
-        )
-        session.add(fubuni_message)
-        session.commit()
+        # Save Fubuni's response only if user is authenticated
+        if current_user:
+            fubuni_message = ChatMessage(
+                sender="fubuni",
+                content=response_text,
+                chat_session_id=chat_session.id,
+                sequence_number=2,  # Will need to implement proper sequencing in a full implementation
+            )
+            session.add(fubuni_message)
+            session.commit()
 
-        # Update session last interaction
-        chat_session.last_interaction = datetime.utcnow()
-        session.add(chat_session)
-        session.commit()
+            # Update session last interaction
+            chat_session.last_interaction = datetime.utcnow()
+            session.add(chat_session)
+            session.commit()
 
         # Return structured response with chapter navigation fields
         return ChatResponse(
@@ -260,16 +270,21 @@ async def chat_endpoint(
 async def chat_stream_endpoint(
     chat_request: ChatRequest,
     session: Session = Depends(get_session),
-    current_user: AuthUser = Depends(require_auth),
+    current_user: AuthUser = Depends(get_current_user),
 ):
     """
     Streaming chat endpoint that returns Fubuni's response as Server-Sent Events.
-    Requires authentication.
+    Supports both authenticated and anonymous users.
+    Authenticated users have their conversations saved to the database.
+    Anonymous users can use the RAG functionality without saving.
     """
+    # Use authenticated user ID if available, otherwise generate a temporary ID for anonymous users
+    user_id = current_user.id if current_user else f"anon_{uuid.uuid4()}"
+
     # Get or create a chat session (similar to above)
     chat_session: Optional[ChatSession] = None
-    if chat_request.session_id:
-        # Only allow access to sessions owned by this user
+    if chat_request.session_id and current_user:
+        # Only allow access to sessions owned by this user if authenticated
         chat_session = session.exec(
             select(ChatSession).where(
                 ChatSession.id == chat_request.session_id,
@@ -279,24 +294,30 @@ async def chat_stream_endpoint(
 
     if not chat_session:
         chat_session = ChatSession(
-            user_id=current_user.id,  # Use authenticated user ID
+            user_id=user_id,
             title=chat_request.message[:50]
             if len(chat_request.message) > 50
             else chat_request.message,
         )
-        session.add(chat_session)
-        session.commit()
-        session.refresh(chat_session)
+        # Only add to session if user is authenticated (to save to DB)
+        if current_user:
+            session.add(chat_session)
+            session.commit()
+            session.refresh(chat_session)
+        else:
+            # For anonymous users, generate ID but don't save to DB
+            chat_session.id = str(uuid.uuid4())
 
-    # Save user message
-    user_message = ChatMessage(
-        sender="user",
-        content=chat_request.message,
-        chat_session_id=chat_session.id,
-        sequence_number=1,
-    )
-    session.add(user_message)
-    session.commit()
+    # Save user message only if user is authenticated
+    if current_user:
+        user_message = ChatMessage(
+            sender="user",
+            content=chat_request.message,
+            chat_session_id=chat_session.id,
+            sequence_number=1,
+        )
+        session.add(user_message)
+        session.commit()
 
     # Capture session ID before session closes
     session_id = chat_session.id
@@ -314,20 +335,21 @@ async def chat_stream_endpoint(
                 async for sse_chunk in create_sse_stream(chunk):
                     yield sse_chunk
 
-            # Save the complete response to database
-            fubuni_message = ChatMessage(
-                sender="fubuni",
-                content=full_response,
-                chat_session_id=chat_session.id,
-                sequence_number=2,
-            )
-            session.add(fubuni_message)
-            session.commit()
+            # Save the complete response to database only if user is authenticated
+            if current_user:
+                fubuni_message = ChatMessage(
+                    sender="fubuni",
+                    content=full_response,
+                    chat_session_id=chat_session.id,
+                    sequence_number=2,
+                )
+                session.add(fubuni_message)
+                session.commit()
 
-            # Update session last interaction
-            chat_session.last_interaction = datetime.utcnow()
-            session.add(chat_session)
-            session.commit()
+                # Update session last interaction
+                chat_session.last_interaction = datetime.utcnow()
+                session.add(chat_session)
+                session.commit()
 
         return StreamingResponse(generate(), media_type="text/event-stream")
     except Exception as e:
