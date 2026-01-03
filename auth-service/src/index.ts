@@ -26,6 +26,9 @@ if (!corsOrigins.includes("https://muhammadariyan.github.io/Ary-s-Physical-Human
   corsOrigins.push("https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics");
 }
 
+// Parse JSON bodies first
+app.use(express.json());
+
 // CORS configuration - use function to allow both base and full path
 app.use(
   cors({
@@ -42,12 +45,10 @@ app.use(
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    optionsSuccessStatus: 200,
   })
 );
-
-// Parse JSON bodies
-app.use(express.json());
 
 // Health check endpoint
 app.get("/health", (_req, res) => {
