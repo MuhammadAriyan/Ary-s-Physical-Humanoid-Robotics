@@ -6,7 +6,7 @@ const getAuthUrl = () => {
     // Client-side: check for production or use localhost
     if (window.location.hostname !== "localhost") {
       // Production: use Koyeb-deployed auth service
-      return "https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app";
+      return "https://ary-s-physical-humanoid-robotics--maryanrar.replit.app";
     }
   }
   return "http://localhost:4000";

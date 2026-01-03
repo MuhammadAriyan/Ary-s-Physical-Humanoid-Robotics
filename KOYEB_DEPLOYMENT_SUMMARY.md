@@ -9,9 +9,9 @@ Your Better Auth authentication service has been successfully deployed to Koyeb 
 ## 🔗 Service URLs
 
 ### Auth Service (Koyeb)
-- **URL**: https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app
-- **Health Check**: https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app/health
-- **Auth Endpoints**: https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app/api/auth/*
+- **URL**: https://ary-s-physical-humanoid-robotics--maryanrar.replit.app
+- **Health Check**: https://ary-s-physical-humanoid-robotics--maryanrar.replit.app/health
+- **Auth Endpoints**: https://ary-s-physical-humanoid-robotics--maryanrar.replit.app/api/auth/*
 
 ### Frontend (GitHub Pages)
 - **URL**: https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics/
@@ -35,7 +35,7 @@ AUTH_PORT=4000
 NEON_DATABASE_URL=postgresql://...(configured in Koyeb)
 BETTER_AUTH_SECRET=****(32-character secret)
 JWT_SECRET=****(generated secret)
-BETTER_AUTH_URL=https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app
+BETTER_AUTH_URL=https://ary-s-physical-humanoid-robotics--maryanrar.replit.app
 CORS_ORIGINS=https://muhammadariyan.github.io
 GOOGLE_CLIENT_ID=****(Google OAuth client ID)
 GOOGLE_CLIENT_SECRET=****(Google OAuth secret)
@@ -77,13 +77,13 @@ GOOGLE_CLIENT_SECRET=****(Google OAuth secret)
 
 ### Test 1: Health Check ✅
 ```bash
-curl https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app/health
+curl https://ary-s-physical-humanoid-robotics--maryanrar.replit.app/health
 ```
 **Expected**: `{"status":"healthy","service":"fubuni-auth-service",...}`
 
 ### Test 2: CORS Configuration ✅
 ```bash
-curl -I -X OPTIONS https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app/api/auth/session \
+curl -I -X OPTIONS https://ary-s-physical-humanoid-robotics--maryanrar.replit.app/api/auth/session \
   -H "Origin: https://muhammadariyan.github.io" \
   -H "Access-Control-Request-Method: GET"
 ```
@@ -92,7 +92,7 @@ curl -I -X OPTIONS https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app/api/auth/se
 ### Test 3: Frontend Connection
 1. Visit: https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics/
 2. Open browser DevTools → Network tab
-3. Look for requests to `gorgeous-deeanne-ary-s-88e09c71.koyeb.app`
+3. Look for requests to `ary-s-physical-humanoid-robotics--maryanrar.replit.app`
 4. Should see successful auth requests with cookies
 
 ---
@@ -166,7 +166,7 @@ koyeb service update fubuni-auth \
 ### Issue: Database connection failed
 1. Verify NEON_DATABASE_URL is correct
 2. Check Neon database is running
-3. Test connection: `curl https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app/health`
+3. Test connection: `curl https://ary-s-physical-humanoid-robotics--maryanrar.replit.app/health`
 
 ### Issue: CORS errors
 1. Verify CORS_ORIGINS includes your frontend domain
@@ -227,5 +227,5 @@ Your auth service easily fits within the free tier limits!
 
 **Deployment Date**: December 26, 2025
 **Deployment Status**: ✅ SUCCESSFUL
-**Auth Service**: https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app
+**Auth Service**: https://ary-s-physical-humanoid-robotics--maryanrar.replit.app
 **Frontend**: https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics/

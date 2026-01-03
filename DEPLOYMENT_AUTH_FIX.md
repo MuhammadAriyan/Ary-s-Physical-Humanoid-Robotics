@@ -2,7 +2,7 @@
 
 ## Problem Fixed
 
-The authentication modal was appearing after successful sign-up/sign-in because session cookies from the Koyeb auth service (`gorgeous-deeanne-ary-s-88e09c71.koyeb.app`) could not be read by the GitHub Pages frontend (`muhammadariyan.github.io`).
+The authentication modal was appearing after successful sign-up/sign-in because session cookies from the Koyeb auth service (`ary-s-physical-humanoid-robotics--maryanrar.replit.app`) could not be read by the GitHub Pages frontend (`muhammadariyan.github.io`).
 
 ## Solution Implemented
 
@@ -23,7 +23,7 @@ In your Koyeb auth service deployment, set these environment variables:
 
 ```env
 NODE_ENV=production
-BETTER_AUTH_URL=https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app
+BETTER_AUTH_URL=https://ary-s-physical-humanoid-robotics--maryanrar.replit.app
 CORS_ORIGINS=https://muhammadariyan.github.io
 BETTER_AUTH_SECRET=<your-32-char-secret>
 JWT_SECRET=<your-jwt-secret>
@@ -43,7 +43,7 @@ In Google Cloud Console (https://console.cloud.google.com/apis/credentials):
 
 **Authorized redirect URIs:**
 ```
-https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app/api/auth/callback/google
+https://ary-s-physical-humanoid-robotics--maryanrar.replit.app/api/auth/callback/google
 ```
 
 **Authorized JavaScript origins:**

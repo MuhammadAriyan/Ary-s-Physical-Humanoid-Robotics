@@ -8,11 +8,11 @@ import { getSessionToken } from './auth-client';
 // Get the API base URL based on environment
 function getApiBaseUrl(): string {
   if (typeof window === 'undefined') {
-    return 'https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app';
+    return 'https://ary-s-physical-humanoid-robotics--maryanrar.replit.app';
   }
   return window.location.hostname === 'localhost'
     ? 'http://localhost:8000'
-    : 'https://gorgeous-deeanne-ary-s-88e09c71.koyeb.app';
+    : 'https://ary-s-physical-humanoid-robotics--maryanrar.replit.app';
 }
 
 // Types for chat sessions
