@@ -1,0 +1,42 @@
+[run]
+# Install dependencies for all services and start the main application
+command = """
+#!/bin/bash
+# Install frontend dependencies
+npm install
+
+# Install auth service dependencies
+cd auth-service
+npm install
+cd ..
+
+# Install backend dependencies
+cd backend
+pip install -r requirements.txt
+cd ..
+
+# Start all services in background
+# Start backend API first
+cd backend
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 > backend.log 2>&1 &
+BACKEND_PID=$!
+cd ..
+
+# Start auth service
+cd auth-service
+npm run dev > auth.log 2>&1 &
+AUTH_PID=$!
+cd ..
+
+# Start frontend (this will be the main service shown to users)
+npm start
+"""
+
+entrypoint = "package.json"
+
+[env]
+PORT = "3000"
+BACKEND_PORT = "8000"
+AUTH_PORT = "4000"
+NODE_ENV = "development"
+PYTHONPATH = "."
