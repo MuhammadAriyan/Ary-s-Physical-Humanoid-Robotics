@@ -5,8 +5,8 @@ const getAuthUrl = () => {
   if (typeof window !== "undefined") {
     // Client-side: check for production or use localhost
     if (window.location.hostname !== "localhost") {
-      // Production: use Koyeb-deployed auth service
-      return "https://ary-s-physical-humanoid-robotics--maryanrar.replit.app";
+      // Production: use Vercel-deployed auth service
+      return "https://ary-s-physical-humanoid-robotics-au.vercel.app";
     }
   }
   return "http://localhost:4000";

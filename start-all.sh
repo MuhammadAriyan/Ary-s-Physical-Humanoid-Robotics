@@ -84,7 +84,7 @@ echo "=================================================="
 
 # Check Auth Service
 if check_port 4000; then
-    if curl -s https://ary-s-physical-humanoid-robotics--maryanrar.replit.app/health | grep -q "healthy" 2>/dev/null; then
+    if curl -s https://ary-s-physical-humanoid-robotics-au.vercel.app/health | grep -q "healthy" 2>/dev/null; then
         echo -e "${GREEN}✓ Auth Service: Running${NC}"
         echo "  URL: http://localhost:4000"
     else
