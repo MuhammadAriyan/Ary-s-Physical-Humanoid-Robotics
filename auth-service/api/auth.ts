@@ -1,4 +1,4 @@
-// Vercel API route for auth service
+// Vercel API route for auth service - handles non-auth routes
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "../src/auth.js";
 import jwt from "jsonwebtoken";
@@ -32,7 +32,7 @@ function checkCors(origin) {
   return corsOrigins.includes(origin);
 }
 
-// Create the Vercel API handler
+// Create the Vercel API handler for non-auth routes
 export default async function handler(req, res) {
   const { method, url } = req;
 
@@ -161,12 +161,7 @@ export default async function handler(req, res) {
       }
     }
 
-    // Handle Better Auth routes
-    if (url.startsWith('/api/auth/')) {
-      return toNodeHandler(auth)(req, res);
-    }
-
-    // 404 for unknown routes
+    // For any other routes that are not handled, return 404
     res.status(404).json({ error: "Not Found" });
   } catch (error) {
     console.error("API route error:", error);
@@ -179,6 +174,7 @@ export default async function handler(req, res) {
 
 export const config = {
   api: {
+    bodyParser: false,
     externalResolver: true,
   },
 };
