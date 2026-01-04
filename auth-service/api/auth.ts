@@ -1,16 +1,16 @@
+// Vercel API route for auth service
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { toNodeHandler } from "better-auth/node";
-import { auth } from "./auth.js";
-import { testConnection, closePool } from "./db.js";
+import { auth } from "../src/auth.js";
+import { testConnection } from "../src/db.js";
 import jwt from "jsonwebtoken";
 
 dotenv.config();
 
+// Create express app for compatibility
 const app = express();
-const PORT = parseInt(process.env.PORT || process.env.AUTH_PORT || '5000', 10);
-const JWT_SECRET = process.env.JWT_SECRET || "default-secret-change-in-production";
 
 // Parse CORS origins from environment
 const corsOrigins = process.env.CORS_ORIGINS?.split(",").map((o) => o.trim()) || [
@@ -156,7 +156,7 @@ app.get("/debug/cors", (_req, res) => {
 app.get("/api/auth/token", async (req, res) => {
   try {
     // Convert Express headers to plain object for Better Auth
-    const headers: Record<string, string> = {};
+    const headers = {};
     for (const [key, value] of Object.entries(req.headers)) {
       if (typeof value === 'string') {
         headers[key] = value;
@@ -171,6 +171,8 @@ app.get("/api/auth/token", async (req, res) => {
     if (!session?.user) {
       return res.status(401).json({ error: "Not authenticated" });
     }
+
+    const JWT_SECRET = process.env.JWT_SECRET || "default-secret-change-in-production";
 
     // Create JWT token with user info
     const token = jwt.sign(
@@ -197,10 +199,10 @@ app.all("/api/auth/*", toNodeHandler(auth));
 // Error handling middleware
 app.use(
   (
-    err: Error,
-    _req: express.Request,
-    res: express.Response,
-    _next: express.NextFunction
+    err,
+    _req,
+    res,
+    _next
   ) => {
     // Log errors with Replit context
     console.error({
@@ -222,45 +224,24 @@ app.use(
   }
 );
 
-// Start server only if not in Vercel environment
-async function start() {
-  // Test database connection
-  const dbConnected = await testConnection();
-  if (!dbConnected) {
-    console.error("Failed to connect to database. Exiting.");
-    process.exit(1);
+// Create the Vercel API handler
+export default async function handler(req, res) {
+  // Wait for database connection
+  try {
+    const dbConnected = await testConnection();
+    if (!dbConnected) {
+      return res.status(500).json({ error: "Database connection failed" });
+    }
+  } catch (error) {
+    console.error("Database connection error:", error);
+    return res.status(500).json({ error: "Database connection failed" });
   }
 
-  // Only start the server if not running in Vercel
-  if (!process.env.VERCEL && !process.env.NOW_BUILDER) {
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Auth service running on port ${PORT}`);
-      console.log(`Health check: http://localhost:${PORT}/health`);
-      console.log(`Auth endpoints: http://localhost:${PORT}/api/auth/*`);
+  // Use the Express app to handle the request
+  await new Promise((resolve, reject) => {
+    app(req, res, (err) => {
+      if (err) reject(err);
+      else resolve();
     });
-  }
-}
-
-// Graceful shutdown
-process.on("SIGTERM", async () => {
-  console.log("SIGTERM received. Shutting down gracefully.");
-  await closePool();
-  process.exit(0);
-});
-
-process.on("SIGINT", async () => {
-  console.log("SIGINT received. Shutting down gracefully.");
-  await closePool();
-  process.exit(0);
-});
-
-// Only run start function if not in Vercel
-if (!process.env.VERCEL && !process.env.NOW_BUILDER) {
-  start().catch((error) => {
-    console.error("Failed to start server:", error);
-    process.exit(1);
   });
 }
-
-// Export app for Vercel compatibility
-export { app };
