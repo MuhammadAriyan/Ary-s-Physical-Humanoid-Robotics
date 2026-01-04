@@ -26,6 +26,10 @@ if (!corsOrigins.includes("https://muhammadariyan.github.io")) {
 if (!corsOrigins.includes("https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics")) {
   corsOrigins.push("https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics");
 }
+// Add Vercel deployment origin for production
+if (!corsOrigins.includes("https://ary-s-physical-humanoid-robotics-au.vercel.app")) {
+  corsOrigins.push("https://ary-s-physical-humanoid-robotics-au.vercel.app");
+}
 
 // Add Replit URL patterns for Replit deployment
 if (process.env.REPL_SLUG && process.env.REPL_OWNER) {

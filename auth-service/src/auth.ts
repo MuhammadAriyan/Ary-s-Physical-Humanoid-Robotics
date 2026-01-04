@@ -83,6 +83,7 @@ export const auth = betterAuth({
     ...corsOrigins,
     "https://muhammadariyan.github.io", // Production frontend (GitHub Pages)
     "https://muhammadariyan.github.io/Ary-s-Physical-Humanoid-Robotics", // Full path for GitHub Pages
+    "https://ary-s-physical-humanoid-robotics-au.vercel.app", // Vercel auth service
     // Add Replit domain if in Replit environment
     ...(process.env.REPL_SLUG && process.env.REPL_OWNER ?
       [`https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`] : []),
