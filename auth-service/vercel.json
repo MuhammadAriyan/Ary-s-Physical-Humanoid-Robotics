@@ -2,11 +2,27 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/auth.ts",
+      "src": "api/auth/[...all].ts",
       "use": "@vercel/node"
     },
     {
-      "src": "api/auth/[...all].ts",
+      "src": "api/health.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/wake-up.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/test/auth-flow.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/debug/cors.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/api/auth/token.ts",
       "use": "@vercel/node"
     }
   ],
@@ -16,8 +32,24 @@
       "dest": "/api/auth/[...all].ts"
     },
     {
-      "src": "/(.*)",
-      "dest": "/api/auth.ts"
+      "src": "/health",
+      "dest": "/api/health.ts"
+    },
+    {
+      "src": "/wake-up",
+      "dest": "/api/wake-up.ts"
+    },
+    {
+      "src": "/test/auth-flow",
+      "dest": "/api/test/auth-flow.ts"
+    },
+    {
+      "src": "/debug/cors",
+      "dest": "/api/debug/cors.ts"
+    },
+    {
+      "src": "/api/auth/token",
+      "dest": "/api/api/auth/token.ts"
     }
   ]
 }
