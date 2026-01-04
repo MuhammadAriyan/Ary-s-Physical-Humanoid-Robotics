@@ -92,10 +92,10 @@ export const auth = betterAuth({
   // Advanced configuration for cross-origin cookies
   advanced: {
     defaultCookieAttributes: {
-      // For cross-origin: use "none" with secure in production
-      sameSite: isProduction ? "none" : "lax",
-      // MUST be true in production for sameSite: "none"
-      secure: isProduction,
+      // For cross-origin: always use "none" with secure
+      sameSite: "none",
+      // MUST be true when sameSite: "none"
+      secure: true,
       httpOnly: true,
       path: "/",
     },
