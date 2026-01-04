@@ -8,11 +8,12 @@ import { getSessionToken, fetchAndStoreJWT } from './auth-client';
 // Get the API base URL based on environment
 function getApiBaseUrl(): string {
   if (typeof window === 'undefined') {
-    return 'https://ary-s-physical-humanoid-robotics--maryanrar.replit.app';
+    // For server-side rendering, use the Hugging Face chat API
+    return 'https://maryanrar-fubuni-chat-api.hf.space';
   }
   return window.location.hostname === 'localhost'
-    ? 'http://localhost:8000'
-    : 'https://ary-s-physical-humanoid-robotics--maryanrar.replit.app';
+    ? 'http://localhost:8000'  // Backend running locally
+    : 'https://maryanrar-fubuni-chat-api.hf.space';  // Production - Hugging Face Spaces
 }
 
 // Types for chat sessions
