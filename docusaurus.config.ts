@@ -7,8 +7,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // - GitHub Pages: BASE_URL=/Ary-s-Physical-Humanoid-Robotics/ (default)
 // - Vercel: BASE_URL=/
 
-const baseUrl = process.env.BASE_URL || '/';
-const url = process.env.SITE_URL || 'https://MuhammadAriyan.github.io';
+const baseUrl = process.env.BASE_URL || '/Ary-s-Physical-Humanoid-Robotics/';
+const url = process.env.SITE_URL || 'https://MuhammadAriyan.github.io/Ary-s-Physical-Humanoid-Robotics/';
 
 const config: Config = {
   title: 'Ary\'s Physical & Humanoid Robotics',
