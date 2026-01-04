@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || process.env.AUTH_PORT || 5000;
+const PORT = parseInt(process.env.PORT || process.env.AUTH_PORT || '5000', 10);
 const JWT_SECRET = process.env.JWT_SECRET || "default-secret-change-in-production";
 
 // Parse CORS origins from environment
@@ -109,7 +109,7 @@ app.get("/test/auth-flow", async (req, res) => {
       },
       tests: {
         serverConfig: {
-          port: process.env.PORT || process.env.AUTH_PORT || 5000,
+          port: parseInt(process.env.PORT || process.env.AUTH_PORT || '5000', 10),
           baseUrl: process.env.BETTER_AUTH_URL || "http://localhost:5000",
           isReplitEnv: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
         },
