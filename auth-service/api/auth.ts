@@ -1,16 +1,7 @@
 // Vercel API route for auth service
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "../src/auth.js";
-import { testConnection } from "../src/db.js";
 import jwt from "jsonwebtoken";
-
-dotenv.config();
-
-// Create express app for compatibility
-const app = express();
 
 // Parse CORS origins from environment
 const corsOrigins = process.env.CORS_ORIGINS?.split(",").map((o) => o.trim()) || [
@@ -35,213 +26,159 @@ if (process.env.REPL_SLUG && process.env.REPL_OWNER) {
   }
 }
 
-// Parse JSON bodies first
-app.use(express.json());
-
-// CORS configuration - use function to allow both base and full path
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-
-      // Enhanced CORS logging for debugging
-      const isAllowed = corsOrigins.includes(origin);
-      const corsLog = {
-        timestamp: new Date().toISOString(),
-        type: "CORS_CHECK",
-        origin: origin,
-        allowedOrigins: corsOrigins,
-        isAllowed: isAllowed,
-        replit: {
-          slug: process.env.REPL_SLUG,
-          owner: process.env.REPL_OWNER,
-          isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
-        }
-      };
-      console.log(corsLog);
-
-      if (isAllowed) {
-        return callback(null, true);
-      } else {
-        callback(null, false);
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-    optionsSuccessStatus: 200,
-  })
-);
-
-// Health check endpoint
-app.get("/health", (_req, res) => {
-  res.json({
-    status: "healthy",
-    service: "fubuni-auth-service",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    replit: {
-      slug: process.env.REPL_SLUG || null,
-      owner: process.env.REPL_OWNER || null,
-      isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
-    }
-  });
-});
-
-// Replit-specific wake-up endpoint to prevent sleep
-app.get("/wake-up", (_req, res) => {
-  res.json({
-    status: "awake",
-    message: "Service is awake and responsive",
-    timestamp: new Date().toISOString()
-  });
-});
-
-// Comprehensive test endpoint for authentication flow verification
-app.get("/test/auth-flow", async (req, res) => {
-  try {
-    const testResults = {
-      timestamp: new Date().toISOString(),
-      replit: {
-        slug: process.env.REPL_SLUG || null,
-        owner: process.env.REPL_OWNER || null,
-        isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
-      },
-      tests: {
-        serverConfig: {
-          port: parseInt(process.env.PORT || process.env.AUTH_PORT || '5000', 10),
-          baseUrl: process.env.BETTER_AUTH_URL || "http://localhost:5000",
-          isReplitEnv: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
-        },
-        corsConfig: {
-          allowedOrigins: corsOrigins,
-          currentOrigin: req.get('Origin') || req.get('Referer') || 'none'
-        },
-        endpoints: {
-          healthCheck: true, // This endpoint is accessible
-          authEndpointsMounted: true, // Better Auth routes are mounted
-          wakeUpEndpoint: true // Wake-up endpoint is accessible
-        },
-        environment: {
-          nodeEnv: process.env.NODE_ENV,
-          hasDatabase: !!process.env.NEON_DATABASE_URL,
-          hasAuthSecret: !!process.env.BETTER_AUTH_SECRET
-        }
-      }
-    };
-
-    res.json(testResults);
-  } catch (error) {
-    console.error("Test endpoint error:", error);
-    res.status(500).json({
-      error: "Test endpoint failed",
-      message: error instanceof Error ? error.message : "Unknown error"
-    });
-  }
-});
-
-// Debug endpoint to check CORS configuration
-app.get("/debug/cors", (_req, res) => {
-  res.json({
-    corsOrigins,
-    envCorsOrigins: process.env.CORS_ORIGINS,
-    envCorsOrigins2: process.env.CORS_ORIGINS2,
-    nodeEnv: process.env.NODE_ENV,
-    betterAuthUrl: process.env.BETTER_AUTH_URL,
-  });
-});
-
-// Custom endpoint to generate JWT token for authenticated sessions
-// Frontend calls this to get a JWT that can be sent to FastAPI backend
-app.get("/api/auth/token", async (req, res) => {
-  try {
-    // Convert Express headers to plain object for Better Auth
-    const headers = {};
-    for (const [key, value] of Object.entries(req.headers)) {
-      if (typeof value === 'string') {
-        headers[key] = value;
-      }
-    }
-
-    // Get the session using Better Auth
-    const session = await auth.api.getSession({
-      headers: headers,
-    });
-
-    if (!session?.user) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
-    const JWT_SECRET = process.env.JWT_SECRET || "default-secret-change-in-production";
-
-    // Create JWT token with user info
-    const token = jwt.sign(
-      {
-        userId: session.user.id,
-        email: session.user.email,
-        name: session.user.name,
-        emailVerified: session.user.emailVerified,
-      },
-      JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
-    res.json({ token });
-  } catch (error) {
-    console.error("Token generation error:", error);
-    res.status(500).json({ error: "Failed to generate token" });
-  }
-});
-
-// Mount Better Auth handler at /api/auth/*
-app.all("/api/auth/*", toNodeHandler(auth));
-
-// Error handling middleware
-app.use(
-  (
-    err,
-    _req,
-    res,
-    _next
-  ) => {
-    // Log errors with Replit context
-    console.error({
-      timestamp: new Date().toISOString(),
-      error: "Server error:",
-      message: err.message,
-      stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
-      replit: {
-        slug: process.env.REPL_SLUG,
-        owner: process.env.REPL_OWNER,
-        isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
-      }
-    });
-
-    res.status(500).json({
-      error: "Internal server error",
-      message: process.env.NODE_ENV === "development" ? err.message : undefined,
-    });
-  }
-);
+// Simple CORS check
+function checkCors(origin) {
+  if (!origin) return true;
+  return corsOrigins.includes(origin);
+}
 
 // Create the Vercel API handler
 export default async function handler(req, res) {
-  // Wait for database connection
-  try {
-    const dbConnected = await testConnection();
-    if (!dbConnected) {
-      return res.status(500).json({ error: "Database connection failed" });
-    }
-  } catch (error) {
-    console.error("Database connection error:", error);
-    return res.status(500).json({ error: "Database connection failed" });
+  const { method, url } = req;
+
+  // Handle CORS preflight
+  if (method === 'OPTIONS') {
+    const origin = req.headers.origin;
+    const isAllowed = checkCors(origin);
+
+    res.setHeader('Access-Control-Allow-Origin', isAllowed ? origin : 'false');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+    return res.status(200).end();
   }
 
-  // Use the Express app to handle the request
-  await new Promise((resolve, reject) => {
-    app(req, res, (err) => {
-      if (err) reject(err);
-      else resolve();
+  // Add CORS headers for all responses
+  const origin = req.headers.origin;
+  const isAllowed = checkCors(origin);
+  if (isAllowed) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  }
+
+  try {
+    // Handle different routes
+    if (url === '/health' && method === 'GET') {
+      return res.json({
+        status: "healthy",
+        service: "fubuni-auth-service",
+        timestamp: new Date().toISOString(),
+        replit: {
+          slug: process.env.REPL_SLUG || null,
+          owner: process.env.REPL_OWNER || null,
+          isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
+        }
+      });
+    }
+
+    if (url === '/wake-up' && method === 'GET') {
+      return res.json({
+        status: "awake",
+        message: "Service is awake and responsive",
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    if (url === '/test/auth-flow' && method === 'GET') {
+      return res.json({
+        timestamp: new Date().toISOString(),
+        replit: {
+          slug: process.env.REPL_SLUG || null,
+          owner: process.env.REPL_OWNER || null,
+          isReplit: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
+        },
+        tests: {
+          serverConfig: {
+            baseUrl: process.env.BETTER_AUTH_URL || "http://localhost:5000",
+            isReplitEnv: !!(process.env.REPL_SLUG && process.env.REPL_OWNER)
+          },
+          corsConfig: {
+            allowedOrigins: corsOrigins,
+            currentOrigin: req.headers.origin || req.headers.referer || 'none'
+          },
+          endpoints: {
+            healthCheck: true,
+            authEndpointsMounted: true,
+            wakeUpEndpoint: true
+          },
+          environment: {
+            nodeEnv: process.env.NODE_ENV,
+            hasDatabase: !!process.env.NEON_DATABASE_URL,
+            hasAuthSecret: !!process.env.BETTER_AUTH_SECRET
+          }
+        }
+      });
+    }
+
+    if (url === '/debug/cors' && method === 'GET') {
+      return res.json({
+        corsOrigins,
+        envCorsOrigins: process.env.CORS_ORIGINS,
+        envCorsOrigins2: process.env.CORS_ORIGINS2,
+        nodeEnv: process.env.NODE_ENV,
+        betterAuthUrl: process.env.BETTER_AUTH_URL,
+      });
+    }
+
+    if (url === '/api/auth/token' && method === 'GET') {
+      try {
+        // Convert headers to plain object for Better Auth
+        const headers = {};
+        for (const [key, value] of Object.entries(req.headers)) {
+          if (typeof value === 'string') {
+            headers[key] = value;
+          }
+        }
+
+        // Get the session using Better Auth
+        const session = await auth.api.getSession({
+          headers: headers,
+        });
+
+        if (!session?.user) {
+          return res.status(401).json({ error: "Not authenticated" });
+        }
+
+        const JWT_SECRET = process.env.JWT_SECRET || "default-secret-change-in-production";
+
+        // Create JWT token with user info
+        const token = jwt.sign(
+          {
+            userId: session.user.id,
+            email: session.user.email,
+            name: session.user.name,
+            emailVerified: session.user.emailVerified,
+          },
+          JWT_SECRET,
+          { expiresIn: "7d" }
+        );
+
+        return res.json({ token });
+      } catch (error) {
+        console.error("Token generation error:", error);
+        return res.status(500).json({ error: "Failed to generate token" });
+      }
+    }
+
+    // Handle Better Auth routes
+    if (url.startsWith('/api/auth/')) {
+      return toNodeHandler(auth)(req, res);
+    }
+
+    // 404 for unknown routes
+    res.status(404).json({ error: "Not Found" });
+  } catch (error) {
+    console.error("API route error:", error);
+    res.status(500).json({
+      error: "Internal server error",
+      message: process.env.NODE_ENV === "development" ? error.message : undefined
     });
-  });
+  }
 }
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+};
